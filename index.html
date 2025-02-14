@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventFusion 2025</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --gradient-1: linear-gradient(45deg, #63f19c, #7e4cf5);
+            --gradient-2: linear-gradient(135deg, #3b82f6, #60a5fa);
+        }
+
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-glow {
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .hero-bg {
+            background: radial-gradient(circle at center, #035d1b 0%, #312e81 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .geometric-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                filter: drop-shadow(0 0 15px rgba(99, 241, 113, 0.5));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 25px rgba(92, 246, 169, 0.8));
+            }
+        }
+
+        .menu-item {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-1);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover::after {
+            transform: translateX(0);
+        }
+
+        .mobile-menu-active {
+            transform: translateX(0) !important;
+        }
+
+        /* Mobile Menu Styles */
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        /* Futuristic Button */
+        .btn-futuristic {
+            background: var(--gradient-1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn-futuristic::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-futuristic:hover::before {
+            left: 100%;
+        }
+
+        /* Add these to your existing style section */
+        .animate-slide-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.6s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .backdrop-blur-sm {
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Enhanced Navbar -->
+    <nav class="fixed w-full z-50 nav-blur">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 animate-glow flex items-center justify-center">
+                        <span class="font-orbitron text-white text-xl">EF</span>
+                    </div>
+                    <span class="font-orbitron text-2xl gradient-text">EventFusion</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#"
+                        class="menu-item font-poppins text-gray-700 hover:text-indigo-600 transition-colors duration-300">Home</a>
+                    <div class="relative group">
+                        <button
+                            class="menu-item font-poppins text-gray-700 hover:text-indigo-600 transition-colors duration-300 flex items-center">
+                            Events
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div
+                            class="absolute hidden group-hover:block w-48 mt-2 p-2 nav-blur rounded-lg shadow-xl animate-float">
+                            <a href="#"
+                                class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 rounded-md transition-colors duration-300">Conferences</a>
+                            <a href="#"
+                                class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 rounded-md transition-colors duration-300">Workshops</a>
+                            <a href="#"
+                                class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 rounded-md transition-colors duration-300">Seminars</a>
+                        </div>
+                    </div>
+                    <a href="#"
+                        class="menu-item font-poppins text-gray-700 hover:text-indigo-600 transition-colors duration-300">Speakers</a>
+                    <a href="#"
+                        class="menu-item font-poppins text-gray-700 hover:text-indigo-600 transition-colors duration-300">Contact</a>
+                    <button class="btn-futuristic text-white px-6 py-2 rounded-full font-poppins shadow-lg">
+                        Register Now
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button"
+                        class="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
+                        aria-label="toggle menu">
+                        <svg viewBox="0 0 24 24" class="h-6 w-6 fill-current">
+                            <path fill-rule="evenodd"
+                                d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu absolute top-20 left-0 w-full nav-blur md:hidden">
+                <div class="px-4 py-6 space-y-4">
+                    <a href="#"
+                        class="block text-gray-700 hover:text-indigo-600 transition-colors duration-300 font-poppins">Home</a>
+                    <div class="space-y-2">
+                        <button
+                            class="w-full text-left text-gray-700 hover:text-indigo-600 transition-colors duration-300 font-poppins">Events
+                            ▾</button>
+                        <div class="pl-4 space-y-2">
+                            <a href="#"
+                                class="block text-gray-700 hover:text-indigo-600 transition-colors duration-300 font-poppins">Conferences</a>
+                            <a href="#"
+                                class="block text-gray-700 hover:text-indigo-600 transition-colors duration-300 font-poppins">Workshops</a>
+                            <a href="#"
+                                class="block text-gray-700 hover:text-indigo-600 transition-colors duration-300 font-poppins">Seminars</a>
+                        </div>
+                    </div>
+                    <a href="#"
+                        class="block text-gray-700 hover:text-indigo-600 transition-colors duration-300 font-poppins">Speakers</a>
+                    <a href="#"
+                        class="block text-gray-700 hover:text-indigo-600 transition-colors duration-300 font-poppins">Contact</a>
+                    <button class="btn-futuristic text-white px-6 py-2 rounded-full font-poppins shadow-lg w-full">
+                        Register Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Enhanced Hero Section -->
+    <div class="pt-20">
+        <div class="hero-bg min-h-screen flex items-center relative">
+            <div class="geometric-bg"></div>
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="text-white space-y-8">
+                        <h1 class="font-orbitron text-5xl md:text-7xl font-bold animate-slide-in">
+                            <span class="block">Event</span>
+                            <span
+                                class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Fusion
+                                2025</span>
+                        </h1>
+                        <p class="font-poppins text-xl md:text-2xl text-gray-300 animate-slide-in">
+                            Experience the future of tech conferences with cutting-edge presentations and networking
+                            opportunities.
+                        </p>
+                        <div class="flex space-x-4 animate-slide-in">
+                            <button class="btn-futuristic px-8 py-4 rounded-full text-lg font-semibold">
+                                Register Now
+                            </button>
+                            <button
+                                class="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white/20 transition duration-300">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hidden md:block relative">
+                        <div
+                            class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full filter blur-3xl animate-pulse">
+                        </div>
+                        <video autoplay loop muted playsinline
+                            class="relative z-10 rounded-2xl shadow-2xl animate-float">
+                            <source src="EventPromo.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rest of the page content remains the same -->
+
+    <!-- Featured Events Carousel -->
+    <div class="max-w-7xl mx-auto px-4 py-16">
+        <h2 class="text-3xl font-bold text-center mb-12">Featured Events</h2>
+        <div class="relative">
+            <div class="overflow-hidden">
+                <div class="flex transition-transform duration-500" id="carousel">
+                    <div class="w-full md:w-1/3 p-4 flex-shrink-0">
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                            <img src="/api/placeholder/400/300" alt="Event 1" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">Tech Summit</h3>
+                                <p class="text-gray-600">Join industry leaders for insights into emerging technologies.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3 p-4 flex-shrink-0">
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                            <img src="/api/placeholder/400/300" alt="Event 2" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">AI Workshop</h3>
+                                <p class="text-gray-600">Hands-on session with cutting-edge AI technologies.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3 p-4 flex-shrink-0">
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                            <img src="/api/placeholder/400/300" alt="Event 3" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">Networking Night</h3>
+                                <p class="text-gray-600">Connect with professionals in a relaxed atmosphere.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg"
+                onclick="previousSlide()">←</button>
+            <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg"
+                onclick="nextSlide()">→</button>
+        </div>
+    </div>
+
+    <!-- Schedule Section -->
+    <div class="bg-gray-100 py-16">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Event Schedule</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300">
+                    <div class="text-purple-600 text-lg font-semibold mb-2">Day 1</div>
+                    <h3 class="text-xl font-bold mb-4">Opening Ceremony</h3>
+                    <p class="text-gray-600">9:00 AM - Welcome Speech</p>
+                    <p class="text-gray-600">10:00 AM - Keynote Session</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300">
+                    <div class="text-purple-600 text-lg font-semibold mb-2">Day 2</div>
+                    <h3 class="text-xl font-bold mb-4">Technical Sessions</h3>
+                    <p class="text-gray-600">9:00 AM - Workshop A</p>
+                    <p class="text-gray-600">2:00 PM - Workshop B</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300">
+                    <div class="text-purple-600 text-lg font-semibold mb-2">Day 3</div>
+                    <h3 class="text-xl font-bold mb-4">Closing Events</h3>
+                    <p class="text-gray-600">10:00 AM - Panel Discussion</p>
+                    <p class="text-gray-600">4:00 PM - Closing Ceremony</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Contact Us</h3>
+                    <p>Email: info@eventfusion.com</p>
+                    <p>Phone: (555) 123-4567</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-purple-400">Twitter</a>
+                        <a href="#" class="hover:text-purple-400">LinkedIn</a>
+                        <a href="#" class="hover:text-purple-400">Facebook</a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Newsletter</h3>
+                    <form class="flex">
+                        <input type="email" placeholder="Enter your email"
+                            class="px-4 py-2 rounded-l-lg w-full text-gray-800">
+                        <button
+                            class="bg-purple-600 px-4 py-2 rounded-r-lg hover:bg-purple-700 transition duration-300">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-slide-in');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.animate-slide-in').forEach((el) => observer.observe(el));
+    </script>
+</body>
+
+</html>
