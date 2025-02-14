@@ -35,9 +35,15 @@
                     class="menu-item font-poppins text-gray-700 hover:text-indigo-600 transition-colors duration-300">Speakers</a>
                 <a href="#"
                     class="menu-item font-poppins text-gray-700 hover:text-indigo-600 transition-colors duration-300">Contact</a>
-                <button class="btn-futuristic text-white px-6 py-2 rounded-full font-poppins shadow-lg" onclick="window.location.href='/event/user/signup.php'">
-                    Register Now
-                </button>
+                <?php if (!isset($_SESSION['user_id'])): ?>
+                    <button class="btn-futuristic text-white px-6 py-2 rounded-full font-poppins shadow-lg" onclick="window.location.href='/event/user/signup.php'">
+                        Register Now
+                    </button>
+                <?php else: ?>
+                    <button class="btn-futuristic text-white px-6 py-2 rounded-full font-poppins shadow-lg" onclick="window.location.href='/event/user/signout.php'">
+                        Sign Out
+                    </button>
+                <?php endif; ?>
             </div>
 
             <!-- Mobile Menu Button -->

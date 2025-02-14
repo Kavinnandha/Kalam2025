@@ -29,11 +29,19 @@
                             opportunities.
                         </p>
                         <div class="flex space-x-4 animate-slide-in">
-                            <button class="btn-futuristic px-8 py-4 rounded-full text-lg font-semibold" onclick="window.location.href='/event/user/signup.php'">
-                                Register Now
-                            </button>
+                            <?php if (isset($_SESSION['user_id'])): ?>
+                                <button class="btn-futuristic px-8 py-4 rounded-full text-lg font-semibold" onclick="window.location.href='/event/user/events.php'">
+                                    View Events
+                                </button>
+                            <?php else: ?>
+                                <button class="btn-futuristic px-8 py-4 rounded-full text-lg font-semibold" onclick="window.location.href='/event/user/signup.php'">
+                                    Register Now
+                                </button>
+                            <?php endif; ?>
                         </div>
-                        <a href="user/signin.php" class="text-white text-sm underline hover:text-purple-400 transition duration-300">Already Registered? Sign in here.</a>
+                        <?php if (!isset($_SESSION['user_id'])): ?>
+                            <a href="user/signin.php" class="text-white text-sm underline hover:text-purple-400 transition duration-300">Already Registered? Sign in here.</a>
+                        <?php endif; ?>
                     </div>
                     <div class="hidden md:block relative">
                         <div

@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $college_id = trim($_POST['college_id']);
     $department = trim($_POST['department']);
     $password = trim($_POST['password']);
-    $hashed_password = hash("sha256", $_POST['password']);  // Hash password
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Prepare SQL statement
     $stmt = $conn->prepare("INSERT INTO users (name, email, phone, college_id, department, password) VALUES (?, ?, ?, ?, ?, ?)");
