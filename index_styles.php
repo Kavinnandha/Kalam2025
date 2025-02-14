@@ -103,7 +103,7 @@
     .animate-slide-in {
         opacity: 0;
         transform: translateY(20px);
-        animation: slideIn 0.6s ease-out forwards;
+        animation: slideIn 1.5s ease-out forwards;
     }
 
     @keyframes slideIn {

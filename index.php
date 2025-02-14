@@ -33,6 +33,7 @@
                                 Register Now
                             </button>
                         </div>
+                        <a href="user/signin.php" class="text-white text-sm underline hover:text-purple-400 transition duration-300">Already Registered? Sign in here.</a>
                     </div>
                     <div class="hidden md:block relative">
                         <div

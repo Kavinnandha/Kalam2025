@@ -13,10 +13,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = trim($_POST['phone']);
     $college_id = trim($_POST['college_id']);
     $department = trim($_POST['department']);
+    $password = trim($_POST['password']);
+    $hashed_password = hash("sha256", $_POST['password']);  // Hash password
 
     // Prepare SQL statement
-    $stmt = $conn->prepare("INSERT INTO users (name, email, phone, college_id, department) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $name, $email, $phone, $college_id, $department);
+    $stmt = $conn->prepare("INSERT INTO users (name, email, phone, college_id, department, password) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssss", $name, $email, $phone, $college_id, $department, $hashed_password);
 
     try {
         $stmt->execute();

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <?php include '../header/links.php'; ?>
+    <?php include '../header/navbar_styles.php'; ?>
+
+</head>
+
+<body class="bg-gray-50">
+    <?php include '../header/navbar.php'; ?>
+
+    <div class="pt-20"></div>
+
+    <?php include '../header/navbar_scripts.php'; ?>
+</body>
+
+</html>
