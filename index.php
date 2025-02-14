@@ -30,7 +30,7 @@
                         </p>
                         <div class="flex space-x-4 animate-slide-in">
                             <?php if (isset($_SESSION['user_id'])): ?>
-                                <button class="btn-futuristic px-8 py-4 rounded-full text-lg font-semibold" onclick="window.location.href='/event/user/events.php'">
+                                <button class="btn-futuristic px-8 py-4 rounded-full text-lg font-semibold" onclick="window.location.href='/event/categories/departments.php'">
                                     View Events
                                 </button>
                             <?php else: ?>

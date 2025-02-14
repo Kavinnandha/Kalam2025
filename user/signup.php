@@ -64,6 +64,15 @@
             margin-bottom: 0.5rem;
             display: block;
         }
+
+        .sign-in-link {
+            transition: all 0.3s ease;
+        }
+
+        .sign-in-link:hover {
+            color: #4f46e5;
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -190,6 +199,16 @@
                             class="w-full py-4 px-6 text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 rounded-xl font-medium transform transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg hover:shadow-xl">
                             Register
                         </button>
+
+                         <!-- Add sign in link -->
+                         <div class="text-center">
+                            <p class="text-gray-600">
+                                Already registered? 
+                                <a href="signin.php" class="sign-in-link font-medium text-indigo-600 hover:text-indigo-700">
+                                    Sign in now
+                                </a>
+                            </p>
+                        </div>
                     </form>
                 </div>
             </div>
