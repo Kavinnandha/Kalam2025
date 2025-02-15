@@ -4,11 +4,11 @@
             <!-- Logo with hover animation -->
             <div class="flex items-center space-x-2 group cursor-pointer">
                 <div
-                    class="w-10 h-10 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
-                    <span class="font-orbitron text-white text-xl">EF</span>
+                    class="w-20 h-10 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
+                    <span class="font-orbitron text-white text-xl">2K25</span>
                 </div>
                 <span
-                    class="font-orbitron text-2xl bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent transition-all duration-300 group-hover:opacity-80">EventFusion</span>
+                    class="font-orbitron text-2xl bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent transition-all duration-300 group-hover:opacity-80">KALAM 2025</span>
             </div>
 
             <!-- Desktop Menu -->
@@ -40,16 +40,16 @@
                     </button>
                     <div
                         class="absolute hidden group-hover:block w-48 mt-0 p-2 nav-blur backdrop-blur-md bg-white/90 rounded-lg shadow-xl transform transition-all duration-300 opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100">
-                        <a href="#"
+                        <a href="/event/categories/events.php"
                             class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 rounded-md transition-colors duration-300 hover:text-indigo-600">All
                             Events</a>
-                        <a href="#"
+                        <a href="/event/categories/departments.php"
                             class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 rounded-md transition-colors duration-300 hover:text-indigo-600">Departmentwise
                             Events</a>
-                        <a href="#"
+                        <a href="/event/categories/events.php?category=Technical"
                             class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 rounded-md transition-colors duration-300 hover:text-indigo-600">Technical
                             Events</a>
-                        <a href="#"
+                        <a href="/event/categories/events.php?category=Non-Technical"
                             class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 rounded-md transition-colors duration-300 hover:text-indigo-600">Non-Technical
                             Events</a>
                     </div>
@@ -138,7 +138,7 @@
                     </button>
                     <div id="mobile-events-submenu"
                         class="hidden pl-8 space-y-3 overflow-hidden transition-all duration-300">
-                        <a href="#"
+                        <a href="/event/categories/events.php"
                             class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-indigo-600 transition-all duration-300 py-2">
                             <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
@@ -148,7 +148,7 @@
                             <span class="transform transition-transform duration-300 group-hover:translate-x-1">All
                                 Events</span>
                         </a>
-                        <a href="#"
+                        <a href="/event/categories/departments.php"
                             class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-indigo-600 transition-all duration-300 py-2">
                             <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
@@ -159,7 +159,7 @@
                                 class="transform transition-transform duration-300 group-hover:translate-x-1">Departmentwise
                                 Events</span>
                         </a>
-                        <a href="#"
+                        <a href="/event/categories/events.php?category=Technical"
                             class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-indigo-600 transition-all duration-300 py-2">
                             <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
@@ -170,7 +170,7 @@
                                 class="transform transition-transform duration-300 group-hover:translate-x-1">Technical
                                 Events</span>
                         </a>
-                        <a href="#"
+                        <a href="/event/categories/events.php?category=Non-Technical"
                             class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-indigo-600 transition-all duration-300 py-2">
                             <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">

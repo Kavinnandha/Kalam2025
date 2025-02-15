@@ -12,21 +12,39 @@
     <?php
         include '../database/connection.php';
         
-        // Get department code from URL
+        // Get department code and category from URL
         $department_code = isset($_GET['code']) ? $_GET['code'] : '';
+        $category = isset($_GET['category']) ? $_GET['category'] : '';
         
-        // Get department name
-        $dept_query = "SELECT department_name FROM department WHERE department_code = ?";
-        $stmt = $conn->prepare($dept_query);
-        $stmt->bind_param("s", $department_code);
-        $stmt->execute();
-        $dept_result = $stmt->get_result();
-        $department = $dept_result->fetch_assoc();
+        // Get department name if department code is set
+        if (!empty($department_code)) {
+            $dept_query = "SELECT department_name FROM department WHERE department_code = ?";
+            $stmt = $conn->prepare($dept_query);
+            $stmt->bind_param("s", $department_code);
+            $stmt->execute();
+            $dept_result = $stmt->get_result();
+            $department = $dept_result->fetch_assoc();
+        } else {
+            $department = ['department_name' => 'All Departments'];
+        }
         
-        // Get events for the department
-        $event_query = "SELECT * FROM events WHERE department_code = ? ORDER BY event_name";
-        $stmt = $conn->prepare($event_query);
-        $stmt->bind_param("s", $department_code);
+        // Get events based on department code and category
+        if (!empty($department_code) && !empty($category)) {
+            $event_query = "SELECT * FROM events WHERE department_code = ? AND category = ? ORDER BY event_name";
+            $stmt = $conn->prepare($event_query);
+            $stmt->bind_param("ss", $department_code, $category);
+        } elseif (!empty($department_code)) {
+            $event_query = "SELECT * FROM events WHERE department_code = ? ORDER BY event_name";
+            $stmt = $conn->prepare($event_query);
+            $stmt->bind_param("s", $department_code);
+        } elseif (!empty($category)) {
+            $event_query = "SELECT * FROM events WHERE category = ? ORDER BY event_name";
+            $stmt = $conn->prepare($event_query);
+            $stmt->bind_param("s", $category);
+        } else {
+            $event_query = "SELECT * FROM events ORDER BY event_name";
+            $stmt = $conn->prepare($event_query);
+        }
         $stmt->execute();
         $events = $stmt->get_result();
     ?>
