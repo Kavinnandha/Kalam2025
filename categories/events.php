@@ -54,8 +54,9 @@
                 <?php while($event = $events->fetch_assoc()): ?>
                     <div class="h-full flex flex-col">
                         <!-- Clickable card area -->
-                        <a href="event_details.php?id=<?php echo urlencode($event['event_id']); ?>" 
-                           class="flex-grow block cursor-pointer">
+                        <a href="event_details.php" 
+                           class="flex-grow block cursor-pointer" 
+                           onclick="event.preventDefault(); document.getElementById('eventForm<?php echo $event['event_id']; ?>').submit();">
                             <div class="bg-white h-full rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
                                 <!-- Image Container with fixed height -->
                                 <div class="h-48 w-full rounded-t-2xl overflow-hidden">
@@ -95,6 +96,9 @@
                                 </div>
                             </div>
                         </a>
+                        <form id="eventForm<?php echo $event['event_id']; ?>" action="event_details.php" method="POST" style="display: none;">
+                            <input type="hidden" name="event_id" value="<?php echo $event['event_id']; ?>">
+                        </form>
                         <!-- Separate cart button outside the clickable area -->
                         <button onclick="addToCart(<?php echo $event['event_id']; ?>)" 
                                 class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-green-500 to-yellow-400 text-white rounded-lg hover:from-green-600 hover:to-yellow-500 transform hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
@@ -135,7 +139,7 @@
             <?php endif; ?>
 
             // AJAX call to add item to cart
-            fetch('add_to_cart.php', {
+            fetch('../cart/add_to_cart.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

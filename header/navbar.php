@@ -39,7 +39,7 @@
                         </svg>
                     </button>
                     <div
-                        class="absolute hidden group-hover:block w-48 mt-2 p-2 nav-blur backdrop-blur-md bg-white/90 rounded-lg shadow-xl transform transition-all duration-300 opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100">
+                        class="absolute hidden group-hover:block w-48 mt-0 p-2 nav-blur backdrop-blur-md bg-white/90 rounded-lg shadow-xl transform transition-all duration-300 opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100">
                         <a href="#"
                             class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 rounded-md transition-colors duration-300 hover:text-indigo-600">All
                             Events</a>
@@ -56,7 +56,7 @@
                 </div>
 
                 <!-- Orders -->
-                <a href="#"
+                <a href="/event/orders/orders.php"
                     class="group flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-all duration-300">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
@@ -67,7 +67,7 @@
                 </a>
 
                 <!-- Cart -->
-                <a href="#"
+                <a href="/event/cart/cart.php"
                     class="group flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-all duration-300">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
@@ -185,7 +185,7 @@
                 </div>
 
                 <!-- Orders Link -->
-                <a href="#"
+                <a href="/event/orders/orders.php"
                     class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-indigo-600 transition-all duration-300 py-2">
                     <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
@@ -196,7 +196,7 @@
                 </a>
 
                 <!-- Cart Link -->
-                <a href="#"
+                <a href="/event/cart/cart.php"
                     class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-indigo-600 transition-all duration-300 py-2">
                     <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">

@@ -35,14 +35,14 @@
 <body class="bg-gray-50">
     <?php include '../header/navbar.php'; ?>
     <?php
-    if (!isset($_GET['id'])) {
+    if (!isset($_POST['event_id'])) {
         header("Location: events.php");
         exit();
     }
 
     require_once '../database/connection.php';
     
-    $event_id = $_GET['id'];
+    $event_id = $_POST['event_id'];
     $query = "SELECT e.*, d.department_name 
               FROM events e 
               LEFT JOIN department d ON e.department_code = d.department_code 
@@ -156,29 +156,14 @@
                         </div>
 
                         <!-- Add to Cart Button -->
-                        <?php if(isset($_SESSION['user_id'])): ?>
-                            <form action="add_to_cart.php" method="POST" class="mt-6">
-                                <input type="hidden" name="event_id" value="<?php echo $event_id; ?>">
-                                <button type="submit" 
-                                    class="w-full py-3 px-4 bg-gradient-to-r from-green-600 to-yellow-500 text-white font-medium rounded-xl 
-                                    hover:from-green-700 hover:to-yellow-600 transform transition-all duration-300 
-                                    hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 
-                                    shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                    </svg>
-                                    Add to Cart
-                                </button>
-                            </form>
-                        <?php else: ?>
-                            <a href="../user/signup.php" 
-                                class="mt-6 block w-full py-3 px-4 bg-gradient-to-r from-green-600 to-yellow-500 text-white 
-                                font-medium rounded-xl text-center hover:from-green-700 hover:to-yellow-600 
-                                transform transition-all duration-300 hover:scale-[1.02] focus:outline-none 
-                                focus:ring-2 focus:ring-offset-2 focus:ring-green-500 shadow-lg hover:shadow-xl">
-                                Sign in to Add to Cart
-                            </a>
-                        <?php endif; ?>
+                        <button onclick="addToCart(<?php echo $event['event_id']; ?>)" 
+                                class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-green-500 to-yellow-400 text-white rounded-lg hover:from-green-600 hover:to-yellow-500 transform hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                            Add to Cart
+                        </button>
                     </div>
                 </div>
             </div>
@@ -188,6 +173,37 @@
     <?php include '../header/navbar_scripts.php'; ?>
 
     <script>
+        function addToCart(eventId) {
+            <?php if(!isset($_SESSION['user_id'])): ?>
+                window.location.href = '../user/signup.php';
+                return;
+            <?php endif; ?>
+
+            // AJAX call to add item to cart
+            fetch('../cart/add_to_cart.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    event_id: eventId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    // Update cart UI or show success message
+                    alert('Added to cart successfully!');
+                } else {
+                    alert(data.message || 'Error adding to cart');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error adding to cart');
+            });
+        }
+
         // Optional: Add smooth scroll animation for better UX
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
