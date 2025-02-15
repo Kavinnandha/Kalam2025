@@ -1,29 +1,57 @@
 <script>
-    // Mobile menu toggle
+document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
+   
+    const mobileEventsButton = document.getElementById('mobile-events-button');
+    const mobileEventsSubmenu = document.getElementById('mobile-events-submenu');
+    const eventsArrow = mobileEventsButton.querySelector('svg:last-child');
+    let isMenuOpen = false;
 
-    mobileMenuButton.addEventListener('click', () => {
+    // Toggle main mobile menu
+    function toggleMenu() {
+        isMenuOpen = !isMenuOpen;
         mobileMenu.classList.toggle('active');
+        
+        // Reset submenu when main menu is closed
+        if (!isMenuOpen) {
+            mobileEventsSubmenu.classList.add('hidden');
+            mobileEventsButton.querySelector('svg').classList.remove('rotate-180');
+        }
+    }
+
+    // Mobile menu button click
+    mobileMenuButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu();
     });
 
-    // Close mobile menu when clicking outside
+    // Events submenu toggle
+    mobileEventsButton.addEventListener('click', (e) => {
+        mobileEventsSubmenu.classList.toggle('hidden');
+        mobileEventsSubmenu.classList.toggle('show');
+        eventsArrow.style.transform = mobileEventsSubmenu.classList.contains('hidden') 
+            ? 'rotate(0deg)' 
+            : 'rotate(180deg)';
+    });
+
+    // Close menu when clicking outside
     document.addEventListener('click', (e) => {
-        if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
-            mobileMenu.classList.remove('active');
+        if (isMenuOpen && !mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+            toggleMenu();
         }
     });
 
-    // Intersection Observer for animations
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-slide-in');
-            }
-        });
-    }, {
-        threshold: 0.1
+    // Prevent menu close when clicking inside menu
+    mobileMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
     });
 
-    document.querySelectorAll('.animate-slide-in').forEach((el) => observer.observe(el));
+    // Close menu on window resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth >= 768 && isMenuOpen) {
+            toggleMenu();
+        }
+    });
+});
 </script>

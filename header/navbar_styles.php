@@ -13,13 +13,7 @@
         font-family: 'Poppins', sans-serif;
     }
 
-    .gradient-text {
-        background: var(--gradient-1);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
+    /* Navigation styles */
     .nav-blur {
         backdrop-filter: blur(10px);
         background: rgba(255, 255, 255, 0.8);
@@ -46,16 +40,24 @@
         transform: translateX(0);
     }
 
+    /* Mobile menu styles */
     .mobile-menu {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
         transform: translateX(-100%);
         transition: transform 0.3s ease-in-out;
+        z-index: 40;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
     .mobile-menu.active {
         transform: translateX(0);
     }
 
-    /* Futuristic Button */
+    /* Button styles */
     .btn-futuristic {
         background: var(--gradient-1);
         position: relative;
@@ -78,7 +80,32 @@
         left: 100%;
     }
 
-    .mobile-menu-active {
-        transform: translateX(0) !important;
+    /* Animation classes */
+    .menu-icon-transition {
+        transition: transform 0.3s ease;
+    }
+
+    .rotate-180 {
+        transform: rotate(180deg);
+    }
+
+    .group:hover .group-hover\:translate-x-1 {
+        transform: translateX(0.25rem);
+    }
+
+    .group:hover .group-hover\:scale-110 {
+        transform: scale(1.1);
+    }
+
+    /* Smooth submenu animation */
+    #mobile-events-submenu {
+        max-height: 0;
+        opacity: 0;
+        transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
+    }
+
+    #mobile-events-submenu.show {
+        max-height: 500px;
+        opacity: 1;
     }
 </style>
