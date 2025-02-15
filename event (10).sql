@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 15, 2025 at 10:55 AM
+-- Generation Time: Feb 15, 2025 at 06:01 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,6 +24,28 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `admin_id` int(11) NOT NULL,
+  `name` varchar(128) DEFAULT NULL,
+  `phone_no` bigint(12) DEFAULT NULL,
+  `email` varchar(64) DEFAULT NULL,
+  `password` varchar(256) DEFAULT NULL,
+  `department_code` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`admin_id`, `name`, `phone_no`, `email`, `password`, `department_code`) VALUES
+(1, 'Kavin', 9345569707, 'kavinnandha121@gmail.com', '$2y$10$i5z3RC0welCb3s2x1zMQ7e0r53iop4OmzDB9v0eD3cul4Xz3K6vdu', 107);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `cart`
 --
 
@@ -38,7 +60,7 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`cart_id`, `user_id`, `total_amount`) VALUES
-(4, 17, 100.00);
+(4, 17, 350.00);
 
 -- --------------------------------------------------------
 
@@ -57,7 +79,8 @@ CREATE TABLE `cart_items` (
 --
 
 INSERT INTO `cart_items` (`cart_item_id`, `cart_id`, `event_id`) VALUES
-(13, 4, 2);
+(13, 4, 2),
+(14, 4, 1);
 
 -- --------------------------------------------------------
 
@@ -104,25 +127,12 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`event_id`, `event_name`, `event_detail`, `category`, `department_code`, `description`, `event_date`, `start_time`, `end_time`, `venue`, `registration_fee`, `image_path`) VALUES
-(1, 'Project K', 'A comphrensive new ctf event', 'Technical', 104, 'Lorem ipsum', '2025-02-14', '10:28:35', '25:17:30', 'Auditorium', 250.00, NULL),
-(2, 'Networking Night', 'India’s Event Search Engine is a comprehensive platform for finding and booking events across various categories, including concerts, workshops, and live online events. Whether you’re looking for local gatherings or virtual experiences, GoEvent.in makes ev', 'Technical', 104, 'GoEvent - India\'s event search engine\r\nGoEvent.in – India’s Event Search Engine is a comprehensive platform for finding and booking events across various categories, including concerts, workshops, and live online events. Whether you’re looking for local gatherings or virtual experiences, GoEvent.in makes event discovery easy and personalized. With a user-friendly interface, it helps you stay updated on the latest happenings and ensures you never miss an exciting event!', '2025-02-14', '10:28:35', '25:17:30', 'Auditorium', 100.00, NULL),
-(3, 'Networking Night 2', 'India’s Event Search Engine is a comprehensive platform for finding and booking events across various categories, including concerts, workshops, and live online events. Whether you’re looking for local gatherings or virtual experiences, GoEvent.in makes ev', 'Technical', 107, 'GoEvent - India\'s event search engine\r\nGoEvent.in – India’s Event Search Engine is a comprehensive platform for finding and booking events across various categories, including concerts, workshops, and live online events. Whether you’re looking for local gatherings or virtual experiences, GoEvent.in makes event discovery easy and personalized. With a user-friendly interface, it helps you stay updated on the latest happenings and ensures you never miss an exciting event!', '2025-02-14', '10:28:35', '25:17:30', 'Auditorium', 100.00, NULL),
-(4, 'Networking Night 3', 'India’s Event Search Engine is a comprehensive platform for finding and booking events across various categories, including concerts, workshops, and live online events. Whether you’re looking for local gatherings or virtual experiences, GoEvent.in makes ev', 'Technical', 107, 'GoEvent - India\'s event search engine\r\nGoEvent.in – India’s Event Search Engine is a comprehensive platform for finding and booking events across various categories, including concerts, workshops, and live online events. Whether you’re looking for local gatherings or virtual experiences, GoEvent.in makes event discovery easy and personalized. With a user-friendly interface, it helps you stay updated on the latest happenings and ensures you never miss an exciting event!', '2025-02-14', '10:28:35', '25:17:30', 'Auditorium', 100.00, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `event_registrations`
---
-
-CREATE TABLE `event_registrations` (
-  `registration_id` int(11) NOT NULL,
-  `event_id` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `order_id` int(11) DEFAULT NULL,
-  `registration_date` timestamp NOT NULL DEFAULT current_timestamp(),
-  `attendance_status` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(1, 'Project K', 'A comphrensive new ctf event', 'Technical', 104, 'Lorem ipsum', '2025-02-14', '10:28:35', '25:17:30', 'Auditorium', 250.00, '/event/networkingnight.webp'),
+(2, 'Networking Night', 'India’s Event Search Engine is a comprehensive platform for finding and booking events across various categories, including concerts, workshops, and live online events. Whether you’re looking for local gatherings or virtual experiences, GoEvent.in makes ev', 'Technical', 107, 'GoEvent - India\'s event search engine\r\nGoEvent.in – India’s Event Search Engine is a comprehensive platform for finding and booking events across various categories, including concerts, workshops, and live online events. Whether you’re looking for local gatherings or virtual experiences, GoEvent.in makes event discovery easy and personalized. With a user-friendly interface, it helps you stay updated on the latest happenings and ensures you never miss an exciting event!', '2025-02-14', '10:28:35', '25:17:30', 'Auditorium', 100.00, '/event/networkingnight.webp'),
+(4, 'Networking Night 3', 'India’s Event Search Engine is a comprehensive platform for finding and booking events across various categories, including concerts, workshops, and live online events. Whether you’re looking for local gatherings or virtual experiences, GoEvent.in makes ev', 'Non-Technical', 107, 'GoEvent - India\'s event search engine\r\nGoEvent.in – India’s Event Search Engine is a comprehensive platform for finding and booking events across various categories, including concerts, workshops, and live online events. Whether you’re looking for local gatherings or virtual experiences, GoEvent.in makes event discovery easy and personalized. With a user-friendly interface, it helps you stay updated on the latest happenings and ensures you never miss an exciting event!', '2025-02-14', '10:28:35', '12:18:00', 'Auditorium', 99.99, '/event/images/67b0bf908003b.jpg'),
+(6, 'Queen Quest', 'A comphrensive a discovery based game who likes to explore the world with different view', 'Non-Technical', 107, 'We envision a vibrant and healthy India that is guided by sound science to manage its natural resources. Our global mission is to conserve the lands and waters on which all life depends. Our global vision is a world where the diversity of life thrives, and people act to conserve nature for its own sake and its ability to fulfill our needs and enrich our lives.', '2026-11-18', '09:00:00', '16:30:00', 'Skype Hall', 140.55, '/event/images/67b0c1e166f98.jpg'),
+(7, 'Unquestable Trench', 'We envision a vibrant and healthy India that is guided by sound science to manage its natural resources. ', 'Non-Technical', 107, 'We envision a vibrant and healthy India that is guided by sound science to manage its natural resources. Our global mission is to conserve the lands and waters on which all life depends. Our global vision is a world where the diversity of life thrives, and people act to conserve nature for its own sake and its ability to fulfill our needs and enrich our lives.', '2025-03-14', '09:03:00', '10:30:00', 'Seminar hall II', 149.90, '/event/images/67b0c2a374600.jpg'),
+(8, 'dsbdfb', 'fddfgb', 'Non-Technical', 107, 'fuyk', '2025-04-29', '04:54:00', '15:43:00', 'dfgfg', 453.00, '/event/images/67b0c39d5abfa.jpg');
 
 -- --------------------------------------------------------
 
@@ -170,22 +180,6 @@ INSERT INTO `order_items` (`order_item_id`, `order_id`, `event_id`, `amount`) VA
 -- --------------------------------------------------------
 
 --
--- Table structure for table `payments`
---
-
-CREATE TABLE `payments` (
-  `payment_id` int(11) NOT NULL,
-  `order_id` int(11) DEFAULT NULL,
-  `amount` decimal(10,2) DEFAULT NULL,
-  `payment_status` enum('pending','completed','failed','refunded') DEFAULT 'pending',
-  `payment_method` varchar(50) DEFAULT NULL,
-  `transaction_id` varchar(100) DEFAULT NULL,
-  `payment_date` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
@@ -210,6 +204,13 @@ INSERT INTO `users` (`user_id`, `name`, `email`, `phone`, `college_id`, `departm
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`admin_id`),
+  ADD KEY `department_code` (`department_code`);
 
 --
 -- Indexes for table `cart`
@@ -240,15 +241,6 @@ ALTER TABLE `events`
   ADD KEY `department_code` (`department_code`);
 
 --
--- Indexes for table `event_registrations`
---
-ALTER TABLE `event_registrations`
-  ADD PRIMARY KEY (`registration_id`),
-  ADD KEY `event_id` (`event_id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `order_id` (`order_id`);
-
---
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
@@ -264,13 +256,6 @@ ALTER TABLE `order_items`
   ADD KEY `event_id` (`event_id`);
 
 --
--- Indexes for table `payments`
---
-ALTER TABLE `payments`
-  ADD PRIMARY KEY (`payment_id`),
-  ADD KEY `order_id` (`order_id`);
-
---
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -283,6 +268,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
@@ -292,19 +283,13 @@ ALTER TABLE `cart`
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `event_registrations`
---
-ALTER TABLE `event_registrations`
-  MODIFY `registration_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -319,12 +304,6 @@ ALTER TABLE `order_items`
   MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `payments`
---
-ALTER TABLE `payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -333,6 +312,12 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `admin`
+--
+ALTER TABLE `admin`
+  ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`department_code`) REFERENCES `department` (`department_code`);
 
 --
 -- Constraints for table `cart`
@@ -354,14 +339,6 @@ ALTER TABLE `events`
   ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`department_code`) REFERENCES `department` (`department_code`);
 
 --
--- Constraints for table `event_registrations`
---
-ALTER TABLE `event_registrations`
-  ADD CONSTRAINT `event_registrations_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`),
-  ADD CONSTRAINT `event_registrations_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  ADD CONSTRAINT `event_registrations_ibfk_3` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`);
-
---
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
@@ -373,12 +350,6 @@ ALTER TABLE `orders`
 ALTER TABLE `order_items`
   ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
   ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`);
-
---
--- Constraints for table `payments`
---
-ALTER TABLE `payments`
-  ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
