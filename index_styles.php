@@ -20,18 +20,10 @@
         -webkit-text-fill-color: transparent;
     }
 
-    .animate-float {
-        animation: float 6s ease-in-out infinite;
-    }
-
-    .animate-glow {
-        animation: glow 2s ease-in-out infinite;
-    }
-
     .hero-bg {
-        background: radial-gradient(circle at center, #035d1b 0%, #312e81 100%);
         position: relative;
         overflow: hidden;
+        background: radial-gradient(circle at center, #035d1b 0%, #312e81 100%);
     }
 
     .hero-bg::before {
@@ -51,6 +43,19 @@
         background-image:
             radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
             radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+        animation: pulse 8s infinite;
+    }
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            opacity: 0.5;
+        }
+
+        50% {
+            opacity: 0.8;
+        }
     }
 
     @keyframes float {
@@ -77,9 +82,74 @@
         }
     }
 
-    /* Futuristic Button */
+    @keyframes slideUp {
+        from {
+            transform: translateY(50px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .animate-glow {
+        animation: glow 2s ease-in-out infinite;
+    }
+
+    .slide-up {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.6s ease-out;
+    }
+
+    .slide-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .event-card,
+    .schedule-card {
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .event-card:hover {
+        transform: translateY(-10px);
+        border-color: #22c55e;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .schedule-card {
+        border-left: 4px solid #eab308;
+    }
+
+    .schedule-card:hover {
+        transform: scale(1.02);
+        border-left-color: #22c55e;
+    }
+
+    .carousel-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #D1D5DB;
+        transition: all 0.3s ease;
+    }
+
+    .carousel-dot.active {
+        width: 24px;
+        border-radius: 4px;
+        background-color: #22c55e;
+    }
+
     .btn-futuristic {
-        background: var(--gradient-1);
+        background: linear-gradient(135deg, #eab308 0%, #22c55e 100%);
         position: relative;
         overflow: hidden;
         transition: all 0.3s ease;

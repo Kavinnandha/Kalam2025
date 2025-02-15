@@ -25,7 +25,10 @@
             <div class="mt-8">
                 <?php
                     include '../database/connection.php';
-                    $sql = "SELECT department_code, department_name FROM department ORDER BY department_name";
+                    $sql = "SELECT d.department_code, d.department_name, COUNT(e.event_id) AS event_count 
+                            FROM department d
+                            JOIN events e ON e.department_code = d.department_code
+                            GROUP BY d.department_code, d.department_name";
                     $result = $conn->query($sql);
                 ?>
 
@@ -62,8 +65,8 @@
                                             <?php echo htmlspecialchars($row['department_name']); ?>
                                         </h3>
                                         <p class="mt-2 text-sm text-gray-600 font-medium">
-                                            Code: <span class="text-green-600">
-                                                <?php echo htmlspecialchars($row['department_code']); ?>
+                                            Events: <span class="text-green-600">
+                                                <?php echo htmlspecialchars($row['event_count']); ?>
                                             </span>
                                         </p>
                                     </div>

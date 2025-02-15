@@ -14,7 +14,7 @@
             <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-8">
                 <a href="/event/index.php"
-                    class="group flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-all duration-300">
+                    class="group flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/event/index.php') echo 'text-green-600'; ?>">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -26,7 +26,7 @@
                 <!-- Events Dropdown -->
                 <div class="relative group">
                     <button
-                        class="group flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-all duration-300">
+                        class="group flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/event/categories/events.php' || $_SERVER['PHP_SELF'] == '/event/categories/departments.php' || $_SERVER['PHP_SELF'] == '/event/categories/event_details.php') echo 'text-green-600'; ?>">
                         <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -57,7 +57,7 @@
 
                 <!-- Orders -->
                 <a href="/event/orders/orders.php"
-                    class="group flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-all duration-300">
+                    class="group flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/event/orders/orders.php') echo 'text-green-600'; ?>">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -68,7 +68,7 @@
 
                 <!-- Cart -->
                 <a href="/event/cart/cart.php"
-                    class="group flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-all duration-300">
+                    class="group flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/event/cart/cart.php') echo 'text-green-600'; ?>">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -109,7 +109,7 @@
             <div class="px-4 py-6 space-y-4">
                 <!-- Home Link -->
                 <a href="/event/index.php"
-                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-indigo-600 transition-all duration-300 py-2">
+                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-indigo-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/event/index.php') echo 'text-green-600'; ?>">
                     <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -121,7 +121,7 @@
                 <!-- Events Menu -->
                 <div class="space-y-2">
                     <button id="mobile-events-button"
-                        class="group flex items-center justify-between w-full font-poppins text-gray-700 hover:text-indigo-600 transition-all duration-300 py-2">
+                        class="group flex items-center justify-between w-full font-poppins text-gray-700 hover:text-indigo-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/event/categories/events.php' || $_SERVER['PHP_SELF'] == '/event/categories/departments.php' || $_SERVER['PHP_SELF'] == '/event/categories/event_details.php') echo 'text-green-600'; ?>">
                         <div class="flex items-center space-x-3">
                             <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
@@ -186,7 +186,7 @@
 
                 <!-- Orders Link -->
                 <a href="/event/orders/orders.php"
-                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-indigo-600 transition-all duration-300 py-2">
+                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-indigo-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/event/orders/orders.php') echo 'text-green-600'; ?>">
                     <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -197,7 +197,7 @@
 
                 <!-- Cart Link -->
                 <a href="/event/cart/cart.php"
-                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-indigo-600 transition-all duration-300 py-2">
+                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-indigo-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/event/cart/cart.php') echo 'text-green-600'; ?>">
                     <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

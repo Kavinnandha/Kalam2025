@@ -59,9 +59,7 @@
 
     /* Button styles */
     .btn-futuristic {
-        background: var(--gradient-1);
-        position: relative;
-        overflow: hidden;
+        background: linear-gradient(135deg, #eab308 0%, #22c55e 100%);
         transition: all 0.3s ease;
     }
 

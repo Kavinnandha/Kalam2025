@@ -5,118 +5,6 @@
     <?php include 'header/links.php'; ?>
     <?php include 'header/navbar_styles.php'; ?>
     <?php include 'index_styles.php'; ?>
-    <style>
-        .hero-bg {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .geometric-bg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image:
-                radial-gradient(circle at 20% 20%, rgba(234, 179, 8, 0.3) 0%, transparent 20%),
-                radial-gradient(circle at 80% 80%, rgba(34, 197, 94, 0.3) 0%, transparent 20%);
-            animation: pulse 8s infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 0.5;
-            }
-
-            50% {
-                opacity: 0.8;
-            }
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0) rotate(0deg);
-            }
-
-            50% {
-                transform: translateY(-20px) rotate(2deg);
-            }
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .slide-up {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.6s ease-out;
-        }
-
-        .slide-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .btn-futuristic {
-            background: linear-gradient(135deg, #eab308 0%, #22c55e 100%);
-            transition: all 0.3s ease;
-        }
-
-        .btn-futuristic:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .event-card {
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .event-card:hover {
-            transform: translateY(-10px);
-            border-color: #22c55e;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .schedule-card {
-            transition: all 0.3s ease;
-            border-left: 4px solid #eab308;
-        }
-
-        .schedule-card:hover {
-            transform: scale(1.02);
-            border-left-color: #22c55e;
-        }
-
-        .carousel-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #D1D5DB;
-            transition: all 0.3s ease;
-        }
-
-        .carousel-dot.active {
-            width: 24px;
-            border-radius: 4px;
-            background-color: #22c55e;
-        }
-    </style>
 </head>
 
 <body>
@@ -170,6 +58,9 @@
                                 </button>
                             <?php endif; ?>
                         </div>
+                        <?php if (!isset($_SESSION['user_id'])): ?>
+                            <a href="user/signin.php" class="text-white text-sm underline hover:text-purple-400 transition duration-300">Already Registered? Sign in here.</a>
+                        <?php endif; ?>
                     </div>
                     <div class="hidden md:block relative">
                         <div
@@ -206,7 +97,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
             </button>
-            <div class="overflow-hidden">
+            <div class="overflow-hidden p-3">
                 <div class="flex transition-transform duration-500 ease-in-out" id="carousel">
                     <?php while ($event = $featured_events->fetch_assoc()): ?>
                         <div class="flex-none w-full md:w-1/3 px-4">
