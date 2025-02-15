@@ -57,7 +57,7 @@
         }
     },
     goToEventDetails(eventId) {
-        window.location.href = `../categories/event_details.php?id=${eventId}`;
+        window.location.href = `../categories/event_details.php?event_id=${eventId}`;
     }
 }" x-init="loadCartItems()">
     <?php include '../header/navbar.php'; ?>

@@ -114,7 +114,7 @@
                         <!-- Order Item Card -->
                         <div class="animate-scale-in hover-scale mb-6" style="animation-delay: <?php echo $delay; ?>s;">
                             <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100">
-                                <form action="../categories/event_details.php" method="POST">
+                                <form action="../categories/event_details.php" method="GET">
                                     <input type="hidden" name="event_id" value="<?php echo $row['event_id']; ?>">
                                     <button type="submit" class="w-full text-left group">
                                         <div class="p-6">

@@ -35,14 +35,14 @@
 <body class="bg-gray-50">
     <?php include '../header/navbar.php'; ?>
     <?php
-    if (!isset($_POST['event_id'])) {
+    if (!isset($_GET['event_id'])) {
         header("Location: events.php");
         exit();
     }
 
     require_once '../database/connection.php';
     
-    $event_id = $_POST['event_id'];
+    $event_id = $_GET['event_id'];
     $query = "SELECT e.*, d.department_name 
               FROM events e 
               LEFT JOIN department d ON e.department_code = d.department_code 
