@@ -21,10 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['admin_id'] = $admin['admin_id'];
             $_SESSION['name'] = $admin['name'];
             $_SESSION['department_code'] = $admin['department_code'];
+            $_SESSION['is_superadmin'] = $admin['is_superadmin'];
             
-            // Redirect to dashboard
-            header("Location: manage_events.php");
-            exit();
+            if ($admin['is_superadmin'] == 'yes') {
+                header("Location: manage_events_admin.php");
+                exit();
+            }else {
+                header("Location: manage_events.php");
+                exit();
+            }
         } else {
             $error = "Invalid credentials!";
         }

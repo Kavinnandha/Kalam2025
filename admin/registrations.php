@@ -7,21 +7,36 @@ if (!isset($_SESSION['department_code'])) {
     exit();
 }
 
-$department_code = $_SESSION['department_code'];
-
-// Fetch events with registration counts
-$events_query = "SELECT e.event_id, e.event_name, COUNT(DISTINCT o.user_id) as participant_count
-                 FROM events e
-                 LEFT JOIN order_items oi ON e.event_id = oi.event_id
-                 LEFT JOIN orders o ON o.order_id = oi.order_id
-                 WHERE e.department_code = ?
-                 GROUP BY e.event_id
-                 ORDER BY e.event_name";
-
-$stmt = $conn->prepare($events_query);
-$stmt->bind_param("s", $department_code);
-$stmt->execute();
-$events_result = $stmt->get_result();
+if ($_SESSION['is_superadmin'] !== 'yes') {
+    $events_query = "SELECT e.event_id, e.event_name, COUNT(DISTINCT o.user_id) as participant_count
+                     FROM events e
+                     LEFT JOIN order_items oi ON e.event_id = oi.event_id
+                     LEFT JOIN orders o ON o.order_id = oi.order_id
+                     WHERE e.department_code = ?
+                     GROUP BY e.event_id
+                     ORDER BY e.event_name";
+    
+    $stmt = $conn->prepare($events_query);
+    $stmt->execute();
+    $events_result = $stmt->get_result();
+    
+} else {
+    $department_code = $_SESSION['department_code'];
+    
+    // Fetch events with registration counts
+    $events_query = "SELECT e.event_id, e.event_name, COUNT(DISTINCT o.user_id) as participant_count
+                     FROM events e
+                     LEFT JOIN order_items oi ON e.event_id = oi.event_id
+                     LEFT JOIN orders o ON o.order_id = oi.order_id
+                     WHERE e.department_code = ?
+                     GROUP BY e.event_id
+                     ORDER BY e.event_name";
+    
+    $stmt = $conn->prepare($events_query);
+    $stmt->bind_param("s", $department_code);
+    $stmt->execute();
+    $events_result = $stmt->get_result();
+}
 ?>
 
 <!DOCTYPE html>
