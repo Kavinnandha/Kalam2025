@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['department_code'])) {
+    header("Location: login.php");
+    exit();
+}
+
 include '../database/connection.php';
 
 if (!isset($_GET['event_id'])) {
@@ -31,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $end_time = $_POST['end_time'];
     $venue = $_POST['venue'];
     $registration_fee = $_POST['registration_fee'];
+    $contact = $_POST['contact'];
     
     // Keep existing department code
     $department_code = $event['department_code'];
@@ -79,12 +86,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                    end_time = ?, 
                    venue = ?, 
                    registration_fee = ?, 
-                   image_path = ? 
+                   image_path = ?,
+                   contact = ?
                    WHERE event_id = ?";
 
     $update_stmt = $conn->prepare($update_sql);
     $update_stmt->bind_param(
-        "ssssssssdsi",
+        "ssssssssdssi",
         $event_name,
         $event_detail,
         $category,
@@ -95,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $venue,
         $registration_fee,
         $image_path,
+        $contact,
         $event_id
     );
 
@@ -216,15 +225,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <!-- Venue and Details Section -->
                         <div class="space-y-6">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Venue</label>
-                                <input type="text" name="venue" value="<?php echo htmlspecialchars($event['venue']); ?>"
-                                    required
-                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Venue</label>
+                                    <input type="text" name="venue" value="<?php echo htmlspecialchars($event['venue']); ?>"
+                                        required
+                                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Contact No.</label>
+                                    <input type="text" name="contact" value="<?php echo htmlspecialchars($event['contact']); ?>"
+                                        required
+                                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                </div>
                             </div>
 
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Event Detail</label>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Tagline</label>
                                 <input type="text" name="event_detail"
                                     value="<?php echo htmlspecialchars($event['event_detail']); ?>" required
                                     maxlength="250"
@@ -232,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
 
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Details and Guidelines</label>
                                 <textarea name="description" rows="4" required
                                     class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm"><?php echo htmlspecialchars($event['description']); ?></textarea>
                             </div>

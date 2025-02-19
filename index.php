@@ -16,7 +16,7 @@
     $sql = "SELECT image_path, event_id, event_name, description, category, registration_fee, event_date 
             FROM events 
             ORDER BY RAND() 
-            LIMIT 20";
+            LIMIT 10";
     $featured_events = $conn->query($sql);
 
     // Fetch upcoming schedule
@@ -29,19 +29,26 @@
 
     <!-- Hero Section -->
     <div class="pt-20">
-        <div class="hero-bg min-h-screen flex items-center relative">
-            <div class="geometric-bg"></div>
-            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+        <div class="hero-bg min-h-screen flex items-center relative overflow-hidden">
+            <!-- Geometric Background with enhanced z-index -->
+            <div class="geometric-bg absolute inset-0 z-10"></div>
+
+            <!-- Radial Gradient Overlay -->
+            <div class="absolute inset-0 bg-gradient-radial z-20"></div>
+
+            <!-- Main Content -->
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 z-30">
                 <div class="grid md:grid-cols-2 gap-12 items-center">
                     <div class="text-white space-y-8">
                         <h1 class="font-orbitron text-5xl md:text-7xl font-bold slide-up">
-                            <span class="block">2K25</span>
+                            <span class="block text-glow">2K25</span>
                             <span
-                                class="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-green-400">
+                                class="block text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-yellow-600 to-orange-500 animate-gradient">
                                 KALAM 2025
                             </span>
                         </h1>
-                        <p class="font-poppins text-xl md:text-2xl text-gray-300 slide-up">
+                        <p
+                            class="font-poppins text-xl md:text-2xl text-gray-300 slide-up backdrop-blur-sm bg-black/10 p-4 rounded-lg">
                             Dive into a world of innovation and excitement with thrilling competitions, technical
                             events, and captivating non-technical activities.
                         </p>
@@ -59,15 +66,24 @@
                             <?php endif; ?>
                         </div>
                         <?php if (!isset($_SESSION['user_id'])): ?>
-                            <a href="user/signin.php" class="text-white text-sm underline hover:text-purple-400 transition duration-300">Already Registered? Sign in here.</a>
+                            <a href="user/signin.php"
+                                class="text-white text-sm underline hover:text-yellow-400 transition duration-300">
+                                Already Registered? Sign in here.
+                            </a>
                         <?php endif; ?>
                     </div>
                     <div class="hidden md:block relative">
                         <div
-                            class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-yellow-500/20 to-green-500/20 rounded-full filter blur-3xl animate-pulse">
+                            class="absolute top-0 left-0 w-full h-full rounded-full filter blur-3xl animate-pulse-slow">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-yellow-500/30 via-green-500/20 to-yellow-500/30 rounded-full">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-green-500/20 via-yellow-500/30 to-green-500/20 rounded-full animate-pulse-reverse">
+                            </div>
                         </div>
                         <video autoplay loop muted playsinline
-                            class="relative z-10 rounded-2xl shadow-2xl animate-float">
+                            class="ml-5 relative z-10 rounded-4xl shadow-4xl animate-float">
                             <source src="EventPromo.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -78,56 +94,59 @@
     </div>
 
     <!-- Featured Events -->
-    <div class="max-w-7xl mx-auto px-4 py-16">
-        <h2 class="text-3xl font-bold text-center mb-12 slide-up">Featured Events</h2>
-        <div class="relative">
-            <button
-                class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-10 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100"
-                id="prevBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-            </button>
-            <button
-                class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-10 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100"
-                id="nextBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </button>
-            <div class="overflow-hidden p-3">
-                <div class="flex transition-transform duration-500 ease-in-out" id="carousel">
-                    <?php while ($event = $featured_events->fetch_assoc()): ?>
-                        <div class="flex-none w-full md:w-1/3 px-4">
-                            <div class="event-card bg-white rounded-lg shadow-lg overflow-hidden slide-up" onclick="window.location.href='/event/categories/event_details.php?event_id=<?php echo $event['event_id']; ?>'">
-                                <img src="<?php echo htmlspecialchars($event['image_path']); ?>"
-                                    alt="<?php echo htmlspecialchars($event['event_name']); ?>"
-                                    class="w-full h-48 object-cover">
-                                <div class="p-6">
-                                    <div class="flex justify-between items-start mb-4">
-                                        <h3 class="text-xl font-semibold text-gray-800">
-                                            <?php echo htmlspecialchars($event['event_name']); ?>
-                                        </h3>
-                                        <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
-                                            ₹<?php echo number_format($event['registration_fee'], 2); ?>
+    <div class="max-w-10xl featured-bg-pattern">
+        <div class="max-w-7xl mx-auto px-4 py-16">
+            <h2 class="text-3xl font-bold text-center mb-12 slide-up">Featured Events</h2>
+            <div class="relative">
+                <button
+                    class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-10 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100"
+                    id="prevBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button
+                    class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-10 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100"
+                    id="nextBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                <div class="overflow-hidden p-3">
+                    <div class="flex transition-transform duration-500 ease-in-out" id="carousel">
+                        <?php while ($event = $featured_events->fetch_assoc()): ?>
+                            <div class="flex-none w-full md:w-1/3 px-4">
+                                <div class="event-card bg-white rounded-lg shadow-lg overflow-hidden slide-up"
+                                    onclick="window.location.href='/event/categories/event_details.php?event_id=<?php echo $event['event_id']; ?>'">
+                                    <img src="<?php echo htmlspecialchars($event['image_path']); ?>"
+                                        alt="<?php echo htmlspecialchars($event['event_name']); ?>"
+                                        class="w-full h-48 object-cover">
+                                    <div class="p-6">
+                                        <div class="flex justify-between items-start mb-4">
+                                            <h3 class="text-xl font-semibold text-gray-800">
+                                                <?php echo htmlspecialchars($event['event_name']); ?>
+                                            </h3>
+                                            <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+                                                ₹<?php echo number_format($event['registration_fee'], 2); ?>
+                                            </span>
+                                        </div>
+                                        <p class="text-gray-600 mb-4">
+                                            <?php echo htmlspecialchars(substr($event['description'], 0, 100)) . '...'; ?>
+                                        </p>
+                                        <span class="text-green-600 font-medium">
+                                            <?php echo date('d M Y', strtotime($event['event_date'])); ?>
                                         </span>
                                     </div>
-                                    <p class="text-gray-600 mb-4">
-                                        <?php echo htmlspecialchars(substr($event['description'], 0, 100)) . '...'; ?>
-                                    </p>
-                                    <span class="text-green-600 font-medium">
-                                        <?php echo date('d M Y', strtotime($event['event_date'])); ?>
-                                    </span>
                                 </div>
                             </div>
-                        </div>
-                    <?php endwhile; ?>
+                        <?php endwhile; ?>
+                    </div>
                 </div>
-            </div>
-            <div class="flex justify-center mt-8 space-x-2" id="carouselDots">
-                <!-- Dots will be added dynamically via JavaScript -->
+                <div class="flex justify-center mt-8 space-x-2" id="carouselDots">
+                    <!-- Dots will be added dynamically via JavaScript -->
+                </div>
             </div>
         </div>
     </div>

@@ -1,5 +1,10 @@
 <?php
 session_start();
+if (!isset($_SESSION['department_code'])) {
+    header("Location: login.php");
+    exit();
+}
+
 include '../database/connection.php';
 
 if (!isset($_SESSION['department_code'])) {

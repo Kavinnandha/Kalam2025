@@ -2,8 +2,8 @@
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
 
     :root {
-        --gradient-1: linear-gradient(45deg, #63f19c, #7e4cf5);
-        --gradient-2: linear-gradient(135deg, #3b82f6, #60a5fa);
+        --gradient-1: linear-gradient(45deg, #FFA500, #FFFF00, #FFFFFF);
+        --gradient-2: linear-gradient(135deg, #FFA500, #FFFF00, #FFFFFF);
     }
 
     .font-orbitron {
@@ -23,7 +23,7 @@
     .hero-bg {
         position: relative;
         overflow: hidden;
-        background: radial-gradient(circle at center, #035d1b 0%, #312e81 100%);
+        background: radial-gradient(circle at center, rgb(154, 100, 0) 0%, rgb(151, 40, 0) 25%, rgb(146, 80, 0) 60%);
     }
 
     .hero-bg::before {
@@ -121,9 +121,23 @@
 
     .event-card:hover {
         transform: translateY(-10px);
-        border-color: #22c55e;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        border-color: rgba(144, 224, 239, 0.5);
+        box-shadow: 0 10px 20px rgba(255, 115, 0, 0.4);
+        background: linear-gradient(135deg, rgba(240, 147, 251, 0.2), rgba(255, 204, 112, 0.2), rgba(144, 224, 239, 0.2));
     }
+
+    .event-card:hover h3 {
+        color: #ff8c00;
+    }
+
+    .event-card:hover p {
+        color: #666;
+    }
+
+    .event-card:hover span {
+        color: #ff6b6b;
+    }
+
 
     .schedule-card {
         border-left: 4px solid #eab308;
@@ -138,18 +152,18 @@
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background-color: #D1D5DB;
+        background-color:rgb(149, 158, 171);
         transition: all 0.3s ease;
     }
 
     .carousel-dot.active {
         width: 24px;
         border-radius: 4px;
-        background-color: #22c55e;
+        background-color:rgb(216, 29, 0);
     }
 
     .btn-futuristic {
-        background: linear-gradient(135deg, #eab308 0%, #22c55e 100%);
+        background: linear-gradient(135deg, rgb(255, 98, 0) 20%, #FFFF00 100%);
         position: relative;
         overflow: hidden;
         transition: all 0.3s ease;
@@ -196,5 +210,11 @@
 
     .backdrop-blur-sm {
         backdrop-filter: blur(4px);
+    }
+
+    .featured-bg-pattern {
+        background-color: rgb(222, 222, 222);
+        background-image: radial-gradient(rgba(125, 125, 125, 0.1) 2px, transparent 2px);
+        background-size: 20px 20px;
     }
 </style>
