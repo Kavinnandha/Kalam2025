@@ -73,13 +73,13 @@
                         <template x-for="item in cartItems" :key="item.cart_item_id">
                             <div @click="goToEventDetails(item.event_id)" 
                                  class="p-6 flex items-center space-x-4 hover:bg-yellow-50 transition-colors duration-200 cursor-pointer">
-                                <div class="w-24 h-24 bg-green-100 rounded-lg flex items-center justify-center">
+                                <div class="w-24 h-24 bg-orange-100 rounded-lg flex items-center justify-center">
                                     <template x-if="item.image_path">
                                         <img :src="item.image_path" :alt="item.event_name" 
                                              class="w-24 h-24 object-cover rounded-lg">
                                     </template>
                                     <template x-if="!item.image_path">
-                                        <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-12 h-12 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                                   d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
@@ -90,20 +90,20 @@
                                     <h3 class="text-lg font-semibold text-yellow-800" x-text="item.event_name"></h3>
                                     <p class="text-sm text-yellow-600 mt-1 text-truncate" x-text="item.event_detail"></p>
                                     <div class="mt-2 flex items-center space-x-4">
-                                        <span class="text-sm text-green-700" x-text="'Date: ' + item.event_date"></span>
-                                        <span class="text-sm text-green-700" 
+                                        <span class="text-sm text-orange-700" x-text="'Date: ' + item.event_date"></span>
+                                        <span class="text-sm text-orange-700" 
                                               x-text="'Time: ' + item.start_time + ' - ' + item.end_time"></span>
                                     </div>
                                     <div class="mt-1">
-                                        <span class="text-sm text-green-700" x-text="'Venue: ' + item.venue"></span>
+                                        <span class="text-sm text-orange-700" x-text="'Venue: ' + item.venue"></span>
                                     </div>
                                     <div class="mt-1">
-                                        <span class="text-sm text-green-700" x-text="'Department: ' + item.department_name"></span>
+                                        <span class="text-sm text-orange-700" x-text="'Department: ' + item.department_name"></span>
                                     </div>
                                 </div>
                                 
                                 <div class="text-right">
-                                    <p class="text-lg font-semibold text-green-700" 
+                                    <p class="text-lg font-semibold text-orange-700" 
                                        x-text="'₹' + parseFloat(item.registration_fee).toFixed(2)"></p>
                                     <button @click="removeItem($event, item.cart_item_id)" 
                                             class="mt-2 text-red-600 hover:text-red-800 text-sm font-medium transition-colors duration-200">
@@ -124,7 +124,7 @@
                         <h3 class="mt-2 text-lg font-medium text-yellow-800">Your cart is empty</h3>
                         <p class="mt-1 text-sm text-yellow-600">Start adding some events to your cart!</p>
                         <a href="../categories/departments.php" 
-                           class="mt-6 inline-block px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200">
+                           class="mt-6 inline-block px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors duration-200">
                             Browse Events
                         </a>
                     </div>
@@ -146,7 +146,7 @@
                     <span class="text-2xl font-bold text-yellow-800" x-text="'₹' + totalPrice.toFixed(2)"></span>
                 </div>
                 <button onclick="window.location.href='../payment/checkout.php'" 
-                        class="px-8 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200">
+                        class="px-8 py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors duration-200">
                     Place Order
                 </button>
             </div>

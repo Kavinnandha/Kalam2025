@@ -7,7 +7,7 @@
     <title>Department Events</title>
 </head>
 
-<body class="bg-gradient-to-br from-green-50 to-yellow-50">
+<body class="bg-gradient-to-br from-orange-50 to-yellow-50">
     <?php include '../header/navbar.php'; ?>
     <?php
         include '../database/connection.php';
@@ -54,16 +54,16 @@
             <!-- Header Section -->
             <div class="mb-12">
                 <div class="relative inline-block">
-                    <a href="departments.php" class="inline-flex items-center text-green-600 hover:text-green-700 mb-4">
+                    <a href="departments.php" class="inline-flex items-center text-orange-600 hover:text-orange-700 mb-4">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                         </svg>
                         Back to Departments
                     </a>
-                    <h1 class="text-4xl font-bold bg-gradient-to-r from-green-600 to-yellow-500 text-transparent bg-clip-text">
+                    <h1 class="text-4xl font-bold bg-gradient-to-r from-orange-600 to-yellow-500 text-transparent bg-clip-text">
                         <?php echo htmlspecialchars($department['department_name']); ?> Events
                     </h1>
-                    <div class="absolute -bottom-2 left-0 h-1 w-24 bg-gradient-to-r from-green-500 to-yellow-400 rounded-full"></div>
+                    <div class="absolute -bottom-2 left-0 h-1 w-24 bg-gradient-to-r from-orange-500 to-yellow-400 rounded-full"></div>
                 </div>
             </div>
 
@@ -84,7 +84,7 @@
 
                                 <div class="p-6 flex flex-col h-[calc(100%-12rem)]">
                                     <!-- Category Badge -->
-                                    <div class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-green-100 to-yellow-100 text-green-700 mb-4 w-fit">
+                                    <div class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-orange-100 to-yellow-100 text-orange-700 mb-4 w-fit">
                                         <?php echo htmlspecialchars($event['category']); ?>
                                     </div>
 
@@ -101,7 +101,7 @@
                                     <!-- Price and Cart Button -->
                                     <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                                         <div class="flex items-center space-x-2">
-                                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                                       d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                             </svg>
@@ -115,7 +115,7 @@
                         </a>
                         <!-- Separate cart button outside the clickable area -->
                         <button onclick="addToCart(<?php echo $event['event_id']; ?>)" 
-                                class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-green-500 to-yellow-400 text-white rounded-lg hover:from-green-600 hover:to-yellow-500 transform hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
+                                class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-lg hover:from-orange-600 hover:to-yellow-500 transform hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                       d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>

@@ -2,7 +2,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
 
     :root {
-        --gradient-1: linear-gradient(45deg, #63f19c, #7e4cf5);
+        --gradient-1: linear-gradient(45deg, orange, #7e4cf5);
     }
 
     .font-orbitron {
@@ -59,7 +59,7 @@
 
     /* Button styles */
     .btn-futuristic {
-        background: linear-gradient(135deg, #eab308 0%, #22c55e 100%);
+        background: linear-gradient(135deg, red 0%, orange 100%);
         transition: all 0.3s ease;
     }
 

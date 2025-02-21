@@ -7,7 +7,7 @@
     <title>Departments</title>
 </head>
 
-<body class="bg-gradient-to-br from-green-50 to-yellow-50">
+<body class="bg-gradient-to-br from-orange-50 to-yellow-50">
     <?php include '../header/navbar.php'; ?>
     
     <div class="pt-20">
@@ -15,10 +15,10 @@
             <!-- Header Section with Gradient Text -->
             <div class="sm:flex sm:items-center sm:justify-between mb-12">
                 <div class="relative">
-                    <h1 class="text-4xl font-bold bg-gradient-to-r from-green-600 to-yellow-500 text-transparent bg-clip-text">
+                    <h1 class="text-4xl font-bold bg-gradient-to-r from-orange-600 to-yellow-500 text-transparent bg-clip-text">
                         Departments
                     </h1>
-                    <div class="absolute -bottom-2 left-0 h-1 w-24 bg-gradient-to-r from-green-500 to-yellow-400 rounded-full"></div>
+                    <div class="absolute -bottom-2 left-0 h-1 w-24 bg-gradient-to-r from-orange-500 to-yellow-400 rounded-full"></div>
                 </div>
             </div>
 
@@ -36,22 +36,22 @@
                     <?php while($row = $result->fetch_assoc()): ?>
                         <a href="events.php?code=<?php echo urlencode($row['department_code']); ?>" 
                            class="block group cursor-pointer h-full">
-                            <div class="bg-gradient-to-br from-green-100 to-yellow-50 h-full
+                            <div class="bg-gradient-to-br from-orange-100 to-yellow-50 h-full
                                       p-8 rounded-2xl shadow-lg hover:shadow-2xl 
                                       transform transition-all duration-300 hover:-translate-y-1 
-                                      border border-green-100 hover:border-green-200 
+                                      border border-orange-100 hover:border-orange-200 
                                       relative overflow-hidden flex flex-col">
                                 <!-- Hover overlay effect -->
-                                <div class="absolute inset-0 bg-gradient-to-br from-green-500 to-yellow-400 
+                                <div class="absolute inset-0 bg-gradient-to-br from-orange-500 to-yellow-400 
                                           opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                                 
                                 <div class="flex items-center space-x-4 relative flex-grow ">
                                     <div class="flex-shrink-0 h-14 w-14 rounded-xl bg-gradient-to-br 
-                                              from-green-200 to-yellow-100 
+                                              from-orange-200 to-yellow-100 
                                               flex items-center justify-center 
-                                              group-hover:from-green-300 group-hover:to-yellow-200 
+                                              group-hover:from-orange-300 group-hover:to-yellow-200 
                                               transition-colors duration-300">
-                                        <svg class="h-8 w-8 text-green-600 group-hover:text-green-700 
+                                        <svg class="h-8 w-8 text-orange-600 group-hover:text-orange-700 
                                                   transition-colors duration-300" 
                                              fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -60,18 +60,18 @@
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <h3 class="text-xl font-semibold text-gray-800 
-                                                   group-hover:text-green-700 transition-colors 
+                                                   group-hover:text-orange-700 transition-colors 
                                                    duration-300 break-words">
                                             <?php echo htmlspecialchars($row['department_name']); ?>
                                         </h3>
                                         <p class="mt-2 text-sm text-gray-600 font-medium">
-                                            Events: <span class="text-green-600">
+                                            Events: <span class="text-orange-600">
                                                 <?php echo htmlspecialchars($row['event_count']); ?>
                                             </span>
                                         </p>
                                     </div>
                                     <!-- Arrow indicator -->
-                                    <div class="text-green-500 group-hover:text-green-600 
+                                    <div class="text-orange-500 group-hover:text-orange-600 
                                                 transition-colors duration-300 flex-shrink-0 flex items-center">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 

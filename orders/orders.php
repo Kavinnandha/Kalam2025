@@ -76,12 +76,12 @@
                                                     <?php echo date('d M Y', strtotime($row['event_date'])); ?>
                                                 </span>
                                                 <span
-                                                    class="text-green-600 font-semibold transition-colors duration-300 group-hover:text-green-700">
+                                                    class="text-orange-600 font-semibold transition-colors duration-300 group-hover:text-orange-700">
                                                     ₹<?php echo number_format($row['amount'], 2); ?>
                                                 </span>
                                             </div>
                                             <h3
-                                                class="text-lg font-semibold text-gray-900 mb-2 transition-colors duration-300 group-hover:text-green-600">
+                                                class="text-lg font-semibold text-gray-900 mb-2 transition-colors duration-300 group-hover:text-orange-600">
                                                 <?php echo htmlspecialchars($row['event_name']); ?>
                                             </h3>
                                             <div class="text-sm text-gray-600">
@@ -96,7 +96,7 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="px-6 py-3 bg-gray-50 text-sm text-green-600 transition-all duration-300 group-hover:bg-green-50 group-hover:text-green-700">
+                                            class="px-6 py-3 bg-gray-50 text-sm text-orange-600 transition-all duration-300 group-hover:bg-orange-50 group-hover:text-orange-700">
                                             View Event Details
                                             <span
                                                 class="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
@@ -122,7 +122,7 @@
                                 events!</p>
                             <?php isset($_SESSION['user_id']) ? $link = '../categories/events.php' : $link = '../user/signin.php'; ?>
                             <a href="<?php echo $link; ?>"
-                                class="inline-flex items-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg transition-all duration-300 hover:bg-green-700 animate-scale-in">
+                                class="inline-flex items-center px-6 py-3 bg-orange-600 text-white font-semibold rounded-lg transition-all duration-300 hover:bg-orange-700 animate-scale-in">
                                 <?php echo isset($_SESSION['user_id']) ? 'Browse Events' : 'Login To View Your Events'; ?>
                                 <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

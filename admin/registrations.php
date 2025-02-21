@@ -16,7 +16,6 @@ if ($_SESSION['is_superadmin'] !== 'yes') {
                      FROM events e
                      LEFT JOIN order_items oi ON e.event_id = oi.event_id
                      LEFT JOIN orders o ON o.order_id = oi.order_id
-                     WHERE e.department_code = ?
                      GROUP BY e.event_id
                      ORDER BY e.event_name";
     
