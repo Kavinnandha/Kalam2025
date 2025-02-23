@@ -57,7 +57,6 @@ try {
     ]);
 }
 
-// Close database connection safely
 if (isset($stmt)) {
     $stmt->close();
 }

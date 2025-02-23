@@ -79,13 +79,15 @@
 
                 <!-- Session-based Button -->
                 <?php if (!isset($_SESSION['user_id'])): ?>
-                    <button onclick="window.location.href='/event/user/signup.php'"
-                        class="btn-futuristic text-white px-6 py-2 rounded-full font-poppins shadow-lg bg-gradient-to-r from-red-500 to-purple-600 hover:from-red-600 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-xl">
-                        Register Now
+                    <button onclick="window.location.href='/event/user/registration.php'"
+                        class="relative group px-6 py-2 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 rounded-full overflow-hidden hover:shadow-lg hover:shadow-orange-500/50 transition-all duration-300 cursor-pointer">
+                        <span class="relative text-white font-semibold text-lg group-hover:scale-105 transition-transform duration-300 inline-block">
+                            Register Now
+                        </span>
                     </button>
                 <?php else: ?>
                     <button onclick="window.location.href='/event/user/signout.php'"
-                        class="btn-futuristic text-white px-6 py-2 rounded-full font-poppins shadow-lg bg-gradient-to-r from-red-500 to-purple-600 hover:from-red-600 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                        class="btn-futuristic text-white px-6 py-2 rounded-full font-poppins shadow-lg bg-gradient-to-r from-red-500 to-purple-600 hover:from-red-600 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer">
                         Sign Out
                     </button>
                 <?php endif; ?>
@@ -208,7 +210,7 @@
 
                 <!-- Login/Register Button -->
                 <?php if (!isset($_SESSION['user_id'])): ?>
-                    <button onclick="window.location.href='/event/user/signup.php'"
+                    <button onclick="window.location.href='/event/user/registration.php'"
                         class="group w-full btn-futuristic text-white px-6 py-3 rounded-full font-poppins shadow-lg transition-all duration-300 flex items-center justify-center space-x-2">
                         <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
