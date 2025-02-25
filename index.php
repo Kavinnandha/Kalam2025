@@ -62,7 +62,7 @@
     $sql = "SELECT image_path, event_id, event_name, description, category, registration_fee, event_date 
             FROM events 
             ORDER BY RAND() 
-            LIMIT 15";
+            LIMIT 18";
     $featured_events = $conn->query($sql);
 
     $schedule_sql = "SELECT event_id, event_name, event_date, start_time, end_time, venue 
@@ -92,7 +92,7 @@
                         non-technical enthusiasts!
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <a href="<?php if (isset($_SESSION['user_id'])) { echo 'categories/events.php'; } else { echo 'user/signup.php'; } ?>">
+                        <a href="<?php if (isset($_SESSION['user_id'])) { echo 'categories/events.php'; } else { echo 'user/registration.php'; } ?>">
                             <button
                                 class="relative group px-8 py-4 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 rounded-full overflow-hidden hover:shadow-lg hover:shadow-orange-500/50 transition-all duration-300 cursor-pointer">
                                 <span
@@ -104,12 +104,12 @@
                     </div>
                 </div>
 
-                <div class="relative">
+                <div class="relative flex items-center justify-center">
                     <div
                         class="absolute inset-0 bg-gradient-to-r from-red-500/30 via-orange-500/30 to-yellow-500/30 rounded-full filter blur-3xl animate-pulse">
                     </div>
-                    <img src="phoenix (1).png" alt="Event Promo"
-                        class="relative w-full rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-500">
+                    <img src="kalam2025-ver.png" alt="Event Promo"
+                        class="relative w-77 h-122 rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-500">
                 </div>
             </div>
         </div>
@@ -228,7 +228,7 @@
                 </div>
 
                 <div class="flex justify-center items-center">
-                    <img src="phoenix (1).png" alt="KALAM Logo" class="h-30">
+                    <img src="kalam2025-hor.png" alt="KALAM Logo" class="mt-5 h-25" style="filter: invert(1);">
                 </div>
 
                 <div class="flex flex-col items-center text-center">
@@ -282,6 +282,7 @@
             let currentSlide = 0;
             const slidesToShow = window.innerWidth >= 768 ? 3 : 1;
             const totalSlides = slides.length;
+            const maxSlideIndex = totalSlides - slidesToShow;
 
             // Touch handling variables
             let touchStartX = 0;
@@ -299,7 +300,7 @@
                     const dot = document.createElement('button');
                     dot.classList.add('carousel-dot');
                     dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
-                    dot.addEventListener('click', () => goToSlide(i));
+                    dot.addEventListener('click', () => goToSlide(i * slidesToShow));
                     dotsContainer.appendChild(dot);
                 }
                 updateDots();
@@ -307,21 +308,20 @@
 
             function updateDots() {
                 const dots = dotsContainer.children;
+                const currentDotIndex = Math.floor(currentSlide / slidesToShow);
                 Array.from(dots).forEach((dot, index) => {
-                    dot.classList.toggle('active', index === currentSlide % Math.ceil(totalSlides / slidesToShow));
+                    dot.classList.toggle('active', index === currentDotIndex);
                 });
             }
 
             function updateCarousel() {
-                // Calculate the actual slide position considering infinite scroll
-                const slidePosition = currentSlide % totalSlides;
-                const offset = -(slidePosition * (100 / slidesToShow));
+                const offset = -(currentSlide * (100 / slidesToShow));
                 carousel.style.transform = `translateX(${offset}%)`;
                 updateDots();
             }
 
             function goToSlide(index) {
-                currentSlide = index;
+                currentSlide = Math.min(Math.max(index, 0), maxSlideIndex);
                 updateCarousel();
             }
 
@@ -340,7 +340,7 @@
 
                 // Add resistance at edges
                 if ((currentSlide === 0 && diff < 0) ||
-                    (currentSlide === totalSlides - slidesToShow && diff > 0)) {
+                    (currentSlide === maxSlideIndex && diff > 0)) {
                     currentTranslate = prevTranslate + diff * 0.3;
                 } else {
                     currentTranslate = prevTranslate + diff;
@@ -355,9 +355,9 @@
 
                 if (Math.abs(diff) > 100) { // Threshold for slide change
                     if (diff > 0) {
-                        currentSlide = (currentSlide + 1) % totalSlides;
+                        currentSlide = Math.min(currentSlide + 1, maxSlideIndex);
                     } else {
-                        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                        currentSlide = Math.max(currentSlide - 1, 0);
                     }
                 }
 
@@ -371,19 +371,19 @@
 
             // Navigation buttons
             prevBtn.addEventListener('click', () => {
-                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                currentSlide = Math.max(currentSlide - 1, 0);
                 updateCarousel();
             });
 
             nextBtn.addEventListener('click', () => {
-                currentSlide = (currentSlide + 1) % totalSlides;
+                currentSlide = Math.min(currentSlide + 1, maxSlideIndex);
                 updateCarousel();
             });
 
             // Auto-play
             setInterval(() => {
                 if (!isDragging) {
-                    currentSlide = (currentSlide + 1) % totalSlides;
+                    currentSlide = (currentSlide >= maxSlideIndex) ? 0 : currentSlide + 1;
                     updateCarousel();
                 }
             }, 2000);

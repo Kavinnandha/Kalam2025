@@ -6,10 +6,7 @@ header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $cart_id = $_GET['cart_id'];
-    
-    // Here you would integrate with your actual payment gateway
-    // For demonstration, we'll simulate a successful payment
-    
+
     try {
         // Start transaction
         $conn->begin_transaction();
@@ -21,8 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $stmt->execute();
         $cart_result = $stmt->get_result();
         $cart_data = $cart_result->fetch_assoc();
-        
-        // Create order
+
+        if (/*response from the api is success (that is payment is successful */) {
+            // Create order
         $order_query = "INSERT INTO orders (user_id, total_amount) VALUES (?, ?)";
         $stmt = $conn->prepare($order_query);
         $stmt->bind_param("id", $cart_data['user_id'], $cart_data['total_amount']);
@@ -58,6 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             'success' => true,
             'order_id' => $order_id
         ]);
+        }
+        
+        
     } catch (Exception $e) {
         $conn->rollback();
         echo json_encode([

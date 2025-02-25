@@ -2,13 +2,8 @@
     <div class="max-w-7xl mx-auto px-4">
         <div class="flex justify-between items-center h-20">
             <!-- Logo with hover animation -->
-            <div class="flex items-center space-x-2 group cursor-pointer">
-                <div
-                    class="w-20 h-10 rounded-lg bg-gradient-to-r from-red-500 to-purple-600 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
-                    <span class="font-orbitron text-white text-xl">2K25</span>
-                </div>
-                <span
-                    class="font-orbitron text-2xl bg-gradient-to-r from-red-500 to-purple-600 bg-clip-text text-transparent transition-all duration-300 group-hover:opacity-80">KALAM 2025</span>
+            <div class="flex items-center space-x-2 group cursor-pointer" onclick="window.location.href='/event/index.php'">
+                <img src="/event/kalam2025-hor.png" alt="Kalam 2025" class="w-50 h-13 transition-all duration-300 group-hover:scale-103 group-hover:shadow-lg" style="filter: invert(1);">
             </div>
 
             <!-- Desktop Menu -->

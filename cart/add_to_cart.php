@@ -52,16 +52,51 @@ if (mysqli_fetch_assoc($checkItem)) {
     exit;
 }
 
-// Fetch the price of the event
-$eventResult = mysqli_query($conn, "SELECT registration_fee FROM events WHERE event_id = '$eventId'");
-$event = mysqli_fetch_assoc($eventResult);
-if (!$event) {
+// Fetch the event details of the event being added
+$newEventQuery = mysqli_query($conn, "SELECT event_id, start_time, end_time, event_date FROM events WHERE event_id = '$eventId'");
+$newEvent = mysqli_fetch_assoc($newEventQuery);
+if (!$newEvent) {
     echo json_encode([
         'success' => false,
         'message' => 'Event not found'
     ]);
     exit;
 }
+
+// Check for time overlaps with existing cart items
+$overlapCheck = "
+    SELECT e.event_id, e.event_name, e.event_date, e.start_time, e.end_time 
+    FROM cart_items ci
+    JOIN events e ON ci.event_id = e.event_id
+    WHERE ci.cart_id = '$cartId'
+    AND e.event_date = '{$newEvent['event_date']}'
+    AND (
+        ('{$newEvent['start_time']}' BETWEEN e.start_time AND e.end_time) OR
+        ('{$newEvent['end_time']}' BETWEEN e.start_time AND e.end_time) OR
+        (e.start_time BETWEEN '{$newEvent['start_time']}' AND '{$newEvent['end_time']}') OR
+        (e.end_time BETWEEN '{$newEvent['start_time']}' AND '{$newEvent['end_time']}')
+    )
+";
+
+$overlappingEvents = mysqli_query($conn, $overlapCheck);
+
+if (mysqli_num_rows($overlappingEvents) > 0) {
+    $conflictingEvents = [];
+    while ($event = mysqli_fetch_assoc($overlappingEvents)) {
+        $conflictingEvents[] = $event;
+    }
+    
+    echo json_encode([
+        'success' => false,
+        'message' => 'An event has already been added to your cart for this time slot.',
+        'overlapping_events' => $conflictingEvents
+    ]);
+    exit;
+}
+
+// Fetch the price of the event
+$eventResult = mysqli_query($conn, "SELECT registration_fee FROM events WHERE event_id = '$eventId'");
+$event = mysqli_fetch_assoc($eventResult);
 $eventPrice = $event['registration_fee'];
 
 // Add item to cart

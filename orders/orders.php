@@ -120,7 +120,7 @@
                             <h3 class="text-xl font-semibold text-gray-900 mb-2 animate-fade-in">No Orders Found</h3>
                             <p class="text-gray-600 mb-8 animate-fade-in">Start your journey by exploring our exciting
                                 events!</p>
-                            <?php isset($_SESSION['user_id']) ? $link = '../categories/events.php' : $link = '../user/signin.php'; ?>
+                            <?php isset($_SESSION['user_id']) ? $link = '../categories/events.php' : $link = '../user/login.php'; ?>
                             <a href="<?php echo $link; ?>"
                                 class="inline-flex items-center px-6 py-3 bg-orange-600 text-white font-semibold rounded-lg transition-all duration-300 hover:bg-orange-700 animate-scale-in">
                                 <?php echo isset($_SESSION['user_id']) ? 'Browse Events' : 'Login To View Your Events'; ?>
