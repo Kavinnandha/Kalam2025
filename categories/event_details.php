@@ -184,7 +184,7 @@
     <script>
         function addToCart(eventId) {
             <?php if(!isset($_SESSION['user_id'])): ?>
-                window.location.href = '../user/signup.php';
+                window.location.href = '../user/registration.php';
                 return;
             <?php endif; ?>
 
