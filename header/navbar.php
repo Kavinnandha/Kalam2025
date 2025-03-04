@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center h-20">
             <!-- Logo with hover animation -->
             <div class="flex items-center space-x-2 group cursor-pointer" onclick="window.location.href='/kalam/index.php'">
-                <img src="/kalam/kalam2025-hor.png" alt="Kalam 2025" class="w-50 h-13 transition-all duration-300 group-hover:scale-103 group-hover:shadow-lg" style="filter: invert(1);">
+                <img src="/kalam/images/kalam2025-hor.png" alt="Kalam 2025" class="w-50 h-13 transition-all duration-300 group-hover:scale-103 group-hover:shadow-lg" style="filter: invert(1);">
             </div>
 
             <!-- Desktop Menu -->
