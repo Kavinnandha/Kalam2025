@@ -89,7 +89,7 @@
                                 alt="<?php echo htmlspecialchars($event['event_name']); ?>" 
                                 class="event-image shadow-xl transition-transform duration-300 hover:scale-[1.02]">
                         <?php else: ?>
-                            <img src="/event/networkingnight.webp" 
+                            <img src="/kalam/networkingnight.webp" 
                                 alt="Event placeholder" 
                                 class="event-image shadow-xl transition-transform duration-300 hover:scale-[1.02] ">
                         <?php endif; ?>

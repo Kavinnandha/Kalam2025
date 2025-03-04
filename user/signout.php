@@ -1,6 +1,6 @@
 <?php
 session_start();
 session_destroy(); 
-header("Location: /event/index.php");
+header("Location: /kalam/index.php");
 exit();
 ?>

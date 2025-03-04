@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($event['image_path'] && file_exists($event['image_path'])) {
             unlink($event['image_path']);
             }
-            $image_path = '/event/images/' . $new_filename;
+            $image_path = '/kalam/images/' . $new_filename;
         }
     }
 
