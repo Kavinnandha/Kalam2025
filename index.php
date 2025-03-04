@@ -223,7 +223,7 @@
                     <h3 class="text-2xl font-semibold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500">Contact Us</h3>
                     <div class="space-y-3 text-gray-700">
                         <p>kalam@siet.ac.in</p>
-                        <p>(+91) 1234567890</p>
+                        <p>(+91) 75400 84863</p>
                     </div>
                 </div>
 
@@ -234,9 +234,10 @@
                 <div class="flex flex-col items-center text-center">
                     <h3 class="text-2xl font-semibold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500">Follow Us</h3>
                     <div class="flex space-x-6">
-                        <a href="#" class="text-gray-700 hover:text-orange-500 transition duration-300">Twitter</a>
-                        <a href="#" class="text-gray-700 hover:text-orange-500 transition duration-300">LinkedIn</a>
-                        <a href="#" class="text-gray-700 hover:text-orange-500 transition duration-300">Facebook</a>
+                        <a href="#" target="_blank" class="text-gray-700 hover:text-orange-500 transition duration-300">Instagram</a>
+                        <a href="#" target="_blank" class="text-gray-700 hover:text-orange-500 transition duration-300">LinkedIn</a>
+                        <a href="https://www.siet.ac.in" target="_blank" class="text-gray-700 hover:text-orange-500 transition duration-300">Web</a>
+                        <a href="#" target="_blank" class="text-gray-700 hover:text-orange-500 transition duration-300">Facebook</a>
                     </div>
                 </div>
             </div>
