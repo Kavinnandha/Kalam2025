@@ -108,7 +108,7 @@
                     <div
                         class="absolute inset-0 bg-gradient-to-r from-red-500/30 via-orange-500/30 to-yellow-500/30 rounded-full filter blur-3xl animate-pulse">
                     </div>
-                    <img src="images/kalam2025-ver.png" alt="Event Promo"
+                    <img src="images/kalam2025-ver.png" alt="Event Promo" style="filter: invert(1);"
                         class="relative w-77 h-122 rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-500">
                 </div>
             </div>
