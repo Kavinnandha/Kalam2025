@@ -147,7 +147,6 @@
         </div>
     </div>
 
-    <?php include '../header/navbar_scripts.php'; ?>
 
     <script>
         // Add dynamic ember creation

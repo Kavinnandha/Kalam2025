@@ -1,15 +1,19 @@
-<nav class="fixed w-full z-50 nav-blur backdrop-blur-md bg-white/80">
+<nav class="fixed w-full z-50 backdrop-blur-md shadow-xl">
     <div class="max-w-7xl mx-auto px-4">
         <div class="flex justify-between items-center h-20">
             <!-- Logo with hover animation -->
-            <div class="flex items-center space-x-2 group cursor-pointer" onclick="window.location.href='/kalam/index.php'">
-                <img src="/kalam/images/kalam2025-hor.png" alt="Kalam 2025" class="w-50 h-13 transition-all duration-300 group-hover:scale-103 group-hover:shadow-lg" style="filter: invert(1);">
+            <div class="flex items-center space-x-2 group cursor-pointer"
+                onclick="window.location.href='/kalam/index.php'">
+                <img src="/kalam/images/kalam2025-hor.png" alt="Kalam 2025"
+                    class="w-50 h-13 transition-all duration-300 group-hover:scale-103 group-hover:shadow-lg opacity-90 mix-blend-multiply"
+                    style="filter: invert(0.9);">
             </div>
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-8">
                 <a href="/kalam/index.php"
-                    class="group flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/index.php') echo 'text-orange-400'; ?>">
+                    class="group flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/index.php')
+                        echo 'text-orange-400'; ?>">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -21,7 +25,8 @@
                 <!-- Events Dropdown -->
                 <div class="relative group">
                     <button
-                        class="group flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/categories/events.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/departments.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/event_details.php') echo 'text-orange-400'; ?>">
+                        class="group flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/categories/events.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/departments.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/event_details.php')
+                            echo 'text-orange-400'; ?>">
                         <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -34,7 +39,7 @@
                         </svg>
                     </button>
                     <div
-                        class="absolute hidden group-hover:block w-48 mt-0 p-2 nav-blur backdrop-blur-md bg-white/90 rounded-lg shadow-xl transform transition-all duration-300 opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100">
+                        class="absolute hidden group-hover:block w-48 mt-0 p-2 bg-white/30 backdrop-blur-lg rounded-lg shadow-xl transform transition-all duration-300 opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100">
                         <a href="/kalam/categories/events.php"
                             class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-red-600">All
                             Events</a>
@@ -52,7 +57,8 @@
 
                 <!-- Orders -->
                 <a href="/kalam/orders/orders.php"
-                    class="group flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/orders/orders.php') echo 'text-orange-400'; ?>">
+                    class="group flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/orders/orders.php')
+                        echo 'text-orange-400'; ?>">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -63,7 +69,8 @@
 
                 <!-- Cart -->
                 <a href="/kalam/cart/cart.php"
-                    class="group flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/cart/cart.php') echo 'text-orange-400'; ?>">
+                    class="group flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/cart/cart.php')
+                        echo 'text-orange-400'; ?>">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -76,7 +83,8 @@
                 <?php if (!isset($_SESSION['user_id'])): ?>
                     <button onclick="window.location.href='/kalam/user/registration.php'"
                         class="relative group px-6 py-2 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 rounded-full overflow-hidden hover:shadow-lg hover:shadow-orange-500/50 transition-all duration-300 cursor-pointer">
-                        <span class="relative text-white font-semibold text-lg group-hover:scale-105 transition-transform duration-300 inline-block">
+                        <span
+                            class="relative text-white font-semibold text-lg group-hover:scale-105 transition-transform duration-300 inline-block">
                             Register Now
                         </span>
                     </button>
@@ -106,7 +114,8 @@
             <div class="px-2 py-6 space-y-4">
                 <!-- Home Link -->
                 <a href="/kalam/index.php"
-                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/index.php') echo 'text-orange-400'; ?>">
+                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/index.php')
+                        echo 'text-orange-400'; ?>">
                     <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -118,7 +127,8 @@
                 <!-- Events Menu -->
                 <div class="space-y-2">
                     <button id="mobile-events-button"
-                        class="group flex items-center justify-between w-full font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/categories/events.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/departments.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/event_details.php') echo 'text-orange-400'; ?>">
+                        class="group flex items-center justify-between w-full font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/categories/events.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/departments.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/event_details.php')
+                            echo 'text-orange-400'; ?>">
                         <div class="flex items-center space-x-3">
                             <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
@@ -183,7 +193,8 @@
 
                 <!-- Orders Link -->
                 <a href="/kalam/orders/orders.php"
-                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/orders/orders.php') echo 'text-orange-400'; ?>">
+                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/orders/orders.php')
+                        echo 'text-orange-400'; ?>">
                     <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -194,7 +205,8 @@
 
                 <!-- Cart Link -->
                 <a href="/kalam/cart/cart.php"
-                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/cart/cart.php') echo 'text-orange-400'; ?>">
+                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/cart/cart.php')
+                        echo 'text-orange-400'; ?>">
                     <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

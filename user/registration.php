@@ -107,25 +107,19 @@
         <div class="max-w-7xl mx-auto py-12 flex flex-col lg:flex-row items-center justify-between gap-12">
             <!-- Left side content -->
             <div class="lg:w-5/12 text-white space-y-8 text-center lg:text-left relative z-10">
-                <h1 class="text-5xl font-extrabold tracking-tight sm:text-6xl">
-                    Ignite Your Journey
-                </h1>
-                <p class="text-xl text-gray-100 leading-relaxed">
+            <h1 class="text-5xl font-extrabold tracking-tight sm:text-6xl">
+                Ignite Your Journey
+            </h1>
+            <p class="text-xl text-gray-100 leading-relaxed">
                     Unleash your potential! Register now and be part of something extraordinary.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start">
-                    <div class="flex items-center gap-3 bg-white/10 rounded-lg px-4 py-3 backdrop-blur-sm hover:bg-white/20 transition-colors duration-300">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Easy Registration</span>
-                    </div>
-                    <div class="flex items-center gap-3 bg-white/10 rounded-lg px-4 py-3 backdrop-blur-sm hover:bg-white/20 transition-colors duration-300">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                        <span>Instant Access</span>
-                    </div>
+                <div class="text-center lg:text-left">
+                    <p class="text-gray-100 mb-4">
+                        Already registered?
+                    </p>
+                    <a href="login.php" class="inline-block py-4 px-8 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl font-medium transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
+                        Log in here
+                    </a>
                 </div>
             </div>
 
