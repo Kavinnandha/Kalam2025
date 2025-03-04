@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
         $file_extension = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
         $new_filename = uniqid() . '.' . $file_extension;
-        $target_file = $target_dir . $new_filename;
+        $target_file = "{$target_dir}{$new_filename}";
 
         // Create directory if it doesn't exist
         if (!is_dir($target_dir)) {
@@ -53,10 +53,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Move uploaded file
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-            if ($event['image_path'] && file_exists($event['image_path'])) {
-            unlink($event['image_path']);
+            if (isset($event['image_path']) && file_exists($event['image_path'])) {
+                unlink($event['image_path']);
             }
-            $image_path = '/kalam/images/' . $new_filename;
+            $image_path = "/kalam/images/{$new_filename}";
         } else {
             $_SESSION['error'] = "Error uploading file!";
             header("Location: add_event.php");
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($insert_sql);
-    $stmt->bind_param("sssssssssds", 
+    $stmt->bind_param("ssssssssssss", 
         $event_name, 
         $event_detail, 
         $category, 
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: " . (isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'));
         exit();
     } else {
-        $_SESSION['error'] = "Error creating event: " . $conn->error;
+        $_SESSION['error'] = "Error creating event: {$conn->error}";
     }
 }
 ?>
