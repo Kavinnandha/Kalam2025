@@ -1,12 +1,10 @@
 <?php
 session_start();
-if (!isset($_SESSION['admin_id'])) {
+if (!isset($_SESSION['admin_id']) || $_SESSION['is_superadmin'] != 'yes') {
     header("Location: login.php");
     exit();
 }
 include '../database/connection.php';
-
-$department_code = $_SESSION['department_code'];
 
 // Get statistics using prepared statements
 $stats_queries = [
@@ -25,20 +23,11 @@ foreach ($stats_queries as $key => $query) {
     $stats[$key] = $result['count'];
 }
 
-// Fetch events with pagination (Filtered by department)
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$items_per_page = 8;
-$offset = ($page - 1) * $items_per_page;
-
-$events_query = "SELECT * FROM events WHERE department_code = ? ORDER BY event_date DESC LIMIT ? OFFSET ?";
+// Fetch all events (Filtered by department)
+$events_query = "SELECT * FROM events ORDER BY event_name";
 $stmt = $conn->prepare($events_query);
-$stmt->bind_param("iii", $department_code, $items_per_page, $offset);
 $stmt->execute();
 $events = $stmt->get_result();
-
-// Get total pages
-$total_events = $stats['total_events'];
-$total_pages = ceil($total_events / $items_per_page);
 
 // Handle Delete
 if (isset($_POST['delete_event'])) {
@@ -51,7 +40,7 @@ if (isset($_POST['delete_event'])) {
     } else {
         $_SESSION['error'] = "Error deleting event!";
     }
-    header("Location: manage_events.php");
+    header("Location: " . (isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'));
     exit();
 }
 ?>
@@ -203,20 +192,6 @@ if (isset($_POST['delete_event'])) {
                     </div>
                 <?php endwhile; ?>
             </div>
-
-            <!-- Pagination -->
-            <?php if ($total_pages > 1): ?>
-                <div class="mt-8 flex justify-center">
-                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                        <?php for($i = 1; $i <= $total_pages; $i++): ?>
-                            <a href="?page=<?php echo $i; ?>" 
-                               class="<?php echo $page === $i ? 'bg-blue-50 border-blue-500 text-blue-600' : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'; ?> relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                <?php echo $i; ?>
-                            </a>
-                        <?php endfor; ?>
-                    </nav>
-                </div>
-            <?php endif; ?>
         </main>
     </div>
 </body>

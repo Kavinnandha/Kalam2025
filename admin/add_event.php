@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['department_code'])) {
+if (!isset($_SESSION['admin_id'])) {
     header("Location: login.php");
     exit();
 }
@@ -12,12 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $event_name = $_POST['event_name'];
     $event_detail = $_POST['event_detail'];
     $category = $_POST['category'];
-    $department_code = $_SESSION['department_code'];
+    $department_code = $_POST['department_code'];
     $description = $_POST['description'];
     $event_date = $_POST['event_date'];
     $start_time = $_POST['start_time'];
     $end_time = $_POST['end_time'];
     $venue = $_POST['venue'];
+    $contact = $_POST['contact'];
     $registration_fee = $_POST['registration_fee'];
     
     // Initialize image path
@@ -64,9 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Insert into database
-    $insert_sql = "INSERT INTO events (event_name, event_detail, category, department_code, description, 
-                   event_date, start_time, end_time, venue, registration_fee, image_path) 
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $insert_sql = "INSERT INTO events (event_name, event_detail, category, department_code, description,
+                   event_date, start_time, end_time, venue, registration_fee, contact, image_path) 
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($insert_sql);
     $stmt->bind_param("sssssssssds", 
@@ -79,13 +80,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $start_time, 
         $end_time, 
         $venue, 
-        $registration_fee, 
+        $registration_fee,
+        $contact, 
         $image_path
     );
 
     if ($stmt->execute()) {
         $_SESSION['success'] = "Event created successfully!";
-        header("Location: manage_events.php");
+        header("Location: " . (isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'));
         exit();
     } else {
         $_SESSION['error'] = "Error creating event: " . $conn->error;
@@ -113,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <h1 class="text-3xl font-bold text-gray-800">Create New Event</h1>
                         <p class="mt-2 text-gray-600">Add a new event to your calendar</p>
                     </div>
-                    <a href="manage_events.php" 
+                    <a href="<?php echo isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'; ?>" 
                        class="flex items-center px-4 py-2 text-blue-600 hover:text-blue-800 transition-colors duration-200">
                         <i class="fas fa-arrow-left mr-2"></i>
                         Back to Events
@@ -171,6 +173,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </select>
                             </div>
 
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Department</label>
+                                <select name="department_code" required
+                                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                    <option value="">Select Department</option>
+                                    <?php
+                                    $dept_sql = "SELECT department_code, department_name FROM department";
+                                    $dept_result = $conn->query($dept_sql);
+                                    if ($dept_result->num_rows > 0) {
+                                        while ($row = $dept_result->fetch_assoc()) {
+                                            echo '<option value="' . $row['department_code'] . '">' . $row['department_name'] . '</option>';
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Registration Fee</label>
@@ -204,10 +222,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
 
                         <!-- Venue and Details -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Venue</label>
-                            <input type="text" name="venue" required
-                                   class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Venue</label>
+                                <input type="text" name="venue" required
+                                       class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Contact No.</label>
+                                <input type="text" name="contact" required
+                                       class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                            </div>
                         </div>
 
                         <div>
@@ -224,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <!-- Form Actions -->
                         <div class="flex justify-end space-x-4 pt-6">
-                            <a href="manage_events.php"
+                            <a href="<?php echo isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'; ?>"
                                class="px-6 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200">
                                 Cancel
                             </a>

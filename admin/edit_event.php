@@ -9,7 +9,7 @@ if (!isset($_SESSION['department_code'])) {
 include '../database/connection.php';
 
 if (!isset($_GET['event_id'])) {
-    header("Location: manage_events.php");
+    header("Location: ");
     exit();
 }
 
@@ -23,7 +23,7 @@ $result = $stmt->get_result();
 $event = $result->fetch_assoc();
 
 if (!$event) {
-    header("Location: manage_events.php");
+    header("Location: " . (isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'));
     exit();
 }
 
@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $event_name = $_POST['event_name'];
     $event_detail = $_POST['event_detail'];
     $category = $_POST['category'];
+    $department_code = $_POST['department_code'];
     $description = $_POST['description'];
     $event_date = $_POST['event_date'];
     $start_time = $_POST['start_time'];
@@ -38,9 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $venue = $_POST['venue'];
     $registration_fee = $_POST['registration_fee'];
     $contact = $_POST['contact'];
-    
-    // Keep existing department code
-    $department_code = $event['department_code'];
 
     // Handle file upload
     $image_path = $event['image_path'];
@@ -58,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (!in_array($file_extension, $allowed_extensions)) {
             $_SESSION['error'] = "Invalid file type! Only JPG, PNG, and GIF allowed.";
-            header("Location: manage_events.php");
+            header("Location: " . (isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'));
             exit();
         }
         // Validate file size (2MB max)
@@ -80,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                    event_name = ?, 
                    event_detail = ?, 
                    category = ?, 
+                   department_code = ?,
                    description = ?, 
                    event_date = ?, 
                    start_time = ?, 
@@ -92,10 +91,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $update_stmt = $conn->prepare($update_sql);
     $update_stmt->bind_param(
-        "ssssssssdssi",
+        "sssisssssdssi",
         $event_name,
         $event_detail,
         $category,
+        $department_code,
         $description,
         $event_date,
         $start_time,
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($update_stmt->execute()) {
         $_SESSION['message'] = "Event updated successfully!";
-        header("Location: manage_events.php");
+        header("Location: " . (isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'));
         exit();
     }
 }
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <h1 class="text-3xl font-bold text-gray-800">Edit Event</h1>
                     <p class="text-gray-600 mt-2">Update event details and information</p>
                 </div>
-                <a href="manage_events.php" class="flex items-center px-4 py-2 text-blue-600 hover:text-blue-800 transition-colors duration-200">
+                <a href="<?php echo isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'; ?>" class="flex items-center px-4 py-2 text-blue-600 hover:text-blue-800 transition-colors duration-200">
                     <i class="fas fa-arrow-left mr-2"></i>
                     Back to Events
                 </a>
@@ -195,6 +195,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 class="w-full rounded-lg border-gray-300 pl-8 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                                         </div>
                                     </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Department</label>
+                                    <select name="department_code" required
+                                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                        <?php
+                                        $dept_query = "SELECT * FROM department";
+                                        $dept_result = $conn->query($dept_query);
+                                        while ($dept = $dept_result->fetch_assoc()) {
+                                            $selected = $event['department_code'] == $dept['department_code'] ? 'selected' : '';
+                                            echo "<option value='{$dept['department_code']}' $selected>{$dept['department_name']}</option>";
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -257,7 +272,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <!-- Action Buttons -->
                         <div class="flex justify-end space-x-4 pt-6">
-                            <a href="manage_events.php"
+                            <a href="<?php echo isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'; ?>"
                                 class="px-6 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200">
                                 Cancel
                             </a>

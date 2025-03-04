@@ -11,7 +11,7 @@ if (!isset($_SESSION['department_code'])) {
     exit();
 }
 
-if ($_SESSION['is_superadmin'] !== 'yes') {
+if ($_SESSION['is_superadmin'] == 'yes') {
     $events_query = "SELECT e.event_id, e.event_name, COUNT(DISTINCT o.user_id) as participant_count
                      FROM events e
                      LEFT JOIN order_items oi ON e.event_id = oi.event_id
@@ -59,9 +59,8 @@ if ($_SESSION['is_superadmin'] !== 'yes') {
             <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800">Event Registrations</h1>
-                    <p class="text-gray-600 mt-1">Department: <?php echo htmlspecialchars($department_code); ?></p>
                 </div>
-                <a href="manage_events.php" class="text-blue-600 hover:text-blue-800">
+                <a href="<?php echo isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'; ?>" class="text-blue-600 hover:text-blue-800">
                     <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
                 </a>
             </div>
