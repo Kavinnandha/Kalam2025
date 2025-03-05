@@ -193,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <div class="relative">
                                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">₹</span>
                                             <input type="number" name="registration_fee"
-                                                value="<?php echo $event['registration_fee']; ?>" step="0.01" required
+                                                value="<?php echo $event['registration_fee']; ?>" step="0.1"
                                                 class="w-full rounded-lg border-gray-300 pl-8 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                                         </div>
                                     </div>
