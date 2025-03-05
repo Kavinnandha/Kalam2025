@@ -232,13 +232,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Contact No.</label>
-                                <input type="text" name="contact" required
+                                <input type="text" name="contact"
                                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Event Detail</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tag Line</label>
                             <input type="text" name="event_detail" required
                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                         </div>
