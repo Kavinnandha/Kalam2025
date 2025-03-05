@@ -11,9 +11,8 @@
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-8">
-                <a href="/kalam/index.php"
-                    class="group flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/index.php')
-                        echo 'text-orange-400'; ?>">
+                <a href="/kalam/index.php" class="group flex items-center space-x-2 text-gray-700 hover:text-orange-400 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/index.php')
+                    echo 'text-red-600'; ?>">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -24,9 +23,8 @@
 
                 <!-- Events Dropdown -->
                 <div class="relative group">
-                    <button
-                        class="group flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/categories/events.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/departments.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/event_details.php')
-                            echo 'text-orange-400'; ?>">
+                    <button class="group flex items-center space-x-2 text-gray-700 hover:text-orange-400 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/categories/events.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/departments.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/event_details.php')
+                        echo 'text-red-600'; ?>">
                         <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -38,27 +36,34 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div
-                        class="absolute hidden group-hover:block w-48 mt-0 p-2 bg-white/30 backdrop-blur-lg rounded-lg shadow-xl transform transition-all duration-300 opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100">
-                        <a href="/kalam/categories/events.php"
-                            class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-red-600">All
-                            Events</a>
-                        <a href="/kalam/categories/departments.php"
-                            class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-red-600">Departmentwise
-                            Events</a>
-                        <a href="/kalam/categories/events.php?category=Technical"
-                            class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-red-600">Technical
-                            Events</a>
-                        <a href="/kalam/categories/events.php?category=Non-Technical"
-                            class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-red-600">Non-Technical
-                            Events</a>
+                    <div class="absolute hidden group-hover:block">
+                        <div
+                            class="w-60 mt-4 p-2 bg-white/50 backdrop-blur-lg rounded-lg shadow-xl transform transition-all duration-300 opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100">
+                            <a href="/kalam/categories/events.php"
+                                class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">All
+                                Events</a>
+                            <a href="/kalam/categories/departments.php"
+                                class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">Departmentwise
+                                Events</a>
+                            <a href="/kalam/categories/events.php?category=Technical"
+                                class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">Technical
+                                Events</a>
+                            <a href="/kalam/categories/events.php?category=Non-Technical"
+                                class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">Non-Technical
+                                Events</a>
+                            <a href="/kalam/categories/events.php?category=Workshop"
+                                class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">
+                                Workshops</a>
+                            <a href="/kalam/categories/events.php?category=Hackthon"
+                                class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">
+                                Hackthons</a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Orders -->
-                <a href="/kalam/orders/orders.php"
-                    class="group flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/orders/orders.php')
-                        echo 'text-orange-400'; ?>">
+                <a href="/kalam/orders/orders.php" class="group flex items-center space-x-2 text-gray-700 hover:text-orange-400 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/orders/orders.php')
+                    echo 'text-red-600'; ?>">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -68,9 +73,8 @@
                 </a>
 
                 <!-- Cart -->
-                <a href="/kalam/cart/cart.php"
-                    class="group flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/cart/cart.php')
-                        echo 'text-orange-400'; ?>">
+                <a href="/kalam/cart/cart.php" class="group flex items-center space-x-2 text-gray-700 hover:text-orange-400 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/cart/cart.php')
+                    echo 'text-red-600'; ?>">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -90,8 +94,11 @@
                     </button>
                 <?php else: ?>
                     <button onclick="window.location.href='/kalam/user/signout.php'"
-                        class="btn-futuristic text-white px-6 py-2 rounded-full font-poppins shadow-lg bg-gradient-to-r from-red-500 to-purple-600 hover:from-red-600 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer">
-                        Sign Out
+                        class="relative group px-6 py-2 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 rounded-full overflow-hidden hover:shadow-lg hover:shadow-orange-500/50 transition-all duration-300 cursor-pointer">
+                        <span
+                            class="relative text-white font-semibold text-lg group-hover:scale-105 transition-transform duration-300 inline-block">
+                            Sign Out
+                        </span>
                     </button>
                 <?php endif; ?>
             </div>
@@ -113,9 +120,8 @@
         <div id="mobile-menu" class="mobile-menu">
             <div class="px-2 py-6 space-y-4">
                 <!-- Home Link -->
-                <a href="/kalam/index.php"
-                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/index.php')
-                        echo 'text-orange-400'; ?>">
+                <a href="/kalam/index.php" class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-orange-400 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/index.php')
+                    echo 'text-red-600'; ?>">
                     <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -126,9 +132,8 @@
 
                 <!-- Events Menu -->
                 <div class="space-y-2">
-                    <button id="mobile-events-button"
-                        class="group flex items-center justify-between w-full font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/categories/events.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/departments.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/event_details.php')
-                            echo 'text-orange-400'; ?>">
+                    <button id="mobile-events-button" class="group flex items-center justify-between w-full font-poppins text-gray-700 hover:text-orange-400 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/categories/events.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/departments.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/event_details.php')
+                        echo 'text-red-600'; ?>">
                         <div class="flex items-center space-x-3">
                             <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
@@ -146,17 +151,17 @@
                     <div id="mobile-events-submenu"
                         class="hidden pl-8 space-y-3 overflow-hidden transition-all duration-300">
                         <a href="/kalam/categories/events.php"
-                            class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2">
+                            class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-orange-400 transition-all duration-300 py-2">
                             <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
                             <span class="transform transition-transform duration-300 group-hover:translate-x-1">All
                                 Events</span>
                         </a>
                         <a href="/kalam/categories/departments.php"
-                            class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2">
+                            class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-orange-400 transition-all duration-300 py-2">
                             <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -167,7 +172,7 @@
                                 Events</span>
                         </a>
                         <a href="/kalam/categories/events.php?category=Technical"
-                            class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2">
+                            class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-orange-400 transition-all duration-300 py-2">
                             <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -178,7 +183,7 @@
                                 Events</span>
                         </a>
                         <a href="/kalam/categories/events.php?category=Non-Technical"
-                            class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2">
+                            class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-orange-400 transition-all duration-300 py-2">
                             <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -188,13 +193,33 @@
                                 class="transform transition-transform duration-300 group-hover:translate-x-1">Non-Technical
                                 Events</span>
                         </a>
+                        <a href="/kalam/categories/events.php?category=Workshop"
+                            class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-orange-400 transition-all duration-300 py-2">
+                            <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10M7 7v2M17 7v2" />
+                            </svg>
+                            <span
+                                class="transform transition-transform duration-300 group-hover:translate-x-1">Workshops</span>
+                        </a>
+
+                        <a href="/kalam/categories/events.php?category=Hackthon"
+                            class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-orange-400 transition-all duration-300 py-2">
+                            <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                            </svg>
+                            <span
+                                class="transform transition-transform duration-300 group-hover:translate-x-1">Hackthons</span>
+                        </a>
                     </div>
                 </div>
 
                 <!-- Orders Link -->
-                <a href="/kalam/orders/orders.php"
-                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/orders/orders.php')
-                        echo 'text-orange-400'; ?>">
+                <a href="/kalam/orders/orders.php" class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-orange-400 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/orders/orders.php')
+                    echo 'text-red-600'; ?>">
                     <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -204,9 +229,8 @@
                 </a>
 
                 <!-- Cart Link -->
-                <a href="/kalam/cart/cart.php"
-                    class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-red-600 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/cart/cart.php')
-                        echo 'text-orange-400'; ?>">
+                <a href="/kalam/cart/cart.php" class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-orange-400 transition-all duration-300 py-2 <?php if ($_SERVER['PHP_SELF'] == '/kalam/cart/cart.php')
+                    echo 'text-red-600'; ?>">
                     <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

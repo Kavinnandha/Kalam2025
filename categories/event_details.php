@@ -83,7 +83,7 @@
                         </div>
                     </div>
                     <!-- Event Image in Hero Section -->
-                    <div class="md:w-1/2">
+                    <div>
                         <?php if(isset($event['image_path']) && !empty($event['image_path'])): ?>
                             <img src="<?php echo htmlspecialchars($event['image_path']); ?>" 
                                 alt="<?php echo htmlspecialchars($event['event_name']); ?>" 

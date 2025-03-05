@@ -57,27 +57,6 @@
         transform: translateX(0);
     }
 
-    /* Button styles */
-    .btn-futuristic {
-        background: linear-gradient(135deg, red 0%, orange 100%);
-        transition: all 0.3s ease;
-    }
-
-    .btn-futuristic::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: 0.5s;
-    }
-
-    .btn-futuristic:hover::before {
-        left: 100%;
-    }
-
     /* Animation classes */
     .menu-icon-transition {
         transition: transform 0.3s ease;
