@@ -11,7 +11,7 @@
             background-clip: text;
             color: transparent;
         }
-        
+
         .custom-shape {
             clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
         }
@@ -41,23 +41,23 @@
     }
 
     require_once '../database/connection.php';
-    
+
     $event_id = $_GET['event_id'];
     $query = "SELECT e.*, d.department_name 
               FROM events e 
               LEFT JOIN department d ON e.department_code = d.department_code 
               WHERE e.event_id = ?";
-    
+
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $event_id);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     if ($result->num_rows === 0) {
         header("Location: events.php");
         exit();
     }
-    
+
     $event = $result->fetch_assoc();
     ?>
 
@@ -84,13 +84,12 @@
                     </div>
                     <!-- Event Image in Hero Section -->
                     <div>
-                        <?php if(isset($event['image_path']) && !empty($event['image_path'])): ?>
-                            <img src="<?php echo htmlspecialchars($event['image_path']); ?>" 
-                                alt="<?php echo htmlspecialchars($event['event_name']); ?>" 
+                        <?php if (isset($event['image_path']) && !empty($event['image_path'])): ?>
+                            <img src="<?php echo htmlspecialchars($event['image_path']); ?>"
+                                alt="<?php echo htmlspecialchars($event['event_name']); ?>"
                                 class="event-image shadow-xl transition-transform duration-300 hover:scale-[1.02]">
                         <?php else: ?>
-                            <img src="/kalam/networkingnight.webp" 
-                                alt="Event placeholder" 
+                            <img src="/kalam/networkingnight.webp" alt="Event placeholder"
                                 class="event-image shadow-xl transition-transform duration-300 hover:scale-[1.02] ">
                         <?php endif; ?>
                     </div>
@@ -117,7 +116,8 @@
                     <div class="bg-white rounded-2xl shadow-lg p-6 space-y-4">
                         <div class="flex items-center gap-3 text-gray-700">
                             <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                             <span class="font-medium">
                                 <?php echo date('F d, Y', strtotime($event['event_date'])); ?>
@@ -126,38 +126,45 @@
 
                         <div class="flex items-center gap-3 text-gray-700">
                             <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <span class="font-medium">
-                                <?php 
-                                echo date('g:i A', strtotime($event['start_time'])) . ' - ' . 
-                                     date('g:i A', strtotime($event['end_time'])); 
+                                <?php
+                                echo date('g:i A', strtotime($event['start_time'])) . ' - ' .
+                                    date('g:i A', strtotime($event['end_time']));
                                 ?>
                             </span>
                         </div>
 
                         <div class="flex items-center gap-3 text-gray-700">
                             <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                             <span class="font-medium">
                                 <?php echo htmlspecialchars($event['venue']); ?>
                             </span>
                         </div>
 
+                        <?php if ($event['contact'] != ''): ?>  
                         <div class="flex items-center gap-3 text-gray-700">
-    <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-    </svg>
-    <span class="font-medium">
-        <?php echo htmlspecialchars($event['contact']); ?>
-    </span>
-</div>
+                            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                            <span class="font-medium">
+                                <?php echo htmlspecialchars($event['contact']); ?>
+                            </span>
+                        </div>
+                        <?php endif; ?>
 
                         <div class="flex items-center gap-3 text-gray-700">
                             <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <span class="font-medium">
                                 ₹<?php echo number_format($event['registration_fee'], 2); ?>
@@ -165,11 +172,11 @@
                         </div>
 
                         <!-- Add to Cart Button -->
-                        <button onclick="addToCart(<?php echo $event['event_id']; ?>)" 
-                                class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-lg hover:from-orange-600 hover:to-yellow-500 transform hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
+                        <button onclick="addToCart(<?php echo $event['event_id']; ?>)"
+                            class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-lg hover:from-orange-600 hover:to-yellow-500 transform hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
                             Add to Cart
                         </button>
@@ -183,7 +190,7 @@
 
     <script>
         function addToCart(eventId) {
-            <?php if(!isset($_SESSION['user_id'])): ?>
+            <?php if (!isset($_SESSION['user_id'])): ?>
                 window.location.href = '../user/registration.php';
                 return;
             <?php endif; ?>
@@ -198,19 +205,19 @@
                     event_id: eventId
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                if(data.success) {
-                    // Update cart UI or show success message
-                    alert('Added to cart successfully!');
-                } else {
-                    alert(data.message || 'Error adding to cart');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error adding to cart');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update cart UI or show success message
+                        alert('Added to cart successfully!');
+                    } else {
+                        alert(data.message || 'Error adding to cart');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error adding to cart');
+                });
         }
 
         // Optional: Add smooth scroll animation for better UX
@@ -224,4 +231,5 @@
         });
     </script>
 </body>
+
 </html>

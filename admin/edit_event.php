@@ -183,6 +183,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                                             <option value="Technical" <?php echo $event['category'] == 'Technical' ? 'selected' : ''; ?>>Technical</option>
                                             <option value="Non-Technical" <?php echo $event['category'] == 'Non-Technical' ? 'selected' : ''; ?>>Non-Technical</option>
+                                            <option value="Workshop" <?php echo $event['category'] == 'Workshop' ? 'selected' : ''; ?>>Workshop</option>
+                                            <option value="Hackthon" <?php echo $event['category'] == 'Hackthon' ? 'selected' : ''; ?>>Hackthon</option>
                                         </select>
                                     </div>
 

@@ -170,6 +170,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <option value="">Select Category</option>
                                     <option value="Technical">Technical</option>
                                     <option value="Non-Technical">Non-Technical</option>
+                                    <option value="Workshop">Workshop</option>
+                                    <option value="Hackthon">Hackthon</option>
                                 </select>
                             </div>
 
