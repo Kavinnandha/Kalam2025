@@ -168,6 +168,7 @@
                             </svg>
                             <span class="font-medium">
                                 ₹<?php echo number_format($event['registration_fee'], 2); ?>
+                                <?php echo '(' . htmlspecialchars($event['fee_description']) . ')'; ?>
                             </span>
                         </div>
 

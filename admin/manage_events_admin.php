@@ -68,6 +68,9 @@ if (isset($_POST['delete_event'])) {
                         <a href="add_event.php" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
                             <i class="fas fa-plus mr-2"></i>Add New Event
                         </a>
+                        <a href="create_user.php" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                            <i class="fas fa-users-cog mr-2"></i>Manage Users
+                        </a>
                         <a href="logout.php" class="text-gray-500 hover:text-gray-700">
                             <i class="fas fa-sign-out-alt mr-2"></i>Logout
                         </a>

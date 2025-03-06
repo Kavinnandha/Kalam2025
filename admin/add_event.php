@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $venue = $_POST['venue'];
     $contact = $_POST['contact'];
     $registration_fee = $_POST['registration_fee'];
+    $fee_description = $_POST['fee_description'];
     
     // Initialize image path
     $image_path = null;
@@ -66,11 +67,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Insert into database
     $insert_sql = "INSERT INTO events (event_name, event_detail, category, department_code, description,
-                   event_date, start_time, end_time, venue, registration_fee, contact, image_path) 
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                   event_date, start_time, end_time, venue, registration_fee, contact, image_path, fee_description) 
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($insert_sql);
-    $stmt->bind_param("ssssssssssss", 
+    $stmt->bind_param("sssssssssssss", 
         $event_name, 
         $event_detail, 
         $category, 
@@ -82,7 +83,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $venue, 
         $registration_fee,
         $contact, 
-        $image_path
+        $image_path,
+        $fee_description
     );
 
     if ($stmt->execute()) {
@@ -199,6 +201,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <input type="number" name="registration_fee" step="0.1"
                                            class="w-full rounded-lg border-gray-300 pl-8 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                                 </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Fee Description</label>
+                                <select name="fee_description" required
+                                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                    <option value="">Select Fee Type</option>
+                                    <option value="Individual">Individual</option>
+                                    <option value="Team">Team</option>
+                                </select>
                             </div>
                         </div>
 

@@ -39,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $venue = $_POST['venue'];
     $registration_fee = $_POST['registration_fee'];
     $contact = $_POST['contact'];
+    $fee_description = $_POST['fee_description'];
 
     // Handle file upload
     $image_path = $event['image_path'];
@@ -48,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
         $file_extension = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
         $new_filename = uniqid() . '.' . $file_extension;
-        $target_file = $target_dir . $new_filename;
+        $target_file = "{$target_dir}{$new_filename}";
 
         if (!is_dir($target_dir)) {
             mkdir($target_dir, 0777, true);
@@ -62,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Validate file size (2MB max)
         if ($_FILES["image"]["size"] > 2 * 1024 * 1024) {
             $_SESSION['error'] = "File size exceeds 2MB!";
-            header("Location: add_event.php");
+            header("Location: edit_event.php?event_id=$event_id");
             exit();
         }
 
@@ -70,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($event['image_path'] && file_exists($event['image_path'])) {
             unlink($event['image_path']);
             }
-            $image_path = '/kalam/images/' . $new_filename;
+            $image_path = "/kalam/images/{$new_filename}";
         }
     }
 
@@ -86,12 +87,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                    venue = ?, 
                    registration_fee = ?, 
                    image_path = ?,
-                   contact = ?
+                   contact = ?,
+                   fee_description = ?
                    WHERE event_id = ?";
 
     $update_stmt = $conn->prepare($update_sql);
     $update_stmt->bind_param(
-        "sssisssssdssi",
+        "sssisssssdsssi",
         $event_name,
         $event_detail,
         $category,
@@ -104,11 +106,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $registration_fee,
         $image_path,
         $contact,
+        $fee_description,
         $event_id
     );
 
     if ($update_stmt->execute()) {
         $_SESSION['message'] = "Event updated successfully!";
+        
         header("Location: " . (isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'));
         exit();
     }
@@ -139,6 +143,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     Back to Events
                 </a>
             </div>
+            <!-- Error Messages -->
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <?php 
+                    echo htmlspecialchars($_SESSION['error']);
+                    unset($_SESSION['error']);
+                    ?>
+                </div>
+            <?php endif; ?>
 
             <!-- Main Form Card -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -200,6 +213,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
 
                                 <div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Fee Type</label>
+                                        <select name="fee_description" required
+                                            class="mb-5 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                            <option value="Individual" <?php echo $event['fee_description'] == 'Individual' ? 'selected' : ''; ?>>Individual</option>
+                                            <option value="Team" <?php echo $event['fee_description'] == 'Team' ? 'selected' : ''; ?>>Team</option>
+                                        </select>
+                                    </div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Department</label>
                                     <select name="department_code" required
                                         class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
