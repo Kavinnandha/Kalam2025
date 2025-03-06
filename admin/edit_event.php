@@ -221,18 +221,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <option value="Team" <?php echo $event['fee_description'] == 'Team' ? 'selected' : ''; ?>>Team</option>
                                         </select>
                                     </div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Department</label>
+                                    
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Department</label>
+                                <?php if (isset($_SESSION['department_code']) && !empty($_SESSION['department_code'])): ?>
+                                    
+                                    <input type="hidden" name="department_code" value="<?php echo $_SESSION['department_code']; ?>">
+                                    <p class="text-gray-700"><?php
+                                        $dept_sql = "SELECT department_name FROM department WHERE department_code = ?";
+                                        $stmt = $conn->prepare($dept_sql);
+                                        $stmt->bind_param("s", $_SESSION['department_code']);
+                                        $stmt->execute();
+                                        $stmt->bind_result($department_name);
+                                        $stmt->fetch();
+                                        echo $department_name;
+                                        $stmt->close();
+                                    ?></p>
+                                <?php else: ?>
                                     <select name="department_code" required
-                                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                            class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                        <option value="">Select Department</option>
                                         <?php
-                                        $dept_query = "SELECT * FROM department";
-                                        $dept_result = $conn->query($dept_query);
-                                        while ($dept = $dept_result->fetch_assoc()) {
-                                            $selected = $event['department_code'] == $dept['department_code'] ? 'selected' : '';
-                                            echo "<option value='{$dept['department_code']}' $selected>{$dept['department_name']}</option>";
+                                        $dept_sql = "SELECT department_code, department_name FROM department";
+                                        $dept_result = $conn->query($dept_sql);
+                                        if ($dept_result->num_rows > 0) {
+                                            while ($row = $dept_result->fetch_assoc()) {
+                                                echo '<option value="' . $row['department_code'] . '">' . $row['department_name'] . '</option>';
+                                            }
                                         }
                                         ?>
                                     </select>
+                                <?php endif; ?>
+                    
                                 </div>
                             </div>
                         </div>

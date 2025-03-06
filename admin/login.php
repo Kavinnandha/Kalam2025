@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Check if identifier is email or phone
     $sql = "SELECT * FROM admin WHERE email = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $identifier, $identifier);
+    $stmt->bind_param("s", $identifier);
     $stmt->execute();
     $result = $stmt->get_result();
     

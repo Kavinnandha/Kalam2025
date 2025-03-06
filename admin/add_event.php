@@ -180,7 +180,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Department</label>
-                                <script>console.log("<?php echo $_SESSION['department_code']; ?>")</script>
                                 <?php if (isset($_SESSION['department_code']) && !empty($_SESSION['department_code'])): ?>
                                     
                                     <input type="hidden" name="department_code" value="<?php echo $_SESSION['department_code']; ?>">
