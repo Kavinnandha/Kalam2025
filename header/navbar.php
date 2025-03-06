@@ -242,7 +242,7 @@
                 <!-- Login/Register Button -->
                 <?php if (!isset($_SESSION['user_id'])): ?>
                     <button onclick="window.location.href='/kalam/user/registration.php'"
-                        class="group w-full btn-futuristic text-white px-6 py-3 rounded-full font-poppins shadow-lg transition-all duration-300 flex items-center justify-center space-x-2">
+                        class="group w-full bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white px-6 py-3 rounded-full font-poppins shadow-lg transition-all duration-300 flex items-center justify-center space-x-2">
                         <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -253,7 +253,7 @@
                     </button>
                 <?php else: ?>
                     <button onclick="window.location.href='/kalam/user/signout.php'"
-                        class="group w-full btn-futuristic text-white px-6 py-3 rounded-full font-poppins shadow-lg transition-all duration-300 flex items-center justify-center space-x-2">
+                        class="group w-full bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white px-6 py-3 rounded-full font-poppins shadow-lg transition-all duration-300 flex items-center justify-center space-x-2">
                         <svg class="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

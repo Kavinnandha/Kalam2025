@@ -35,11 +35,10 @@ $cartId = null;
 $totalAmount = 0;
 if (!$cart) {
     // Create new cart if doesn't exist
-    mysqli_query($conn, "INSERT INTO cart (user_id, total_amount) VALUES ('$userId', 0)");
+    mysqli_query($conn, "INSERT INTO cart (user_id) VALUES ('$userId')");
     $cartId = mysqli_insert_id($conn);
 } else {
     $cartId = $cart['cart_id'];
-    $totalAmount = $cart['total_amount'];
 }
 
 // Check if item already exists in cart
@@ -94,19 +93,10 @@ if (mysqli_num_rows($overlappingEvents) > 0) {
     exit;
 }
 
-// Fetch the price of the event
-$eventResult = mysqli_query($conn, "SELECT registration_fee FROM events WHERE event_id = '$eventId'");
-$event = mysqli_fetch_assoc($eventResult);
-$eventPrice = $event['registration_fee'];
-
 // Add item to cart
 $addItem = mysqli_query($conn, "INSERT INTO cart_items (cart_id, event_id) VALUES ('$cartId', '$eventId')");
 
-if ($addItem) {
-    // Update total amount in cart
-    $totalAmount += $eventPrice;
-    mysqli_query($conn, "UPDATE cart SET total_amount = '$totalAmount' WHERE cart_id = '$cartId'");
-    
+if ($addItem) {    
     echo json_encode([
         'success' => true,
         'message' => 'Item added to cart successfully'
