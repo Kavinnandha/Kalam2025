@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 04, 2025 at 10:48 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Mar 06, 2025 at 05:41 AM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `kalam2025`
+-- Database: `kalam2`
 --
 
 -- --------------------------------------------------------
@@ -111,7 +111,7 @@ CREATE TABLE `events` (
   `event_id` int(11) NOT NULL,
   `event_name` varchar(100) NOT NULL,
   `event_detail` varchar(256) NOT NULL,
-  `category` enum('Technical','Non-Technical') DEFAULT NULL,
+  `category` enum('Technical','Non-Technical','Workshop','Hackathon') DEFAULT NULL,
   `department_code` int(11) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `event_date` date NOT NULL,
@@ -120,7 +120,8 @@ CREATE TABLE `events` (
   `venue` varchar(100) DEFAULT NULL,
   `registration_fee` decimal(10,2) DEFAULT NULL,
   `image_path` varchar(512) DEFAULT NULL,
-  `contact` bigint(15) DEFAULT NULL
+  `contact` bigint(15) DEFAULT NULL,
+  `fee_description` varchar(128) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -273,25 +274,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `orders`
