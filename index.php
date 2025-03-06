@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,7 +56,10 @@
         }
     </style>
 </head>
-
+<script>console.log("<?php echo $_SESSION['user_id'] ?? '' ?>")</script>
+<?php
+echo $_SESSION['user_id'] ?? '';
+?>
 <body class="bg-gradient-to-br from-orange-50 to-red-100 min-h-screen">
     <?php include 'header/navbar.php'; ?>
     <?php include 'database/connection.php';
@@ -86,7 +90,7 @@
                         <div class="container mx-auto text-center w-full">
                             <div class="p-4 sm:p-8 max-w-xl mx-auto transform transition-all duration-500">
                                 <div class="text-gray-700 text-base sm:text-lg mb-4 font-semibold">
-                                    Get Ready On March 21, 2025
+                                    Mark Your Calenders On <br> 21 - 22 March 2025
                                 </div>
                                 <div id="countdown" class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
                                     <div
