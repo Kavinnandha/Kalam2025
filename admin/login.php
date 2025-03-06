@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
     
     // Check if identifier is email or phone
-    $sql = "SELECT * FROM admin WHERE (email = ?)";
+    $sql = "SELECT * FROM admin WHERE email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ss", $identifier, $identifier);
     $stmt->execute();
