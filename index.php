@@ -56,10 +56,6 @@
         }
     </style>
 </head>
-<script>console.log("<?php echo $_SESSION['user_id'] ?? '' ?>")</script>
-<?php
-echo $_SESSION['user_id'] ?? '';
-?>
 <body class="bg-gradient-to-br from-orange-50 to-red-100 min-h-screen">
     <?php include 'header/navbar.php'; ?>
     <?php include 'database/connection.php';
@@ -90,7 +86,7 @@ echo $_SESSION['user_id'] ?? '';
                         <div class="container mx-auto text-center w-full">
                             <div class="p-4 sm:p-8 max-w-xl mx-auto transform transition-all duration-500">
                                 <div class="text-gray-700 text-base sm:text-lg mb-4 font-semibold">
-                                    Mark Your Calenders On <br> 21 - 22 March 2025
+                                    Mark Your Calender On <br> 21 - 22 March 2025
                                 </div>
                                 <div id="countdown" class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
                                     <div
@@ -137,6 +133,17 @@ echo $_SESSION['user_id'] ?? '';
                                 </span>
                             </button>
                         </a>
+                        <?php if (!isset($_SESSION['user_id'])): ?>
+                        <a href="user/login.php">
+                            <button
+                                class="relative group px-8 py-4 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 rounded-full overflow-hidden hover:shadow-lg hover:shadow-red-500/50 transition-all duration-300 cursor-pointer">
+                                <span
+                                    class="relative text-white font-semibold text-lg group-hover:scale-105 transition-transform duration-300 inline-block">
+                                    Already Registered? Login
+                                </span>
+                            </button>
+                        </a>
+                        <?php endif; ?>
                     </div>
                 </div>
 
