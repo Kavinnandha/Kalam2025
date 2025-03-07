@@ -54,9 +54,9 @@
                             <a href="/kalam/categories/events.php?category=Workshop"
                                 class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">
                                 Workshops</a>
-                            <a href="/kalam/categories/events.php?category=Hackthon"
+                            <a href="/kalam/categories/events.php?category=Hackathon"
                                 class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">
-                                Hackthons</a>
+                                Hackathons</a>
                         </div>
                     </div>
                 </div>
@@ -204,7 +204,7 @@
                                 class="transform transition-transform duration-300 group-hover:translate-x-1">Workshops</span>
                         </a>
 
-                        <a href="/kalam/categories/events.php?category=Hackthon"
+                        <a href="/kalam/categories/events.php?category=Hackathon"
                             class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-orange-400 transition-all duration-300 py-2">
                             <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
@@ -212,7 +212,7 @@
                                     d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                             </svg>
                             <span
-                                class="transform transition-transform duration-300 group-hover:translate-x-1">Hackthons</span>
+                                class="transform transition-transform duration-300 group-hover:translate-x-1">Hackathons</span>
                         </a>
                     </div>
                 </div>

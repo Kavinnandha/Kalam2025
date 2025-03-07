@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -149,16 +150,16 @@
                             </span>
                         </div>
 
-                        <?php if ($event['contact'] != ''): ?>  
-                        <div class="flex items-center gap-3 text-gray-700">
-                            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                            </svg>
-                            <span class="font-medium">
-                                <?php echo htmlspecialchars($event['contact']); ?>
-                            </span>
-                        </div>
+                        <?php if ($event['contact'] != ''): ?>
+                            <div class="flex items-center gap-3 text-gray-700">
+                                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                </svg>
+                                <span class="font-medium">
+                                    <?php echo htmlspecialchars($event['contact']); ?>
+                                </span>
+                            </div>
                         <?php endif; ?>
 
                         <div class="flex items-center gap-3 text-gray-700">
@@ -181,15 +182,42 @@
                             </svg>
                             Add to Cart
                         </button>
+
+                        <?php if ($event['category'] == 'Hackathon'): ?>
+                            <button
+                                class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-lg 
+                                           hover:from-orange-600 hover:to-yellow-500 transform hover:scale-105 transition-all duration-300 shadow-md  flex items-center justify-center"
+                                onclick="checkEventAccess(<?php echo $event['event_id']; ?>)">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 100-16 8 8 0 000 16z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2" />
+                                </svg>
+                                View Hackathon Status
+                            </button>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    
     <?php include '../header/navbar_scripts.php'; ?>
 
     <script>
+        function checkEventAccess(eventId) {
+            fetch('../hackathon/check_event_access.php?event_id=' + eventId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'not_logged_in') {
+                        window.location.href = '../user/registration.php';
+                    } else if (data.status === 'not_purchased') {
+                        alert('You need to purchase this event to proceed.');
+                    } else if (data.status === 'allowed') {
+                        window.location.href = '../hackathon/hackathon.php?event_id=' + encodeURIComponent(<?php echo $event['event_id'] ?>);
+                    }
+                });
+        }
         function addToCart(eventId) {
             <?php if (!isset($_SESSION['user_id'])): ?>
                 window.location.href = '../user/registration.php';
