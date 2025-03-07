@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 06, 2025 at 05:41 AM
+-- Generation Time: Mar 07, 2025 at 10:48 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `kalam2`
+-- Database: `kalam20255`
 --
 
 -- --------------------------------------------------------
@@ -111,7 +111,7 @@ CREATE TABLE `events` (
   `event_id` int(11) NOT NULL,
   `event_name` varchar(100) NOT NULL,
   `event_detail` varchar(256) NOT NULL,
-  `category` enum('Technical','Non-Technical','Workshop','Hackathon') DEFAULT NULL,
+  `category` enum('Technical','Non-Technical','Workshop','Hackathon','General') DEFAULT NULL,
   `department_code` int(11) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `event_date` date NOT NULL,
@@ -122,6 +122,32 @@ CREATE TABLE `events` (
   `image_path` varchar(512) DEFAULT NULL,
   `contact` bigint(15) DEFAULT NULL,
   `fee_description` varchar(128) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hackathon`
+--
+
+CREATE TABLE `hackathon` (
+  `team_id` int(11) NOT NULL,
+  `team_name` varchar(512) DEFAULT NULL,
+  `title` varchar(512) DEFAULT NULL,
+  `problem_statement` text DEFAULT NULL,
+  `event_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hackathon_teams`
+--
+
+CREATE TABLE `hackathon_teams` (
+  `team_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `team_member_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -193,7 +219,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `name`, `email`, `phone`, `college_id`, `department`, `otp`, `password`) VALUES
-(17, 'Kavin Nandha', 'kavinnandha121@gmail.com', '9345569707', 'sri shakthi institute of engineering college', 'Cyber security', NULL, '$2y$10$i5z3RC0welCb3s2x1zMQ7e0r53iop4OmzDB9v0eD3cul4Xz3K6vdu');
+(17, 'Kavin Nandha', 'kavinnandha121@gmail.com', '9345569707', 'sri shakthi institute of engineering college', 'Cyber security', NULL, '$2y$10$i5z3RC0welCb3s2x1zMQ7e0r53iop4OmzDB9v0eD3cul4Xz3K6vdu'),
+(46, 'Kavin Nandha', 'kavin2@gmail.com', '9345569708', 'sri shakthi institute of engineering college', 'Cyber security', NULL, '$2y$10$i5z3RC0welCb3s2x1zMQ7e0r53iop4OmzDB9v0eD3cul4Xz3K6vdu');
 
 --
 -- Indexes for dumped tables
@@ -233,6 +260,21 @@ ALTER TABLE `department`
 ALTER TABLE `events`
   ADD PRIMARY KEY (`event_id`),
   ADD KEY `department_code` (`department_code`);
+
+--
+-- Indexes for table `hackathon`
+--
+ALTER TABLE `hackathon`
+  ADD PRIMARY KEY (`team_id`),
+  ADD KEY `fk_event_id` (`event_id`);
+
+--
+-- Indexes for table `hackathon_teams`
+--
+ALTER TABLE `hackathon_teams`
+  ADD PRIMARY KEY (`team_member_id`),
+  ADD KEY `team_id` (`team_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `orders`
@@ -280,13 +322,13 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `events`
@@ -295,16 +337,28 @@ ALTER TABLE `events`
   MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
+-- AUTO_INCREMENT for table `hackathon`
+--
+ALTER TABLE `hackathon`
+  MODIFY `team_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `hackathon_teams`
+--
+ALTER TABLE `hackathon_teams`
+  MODIFY `team_member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `payment_transactions`
@@ -316,7 +370,7 @@ ALTER TABLE `payment_transactions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- Constraints for dumped tables
@@ -346,6 +400,19 @@ ALTER TABLE `cart_items`
 --
 ALTER TABLE `events`
   ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`department_code`) REFERENCES `department` (`department_code`);
+
+--
+-- Constraints for table `hackathon`
+--
+ALTER TABLE `hackathon`
+  ADD CONSTRAINT `fk_event_id` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`);
+
+--
+-- Constraints for table `hackathon_teams`
+--
+ALTER TABLE `hackathon_teams`
+  ADD CONSTRAINT `hackathon_teams_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `hackathon` (`team_id`),
+  ADD CONSTRAINT `hackathon_teams_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
 --
 -- Constraints for table `orders`

@@ -3,10 +3,10 @@ session_start();
 include '../database/connection.php';
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $identifier = $_POST['identifier']; // This can be either email or phone
+    $identifier = $_POST['identifier']; // This can be either email
     $password = $_POST['password'];
     
-    // Check if identifier is email or phone
+    // Check if identifier is email
     $sql = "SELECT * FROM admin WHERE email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $identifier);
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     Admin Login
                 </h2>
                 <p class="mt-2 text-center text-sm text-gray-600">
-                    Enter your email/phone and password
+                    Enter your email and password
                 </p>
             </div>
 
@@ -68,10 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <form class="mt-8 space-y-6" action="" method="POST">
                 <div class="rounded-md shadow-sm -space-y-px">
                     <div>
-                        <label for="identifier" class="sr-only">Email or Phone</label>
+                        <label for="identifier" class="sr-only">Email</label>
                         <input id="identifier" name="identifier" type="text" required 
                             class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
-                            placeholder="Email or Phone Number">
+                            placeholder="Email">
                     </div>
                     <div>
                         <label for="password" class="sr-only">Password</label>

@@ -23,6 +23,105 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(255, 94, 98, 0.2);
         }
+        /* Enhanced form styling */
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(209, 213, 219, 0.5);
+            border-radius: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        .form-input:focus {
+            border-color: #ff7e65;
+            box-shadow: 0 0 0 3px rgba(255, 126, 101, 0.2);
+            outline: none;
+        }
+        .form-input::placeholder {
+            color: #9ca3af;
+            opacity: 0.7;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #4b5563;
+            font-size: 0.95rem;
+            letter-spacing: 0.025em;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .input-group-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 1rem;
+            color: #9ca3af;
+        }
+        .input-with-icon {
+            padding-left: 2.5rem;
+        }
+        textarea.form-input {
+            resize: none;
+            min-height: 120px;
+            line-height: 1.6;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 640px) {
+            .responsive-flex {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            .responsive-button-group {
+                display: flex;
+                gap: 0.5rem;
+                margin-top: 0.75rem;
+            }
+            
+            .responsive-button-group button {
+                flex: 1;
+                justify-content: center;
+            }
+            
+            .responsive-table {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .header-actions {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+            
+            .header-actions button {
+                align-self: flex-start;
+            }
+            
+            .team-actions {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+            
+            .team-actions a,
+            .team-actions form {
+                width: 100%;
+            }
+            
+            .team-actions button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -131,8 +230,8 @@
                     $countResult = $countMembersStmt->get_result();
                     $countData = $countResult->fetch_assoc();
                     
-                    if ($countData['member_count'] >= 6) {
-                        $error = "Maximum team size (6 members) reached.";
+                    if ($countData['member_count'] >= 4) {
+                        $error = "Maximum team size (4 members) reached.";
                     } else {
                         // Check if the user has purchased the event
                         $checkPurchaseSql = "SELECT * FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.user_id = ? AND oi.event_id = ?";
@@ -279,9 +378,9 @@
             ?>
 
             <div class="glass-card p-6 mb-8">
-                <div class="flex justify-between items-center mb-6">
+                <div class="flex justify-between items-center mb-6 header-actions">
                     <h2 class="text-2xl font-bold text-gray-800">Your Team: <?php echo htmlspecialchars($teamData['team_name']); ?></h2>
-                    <button class="text-orange-500 hover:text-orange-700" onclick="toggleEditTeam()">
+                    <button class="text-orange-500 hover:text-orange-700 transition-colors duration-300 flex items-center" onclick="toggleEditTeam()">
                         <i class="fas fa-edit mr-1"></i> Edit Team Details
                     </button>
                 </div>
@@ -300,59 +399,70 @@
                 <div id="edit-team-form" class="mb-6 hidden">
                     <form method="POST" class="space-y-4">
                         <input type="hidden" name="team_id" value="<?php echo $team_id; ?>">
-                        <div>
-                            <label for="team_name" class="block text-sm font-medium text-gray-700">Team Name</label>
-                            <input type="text" id="team_name" name="team_name" value="<?php echo htmlspecialchars($teamData['team_name']); ?>" required 
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200">
+                        <div class="input-group">
+                            <label for="team_name" class="form-label">Team Name</label>
+                            <div class="relative">
+                                <i class="fas fa-users input-group-icon"></i>
+                                <input type="text" id="team_name" name="team_name" value="<?php echo htmlspecialchars($teamData['team_name']); ?>" required 
+                                    class="form-input input-with-icon">
+                            </div>
                         </div>
-                        <div>
-                            <label for="title" class="block text-sm font-medium text-gray-700">Project Title</label>
-                            <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($teamData['title']); ?>" required 
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200">
+                        <div class="input-group">
+                            <label for="title" class="form-label">Project Title</label>
+                            <div class="relative">
+                                <i class="fas fa-project-diagram input-group-icon"></i>
+                                <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($teamData['title']); ?>" required 
+                                    class="form-input input-with-icon">
+                            </div>
                         </div>
-                        <div>
-                            <label for="problem_statement" class="block text-sm font-medium text-gray-700">Problem Statement</label>
+                        <div class="input-group">
+                            <label for="problem_statement" class="form-label">Problem Statement</label>
                             <textarea id="problem_statement" name="problem_statement" rows="4" required 
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200"><?php echo htmlspecialchars($teamData['problem_statement']); ?></textarea>
+                                class="form-input"><?php echo htmlspecialchars($teamData['problem_statement']); ?></textarea>
                         </div>
-                        <div class="flex gap-3">
-                            <button type="submit" name="update_team" class="btn-gradient text-white px-4 py-2 rounded-md">
-                                Save Changes
+                        <div class="flex gap-3 responsive-flex">
+                            <button type="submit" name="update_team" class="btn-gradient text-white px-4 py-2 rounded-md flex items-center">
+                                <i class="fas fa-save mr-2"></i> Save Changes
                             </button>
-                            <button type="button" onclick="toggleEditTeam()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">
-                                Cancel
+                            <button type="button" onclick="toggleEditTeam()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors duration-300 flex items-center">
+                                <i class="fas fa-times mr-2"></i> Cancel
                             </button>
                         </div>
                     </form>
                 </div>
                 
                 <div class="mt-8">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-xl font-bold text-gray-800">Team Members (<?php echo $member_count; ?>/6)</h3>
-                        <?php if ($member_count < 6): ?>
-                            <button class="text-orange-500 hover:text-orange-700" onclick="toggleAddMember()">
+                    <div class="flex justify-between items-center mb-4 header-actions">
+                        <h3 class="text-xl font-bold text-gray-800">Team Members (<?php echo $member_count; ?>/4)</h3>
+                        <?php if ($member_count < 4): ?>
+                            <button class="text-orange-500 hover:text-orange-700 transition-colors duration-300 flex items-center" onclick="toggleAddMember()">
                                 <i class="fas fa-plus-circle mr-1"></i> Add Member
                             </button>
                         <?php endif; ?>
                     </div>
                     
                     <div id="add-member-form" class="mb-6 hidden">
-                        <form method="POST" class="flex space-x-2">
+                        <form method="POST">
                             <input type="hidden" name="team_id" value="<?php echo $team_id; ?>">
-                            <div class="flex-grow">
-                                <input type="email" name="member_email" placeholder="Enter team member's email" required 
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200">
+                            <div class="mb-3">
+                                <div class="relative">
+                                    <i class="fas fa-envelope input-group-icon"></i>
+                                    <input type="email" name="member_email" placeholder="Enter team member's email" required 
+                                        class="form-input input-with-icon">
+                                </div>
                             </div>
-                            <button type="submit" name="add_member" class="btn-gradient text-white px-4 py-2 rounded-md">
-                                Add
-                            </button>
-                            <button type="button" onclick="toggleAddMember()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">
-                                Cancel
-                            </button>
+                            <div class="flex gap-2 responsive-button-group">
+                                <button type="submit" name="add_member" class="btn-gradient text-white px-4 py-2 rounded-md flex items-center">
+                                    <i class="fas fa-user-plus mr-2"></i> Add
+                                </button>
+                                <button type="button" onclick="toggleAddMember()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors duration-300 flex items-center">
+                                    <i class="fas fa-times mr-2"></i> Cancel
+                                </button>
+                            </div>
                         </form>
                     </div>
                     
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto responsive-table">
                         <table class="min-w-full bg-white rounded-lg overflow-hidden">
                             <thead class="bg-gray-100">
                                 <tr>
@@ -364,7 +474,7 @@
                             </thead>
                             <tbody class="divide-y divide-gray-200">
                                 <?php foreach ($members as $member): ?>
-                                <tr class="hover:bg-gray-50">
+                                <tr class="hover:bg-gray-50 transition-colors duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         <?php echo htmlspecialchars($member['name']); ?>
                                         <?php if ($member['user_id'] == $user_id): ?>
@@ -377,7 +487,7 @@
                                         <form method="POST" class="inline">
                                             <input type="hidden" name="team_id" value="<?php echo $team_id; ?>">
                                             <input type="hidden" name="member_id" value="<?php echo $member['user_id']; ?>">
-                                            <button type="submit" name="remove_member" class="text-red-600 hover:text-red-900" 
+                                            <button type="submit" name="remove_member" class="text-red-600 hover:text-red-900 transition-colors duration-300" 
                                                 <?php if ($member_count <= 1 && $member['user_id'] == $user_id): ?>disabled<?php endif; ?>>
                                                 <i class="fas fa-user-minus"></i>
                                             </button>
@@ -390,13 +500,13 @@
                     </div>
                 </div>
                 
-                <div class="mt-10 border-t pt-6 flex justify-between">
-                    <a href="../categories/event_details.php?event_id=<?php echo $event_id; ?>" class="inline-flex items-center text-gray-700 hover:text-gray-900">
+                <div class="mt-10 border-t pt-6 flex justify-between team-actions">
+                    <a href="../categories/event_details.php?event_id=<?php echo $event_id; ?>" class="inline-flex items-center text-gray-700 hover:text-gray-900 transition-colors duration-300">
                         <i class="fas fa-arrow-left mr-2"></i> Back to Hackathons
                     </a>
                     <form method="POST" onsubmit="return confirm('Are you sure you want to delete this team? This action cannot be undone.')">
                         <input type="hidden" name="team_id" value="<?php echo $team_id; ?>">
-                        <button type="submit" name="delete_team" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md inline-flex items-center">
+                        <button type="submit" name="delete_team" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md inline-flex items-center transition-colors duration-300">
                             <i class="fas fa-trash-alt mr-2"></i> Delete Team
                         </button>
                     </form>
@@ -406,29 +516,35 @@
         <?php else: ?>
             <div class="glass-card p-6">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">Create a New Team</h2>
-                <form method="POST" class="space-y-4">
+                <form method="POST" class="space-y-6">
                     <input type="hidden" name="event_id" value="<?php echo $event_id; ?>">
-                    <div>
-                        <label for="team_name" class="block text-sm font-medium text-gray-700">Team Name</label>
-                        <input type="text" id="team_name" name="team_name" required 
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200">
+                    <div class="input-group">
+                        <label for="team_name" class="form-label">Team Name</label>
+                        <div class="relative">
+                            <i class="fas fa-users input-group-icon"></i>
+                            <input type="text" id="team_name" name="team_name" placeholder="Enter your team name" required 
+                                class="form-input input-with-icon">
+                        </div>
                     </div>
-                    <div>
-                        <label for="title" class="block text-sm font-medium text-gray-700">Project Title</label>
-                        <input type="text" id="title" name="title" required 
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200">
+                    <div class="input-group">
+                        <label for="title" class="form-label">Project Title</label>
+                        <div class="relative">
+                            <i class="fas fa-project-diagram input-group-icon"></i>
+                            <input type="text" id="title" name="title" placeholder="Enter your project title" required 
+                                class="form-input input-with-icon">
+                        </div>
                     </div>
-                    <div>
-                        <label for="problem_statement" class="block text-sm font-medium text-gray-700">Problem Statement</label>
-                        <textarea id="problem_statement" name="problem_statement" rows="4" required 
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200"></textarea>
+                    <div class="input-group">
+                        <label for="problem_statement" class="form-label">Problem Statement</label>
+                        <textarea id="problem_statement" name="problem_statement" rows="4" placeholder="Describe the problem your project will solve" required 
+                            class="form-input"></textarea>
                     </div>
-                    <div class="flex justify-between">
-                        <a href="../categories/event_details.php?event_id=<?php echo $event_id; ?>" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 inline-flex items-center">
+                    <div class="flex justify-between responsive-flex">
+                        <a href="../categories/event_details.php?event_id=<?php echo $event_id; ?>" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 inline-flex items-center transition-colors duration-300">
                             <i class="fas fa-arrow-left mr-2"></i> Back to Hackathons
                         </a>
-                        <button type="submit" name="create_team" class="btn-gradient text-white px-4 py-2 rounded-md">
-                            Create Team
+                        <button type="submit" name="create_team" class="btn-gradient text-white px-6 py-2 rounded-md flex items-center">
+                            <i class="fas fa-plus-circle mr-2"></i> Create Team
                         </button>
                     </div>
                 </form>
