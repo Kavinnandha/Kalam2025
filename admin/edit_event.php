@@ -198,6 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <option value="Non-Technical" <?php echo $event['category'] == 'Non-Technical' ? 'selected' : ''; ?>>Non-Technical</option>
                                             <option value="Workshop" <?php echo $event['category'] == 'Workshop' ? 'selected' : ''; ?>>Workshop</option>
                                             <option value="Hackathon" <?php echo $event['category'] == 'Hackathon' ? 'selected' : ''; ?>>Hackathon</option>
+                                            <option value="Media" <?php echo $event['category'] == 'Media' ? 'selected' : ''; ?>>Media</option>
                                         </select>
                                     </div>
 

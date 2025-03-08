@@ -38,7 +38,7 @@
                     </button>
                     <div class="absolute hidden group-hover:block">
                         <div
-                            class="w-60 mt-4 p-2 bg-white/50 backdrop-blur-lg rounded-lg shadow-xl transform transition-all duration-300 opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100">
+                            class="w-60 mt-4 p-2 bg-white/90 backdrop-blur-lg rounded-lg shadow-xl transform transition-all duration-300 opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100">
                             <a href="/kalam/categories/events.php"
                                 class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">All
                                 Events</a>
@@ -57,6 +57,9 @@
                             <a href="/kalam/categories/events.php?category=Hackathon"
                                 class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">
                                 Hackathons</a>
+                            <a href="/kalam/categories/events.php?category=Media"
+                                class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">
+                                Media</a>
                         </div>
                     </div>
                 </div>
@@ -213,6 +216,16 @@
                             </svg>
                             <span
                                 class="transform transition-transform duration-300 group-hover:translate-x-1">Hackathons</span>
+                        </a>
+                        <a href="/kalam/categories/events.php?category=Media"
+                            class="group flex items-center space-x-3 font-poppins text-gray-700 hover:text-orange-400 transition-all duration-300 py-2">
+                            <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 5v14m-4-4l4 4 4-4" />
+                            </svg>
+                            <span
+                                class="transform transition-transform duration-300 group-hover:translate-x-1">Media</span>
                         </a>
                     </div>
                 </div>
