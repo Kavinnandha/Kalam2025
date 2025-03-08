@@ -56,6 +56,7 @@
         }
     </style>
 </head>
+
 <body class="bg-gradient-to-br from-orange-50 to-red-100 min-h-screen">
     <?php include 'header/navbar.php'; ?>
     <?php include 'database/connection.php';
@@ -134,15 +135,15 @@
                             </button>
                         </a>
                         <?php if (!isset($_SESSION['user_id'])): ?>
-                        <a href="user/login.php">
-                            <button
-                                class="relative group px-8 py-4 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 rounded-full overflow-hidden hover:shadow-lg hover:shadow-red-500/50 transition-all duration-300 cursor-pointer">
-                                <span
-                                    class="relative text-white font-semibold text-lg group-hover:scale-105 transition-transform duration-300 inline-block">
-                                    Already Registered? Login
-                                </span>
-                            </button>
-                        </a>
+                            <a href="user/login.php">
+                                <button
+                                    class="relative group px-8 py-4 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 rounded-full overflow-hidden hover:shadow-lg hover:shadow-red-500/50 transition-all duration-300 cursor-pointer">
+                                    <span
+                                        class="relative text-white font-semibold text-lg group-hover:scale-105 transition-transform duration-300 inline-block">
+                                        Already Registered? Login
+                                    </span>
+                                </button>
+                            </a>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -190,19 +191,19 @@
                             <div class="flex-none w-full md:w-1/3 p-4 cursor-pointer"
                                 onclick="window.location.href='categories/event_details.php?event_id=<?php echo $event['event_id']; ?>'">
                                 <div
-                                    class="group relative bg-white rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-orange-500/20">
+                                    class="group relative bg-white rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-orange-500/20 h-full flex flex-col">
                                     <div
                                         class="absolute inset-0 bg-gradient-to-br from-red-500/10 to-yellow-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     </div>
                                     <img src="<?php echo htmlspecialchars($event['image_path']); ?>"
                                         alt="<?php echo htmlspecialchars($event['event_name']); ?>"
                                         class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
-                                    <div class="p-6">
+                                    <div class="p-6 flex-grow flex flex-col">
                                         <h3
                                             class="text-xl font-semibold text-gray-800 group-hover:text-orange-500 transition-colors">
                                             <?php echo htmlspecialchars($event['event_name']); ?>
                                         </h3>
-                                        <p class="text-gray-600 mt-2">
+                                        <p class="text-gray-600 mt-2 flex-grow">
                                             <?php echo htmlspecialchars(substr($event['description'], 0, 100)) . '...'; ?>
                                         </p>
                                         <div class="mt-4 flex justify-between items-center">
