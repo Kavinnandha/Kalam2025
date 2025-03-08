@@ -61,12 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Generate verification code
         $verificationCode = generateVerificationCode();
         
-        // Set expiration time (30 minutes from now) in 24-hour format
+        // Set expiration time (30 minutes from now) using MySQL's datetime
         $expiryTime = date('Y-m-d H:i:s', time() + 1800); // 30 minutes from now
         
-        // Adjust expiry time to match the correct format and time
-        $adjustedExpiryTime = date('Y-m-d H:i:s', strtotime($expiryTime . ' + 5 hours'));
-        
+        // Adjust expiry time to match the correct format and time using MySQL's datetime
+        $adjustedExpiryTime = date('Y-m-d H:i:s', strtotime($expiryTime . ' + 6 hours'));
         // Store the verification code in the database
         // First, check if there's an existing reset request
         $stmt = $conn->prepare("SELECT id FROM password_resets WHERE email = ?");
