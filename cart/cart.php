@@ -111,7 +111,7 @@
         }
     },
     proceedToPayment() {
-        window.location.href = '../payment/payment.php';
+        window.location.href = '../payment/phonepe_initiate.php';
     }
 }" x-init="loadCartItems()">
     <?php include '../header/navbar.php'; ?>

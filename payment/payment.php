@@ -1,25 +1,26 @@
 <?php
-// process_payment.php
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../index.php");
+    exit(); 
+}
 include '../database/connection.php';
 
 header('Content-Type: application/json');
-
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $cart_id = $_GET['cart_id'];
-
+    
     try {
         // Start transaction
         $conn->begin_transaction();
-        
-        // Get cart details
-        $cart_query = "SELECT * FROM cart WHERE cart_id = ?";
+        $user_id = $_SESSION['user_id'];
+        $cart_query = "SELECT total_amount FROM cart WHERE user_id = ?";
         $stmt = $conn->prepare($cart_query);
-        $stmt->bind_param("i", $cart_id);
+        $stmt->bind_param("i", $user_id);
         $stmt->execute();
         $cart_result = $stmt->get_result();
-        $cart_data = $cart_result->fetch_assoc();
-
-        if (/*response from the api is success (that is payment is successful */) {
+        $row = $cart_result->fetch_assoc();
+        $total_amount = $row['total_amount'];
+        $stmt->close();
+      //  if (/*response from the api is success (that is payment is successful */) {
             // Create order
         $order_query = "INSERT INTO orders (user_id, total_amount) VALUES (?, ?)";
         $stmt = $conn->prepare($order_query);
@@ -56,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             'success' => true,
             'order_id' => $order_id
         ]);
-        }
+     //   }
         
         
     } catch (Exception $e) {
@@ -66,10 +67,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             'message' => 'An error occurred while processing your payment'
         ]);
     }
-} else {
-    echo json_encode([
-        'success' => false,
-        'message' => 'Invalid request method'
-    ]);
-}
 ?>

@@ -479,6 +479,7 @@
                             
                             if ($updateFileStmt->execute()) {
                                 $success = "Project file uploaded successfully!";
+                                echo "<script>window.location.href='hackathon.php?event_id=" . $event_id . "';</script>";
                             } else {
                                 $error = "Database update failed.";
                             }
@@ -833,8 +834,7 @@
             const formEl = document.getElementById('add-member-form');
             formEl.classList.toggle('hidden');
         }
-    </script>
-    <script>
+
         function toggleEditTeam() {
             const detailsEl = document.getElementById('team-details');
             const formEl = document.getElementById('edit-team-form');
