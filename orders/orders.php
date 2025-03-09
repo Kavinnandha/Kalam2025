@@ -142,8 +142,6 @@
     $conn->close();
     ?>
 
-    <?php include '../header/navbar_scripts.php'; ?>
-
     <script>
         // Add stagger animation to grid items
         document.addEventListener('DOMContentLoaded', function () {

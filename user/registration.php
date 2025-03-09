@@ -205,7 +205,6 @@
         </div>
     </div>
 
-    <?php include '../header/navbar_scripts.php' ?>
     <script>
         function createEmber() {
             const ember = document.createElement('div');

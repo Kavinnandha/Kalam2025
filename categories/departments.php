@@ -90,7 +90,6 @@
         </div>
     </div>
 
-    <?php include '../header/navbar_scripts.php'; ?>
 </body>
 
 </html>

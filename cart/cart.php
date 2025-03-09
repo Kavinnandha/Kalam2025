@@ -41,6 +41,26 @@
             max-height: 90vh;
             overflow-y: auto;
         }
+        
+        /* Mobile order summary page styles */
+        .mobile-order-summary {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: white;
+            z-index: 60;
+            overflow-y: auto;
+
+            padding-bottom: 5rem;
+        }
+        
+        @media (min-width: 640px) {
+            .mobile-order-summary {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -48,6 +68,7 @@
     cartItems: [],
     totalPrice: 0,
     showOrderModal: false,
+    showMobileOrderSummary: false,
     orderSummary: {
         userData: {},
         items: [],
@@ -56,6 +77,7 @@
         totalAmount: 0,
         hasExistingOrder: false
     },
+    isMobile: window.innerWidth < 640,
     async loadCartItems() {
         try {
             const response = await fetch('get_cart_items.php');
@@ -94,14 +116,19 @@
     goToEventDetails(eventId) {
         window.location.href = `../categories/event_details.php?event_id=${eventId}`;
     },
-    async openOrderModal() {
+    async openOrderSummary() {
         try {
             const response = await fetch('get_order_summary.php');
             const result = await response.json();
             
             if (result.success) {
                 this.orderSummary = result;
-                this.showOrderModal = true;
+                // Check screen size and show appropriate view
+                if (this.isMobile) {
+                    this.showMobileOrderSummary = true;
+                } else {
+                    this.showOrderModal = true;
+                }
             } else {
                 alert('Could not load order details. Please try again.');
             }
@@ -111,9 +138,15 @@
         }
     },
     proceedToPayment() {
-        window.location.href = '../payment/cashfree_initiate.php';
+        window.location.href = '../payment/phonepe_initiate.php';
+    },
+    closeMobileOrderSummary() {
+        this.showMobileOrderSummary = false;
+    },
+    checkMobile() {
+        this.isMobile = window.innerWidth < 640;
     }
-}" x-init="loadCartItems()">
+}" x-init="loadCartItems(); checkMobile(); window.addEventListener('resize', checkMobile)">
     <?php include '../header/navbar.php'; ?>
 
     <div class="content-wrapper">
@@ -260,8 +293,8 @@
         </div>
     </div>
 
-    <!-- Fixed Bottom Bar -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-yellow-200"
+    <!-- Fixed Bottom Bar with Mobile Adjustments -->
+    <div class="fixed left-0 right-0 bg-white shadow-lg border-t border-yellow-200 sm:bottom-0 bottom-14"
         x-show="cartItems.length > 0" x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0 transform translate-y-full"
         x-transition:enter-end="opacity-100 transform translate-y-0">
@@ -271,7 +304,7 @@
                     <span class="text-sm text-yellow-600 mr-2">Total:</span>
                     <span class="text-2xl font-bold text-yellow-800" x-text="'₹' + totalPrice.toFixed(2)"></span>
                 </div>
-                <button @click="openOrderModal()"
+                <button @click="openOrderSummary()"
                     class="px-8 py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors duration-200">
                     Place Order
                 </button>
@@ -279,8 +312,9 @@
         </div>
     </div>
 
-    <!-- Order Summary Modal -->
-    <div class="modal-backdrop" x-show="showOrderModal" x-cloak x-transition:enter="transition ease-out duration-300"
+    <!-- Desktop Order Summary Modal (shown only on larger screens) -->
+    <div class="modal-backdrop hidden sm:flex" x-show="showOrderModal" x-cloak 
+        x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0">
@@ -364,7 +398,93 @@
         </div>
     </div>
 
-    <?php include '../header/navbar_scripts.php'; ?>
+    <!-- Mobile Order Summary Page (full-screen instead of modal) -->
+    <div class="mb-10 mobile-order-summary" x-show="showMobileOrderSummary" x-cloak
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform translate-x-full"
+        x-transition:enter-end="opacity-100 transform translate-x-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 transform translate-x-0"
+        x-transition:leave-end="opacity-0 transform translate-x-full">
+        
+        <!-- Mobile header with back button -->
+        <div class="sticky top-0 bg-white shadow-sm px-4 py-4 flex items-center z-10">
+            <button @click="closeMobileOrderSummary()" class="mr-2 text-yellow-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <h1 class="text-xl font-bold text-yellow-800">Order Summary</h1>
+        </div>
+        
+        <div class="px-4 py">
+            <!-- User Details -->
+            <div class="mb-6 bg-yellow-50 p-4 rounded-lg mt-2">
+                <h3 class="text-lg font-semibold text-yellow-800 mb-2">Customer Information</h3>
+                <p class="text-sm text-yellow-700"><span class="font-medium">Name:</span> <span
+                        x-text="orderSummary.userData.name"></span></p>
+                <p class="text-sm text-yellow-700 mt-1"><span class="font-medium">Email:</span> <span
+                        x-text="orderSummary.userData.email"></span></p>
+                <p class="text-sm text-yellow-700 mt-1"><span class="font-medium">Phone:</span> <span
+                        x-text="orderSummary.userData.phone"></span></p>
+            </div>
+
+            <!-- Order Items -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-yellow-800 mb-2">Order Items</h3>
+                <div class="border border-yellow-200 rounded-lg overflow-hidden">
+                    <div class="divide-y divide-yellow-100">
+                        <template x-for="(item, index) in orderSummary.items" :key="index">
+                            <div class="p-4">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex-1 pr-4">
+                                        <p class="font-medium text-yellow-800" x-text="item.event_name"></p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-semibold text-orange-700"
+                                            x-text="'₹' + parseFloat(item.registration_fee).toFixed(2)"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cost Summary -->
+            <div class="mb-6 bg-yellow-50 p-4 rounded-lg">
+                <h3 class="text-lg font-semibold text-yellow-800 mb-2">Cost Summary</h3>
+                <div class="flex justify-between mb-2">
+                    <span class="text-yellow-700">Subtotal</span>
+                    <span class="font-medium text-yellow-800"
+                        x-text="'₹' + orderSummary.subtotal.toFixed(2)"></span>
+                </div>
+                <div class="flex justify-between mb-2" x-show="orderSummary.generalFee > 0">
+                    <span class="text-yellow-700">General Fee</span>
+                    <span class="font-medium text-yellow-800"
+                        x-text="'₹' + orderSummary.generalFee.toFixed(2)"></span>
+                </div>
+                <div class="border-t border-yellow-200 pt-2 mt-2 flex justify-between">
+                    <span class="font-bold text-yellow-800">Total</span>
+                    <span class="font-bold text-orange-700"
+                        x-text="'₹' + orderSummary.totalAmount.toFixed(2)"></span>
+                </div>
+                <div class="mt-2 text-xs text-yellow-600" x-show="orderSummary.generalFee > 0">
+                    <p>* General fee is applied for first-time orders.</p>
+                    <p>* All general events can be participated.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Fixed bottom action buttons for mobile -->
+        <div class="fixed bottom-15 left-0 right-0 bg-white border-t border-yellow-200 p-4">
+            <button @click="proceedToPayment()"
+                class="w-full py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition-colors duration-200">
+                Continue to Payment
+            </button>
+        </div>
+    </div>
+
 </body>
 
 </html>
