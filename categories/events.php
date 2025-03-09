@@ -144,8 +144,6 @@
         </div>
     </div>
 
-    <?php include '../header/navbar_scripts.php'; ?>
-
     <script>
         function addToCart(eventId) {
             <?php if(!isset($_SESSION['user_id'])): ?>

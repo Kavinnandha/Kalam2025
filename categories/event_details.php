@@ -201,8 +201,6 @@
             </div>
         </div>
     </div>
-    
-    <?php include '../header/navbar_scripts.php'; ?>
 
     <script>
         function checkEventAccess(eventId) {

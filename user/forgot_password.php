@@ -228,8 +228,7 @@
             </div>
         </div>
     </div>
-
-    <?php include '../header/navbar_scripts.php' ?>
+    
     <script>
         // Create animated embers effect
         function createEmber() {

@@ -862,6 +862,5 @@
         }
     </script>
 
-    <?php include '../header/navbar_scripts.php'; ?>
 </body>
 </html>

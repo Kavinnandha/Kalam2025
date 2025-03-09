@@ -333,7 +333,6 @@
     </footer>
 
     <?php $conn->close(); ?>
-    <?php include 'header/navbar_scripts.php' ?>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
