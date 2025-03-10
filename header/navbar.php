@@ -63,6 +63,9 @@
                             <a href="/kalam/categories/events.php?category=Media"
                                 class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">
                                 Media</a>
+                            <a href="/kalam/categories/events.php?category=Culturals"
+                                class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">
+                                Culturals</a>
                         </div>
                     </div>
                 </div>
@@ -121,9 +124,8 @@
 <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg z-100 border-t border-gray-200">
     <div class="flex justify-around items-center h-16">
         <!-- Home -->
-        <a href="/kalam/index.php"
-            class="flex flex-col items-center justify-center w-full py-2 text-gray-700 hover:text-orange-400 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/index.php')
-                echo 'text-red-600'; ?>">
+        <a href="/kalam/index.php" class="flex flex-col items-center justify-center w-full py-2 text-gray-700 hover:text-orange-400 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/index.php')
+            echo 'text-red-600'; ?>">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -132,9 +134,8 @@
         </a>
 
         <!-- Events -->
-        <button id="mobile-bottom-events"
-            class="flex flex-col items-center justify-center w-full py-2 text-gray-700 hover:text-orange-400 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/categories/events.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/departments.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/event_details.php')
-                echo 'text-red-600'; ?>">
+        <button id="mobile-bottom-events" class="flex flex-col items-center justify-center w-full py-2 text-gray-700 hover:text-orange-400 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/categories/events.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/departments.php' || $_SERVER['PHP_SELF'] == '/kalam/categories/event_details.php')
+            echo 'text-red-600'; ?>">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -143,9 +144,8 @@
         </button>
 
         <!-- Orders -->
-        <a href="/kalam/orders/orders.php"
-            class="flex flex-col items-center justify-center w-full py-2 text-gray-700 hover:text-orange-400 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/orders/orders.php')
-                echo 'text-red-600'; ?>">
+        <a href="/kalam/orders/orders.php" class="flex flex-col items-center justify-center w-full py-2 text-gray-700 hover:text-orange-400 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/orders/orders.php')
+            echo 'text-red-600'; ?>">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -154,9 +154,8 @@
         </a>
 
         <!-- Cart -->
-        <a href="/kalam/cart/cart.php"
-            class="flex flex-col items-center justify-center w-full py-2 text-gray-700 hover:text-orange-400 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/cart/cart.php')
-                echo 'text-red-600'; ?>">
+        <a href="/kalam/cart/cart.php" class="flex flex-col items-center justify-center w-full py-2 text-gray-700 hover:text-orange-400 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/cart/cart.php')
+            echo 'text-red-600'; ?>">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -166,9 +165,8 @@
 
         <!-- Account/Register -->
         <?php if (!isset($_SESSION['user_id'])): ?>
-            <a href="/kalam/user/registration.php"
-                class="flex flex-col items-center justify-center w-full py-2 text-gray-700 hover:text-orange-400 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/user/registration.php' || $_SERVER['PHP_SELF'] == '/kalam/user/login.php')
-                    echo 'text-red-600'; ?>">
+            <a href="/kalam/user/registration.php" class="flex flex-col items-center justify-center w-full py-2 text-gray-700 hover:text-orange-400 transition-all duration-300 <?php if ($_SERVER['PHP_SELF'] == '/kalam/user/registration.php' || $_SERVER['PHP_SELF'] == '/kalam/user/login.php')
+                echo 'text-red-600'; ?>">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -263,6 +261,13 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m-4-4l4 4 4-4" />
                 </svg>
                 <span>Media</span>
+            </a>
+            <a href="/kalam/categories/events.php?category=Culturals"
+                class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m-4-4l4 4 4-4" />
+                </svg>
+                <span>Culturals</span>
             </a>
         </div>
     </div>
