@@ -177,6 +177,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <option value="Hackathon">Hackathon</option>
                                     <option value="Media">Media</option>
                                     <option value="Culturals">Culturals</option>
+                                    <option value="ESAT-Gaming">ESAT-Gaming</option>
+                                    <option value="Tech-Hub">Tech-Hub</option>
+                                    <option value="NCC">NCC</option>
                                 </select>
                             </div>
 

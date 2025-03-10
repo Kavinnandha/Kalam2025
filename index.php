@@ -353,7 +353,7 @@
                     <!-- Developer Info -->
                     <div class="flex flex-col items-center text-center font-[Poppins] space-y-4">
                         <h4
-                            class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-yellow-400">
+                            class="text-xl font-bold mb-4 text-gray-700">
                             Developed By
                         </h4>
                         <div class="text-gray-700">
@@ -365,7 +365,7 @@
                                 <a href="https://www.linkedin.com/in/kavin-nandha-076b22263"
                                     target="_blank"
                                     class="flex items-center text-gray-700 hover:text-orange-500 transition duration-300 transform hover:scale-110 hover:-rotate-3">
-                                    <i class="fab fa-linkedin text-3xl mb-1"></i>
+                                    <i class="fab fa-linkedin text-2xl mb-1"></i>
                                     <span class="text-sm font-semibold ml-2">LinkedIn</span>
                                 </a>
                             </div>

@@ -50,10 +50,10 @@ if (mysqli_fetch_assoc($checkItem)) {
     ]);
     exit;
 }
-
 // Fetch the event details of the event being added
 $newEventQuery = mysqli_query($conn, "SELECT event_id, start_time, end_time, event_date FROM events WHERE event_id = '$eventId'");
 $newEvent = mysqli_fetch_assoc($newEventQuery);
+
 if (!$newEvent) {
     echo json_encode([
         'success' => false,
@@ -62,7 +62,7 @@ if (!$newEvent) {
     exit;
 }
 
-// Check for time overlaps with existing cart items
+// Check for time overlaps with existing cart items (EXCLUDE BOUNDARIES)
 $overlapCheck = "
     SELECT e.event_id, e.event_name, e.event_date, e.start_time, e.end_time 
     FROM cart_items ci
@@ -70,10 +70,9 @@ $overlapCheck = "
     WHERE ci.cart_id = '$cartId'
     AND e.event_date = '{$newEvent['event_date']}'
     AND (
-        ('{$newEvent['start_time']}' BETWEEN e.start_time AND e.end_time) OR
-        ('{$newEvent['end_time']}' BETWEEN e.start_time AND e.end_time) OR
-        (e.start_time BETWEEN '{$newEvent['start_time']}' AND '{$newEvent['end_time']}') OR
-        (e.end_time BETWEEN '{$newEvent['start_time']}' AND '{$newEvent['end_time']}')
+        ('{$newEvent['start_time']}' > e.start_time AND '{$newEvent['start_time']}' < e.end_time) OR
+        ('{$newEvent['end_time']}' > e.start_time AND '{$newEvent['end_time']}' < e.end_time) OR
+        (e.start_time > '{$newEvent['start_time']}' AND e.end_time < '{$newEvent['end_time']}')
     )
 ";
 
