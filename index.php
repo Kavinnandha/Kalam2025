@@ -523,7 +523,7 @@
                     currentSlide = (currentSlide >= maxSlideIndex) ? 0 : currentSlide + 1;
                     updateCarousel();
                 }
-            }, 2000);
+            }, 5000);
 
             // Initialize
             createDots();
