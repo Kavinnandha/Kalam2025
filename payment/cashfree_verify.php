@@ -1,5 +1,4 @@
 <?php
-// File: /kalam/payment/cashfree_return.php
 
 session_start();
 require_once '../database/connection.php';
@@ -13,7 +12,7 @@ if (!isset($_GET['order_id'])) {
     exit();
 }
 
-$order_id = $_GET['order_id'];
+$transaction_id = $_GET['order_id'];
 
 $x_api_version = "2023-08-01";
 Cashfree::$XClientId = "TEST430329ae80e0f32e41a393d78b923034";
@@ -22,7 +21,7 @@ Cashfree::$XEnvironment = Cashfree::$SANDBOX;
 
 try {
     $cashfree = new Cashfree();
-    $response = $cashfree->PGOrderFetchPayments($x_api_version, $order_id);
+    $response = $cashfree->PGOrderFetchPayments($x_api_version, $transaction_id);
 
 
     // Extract Payment Details
@@ -47,8 +46,64 @@ try {
                                        SET cf_payment_id = ?, amount = ?, payment_mode = ?, payment_time = ?, payment_completion_time = ?, payment_status = ?, response_data = ?
                                        WHERE transaction_id = ? ");
 
-        $stmt->bind_param("ssssssss", $cf_payment_id, $payment_amount, $payment_mode, $payment_time, $payment_completion_time, $payment_status, $response_data, $order_id);
+        $stmt->bind_param("ssssssss", $cf_payment_id, $payment_amount, $payment_mode, $payment_time, $payment_completion_time, $payment_status, $response_data, $transaction_id);
         $stmt->execute();
+
+        // Start transaction
+        $conn->begin_transaction();
+        $user_id = $_SESSION['user_id'];
+        $cart_query = "SELECT cart_id, total_amount FROM cart WHERE user_id = ?";
+        $stmt = $conn->prepare($cart_query);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $cart_data = $result->fetch_assoc();
+
+        $cart_id = $cart_data['cart_id'];
+        $total_amount = $cart_data['total_amount'];
+
+        $total_items_query = "SELECT COUNT(*) FROM cart_items WHERE cart_id = ?";
+        $stmt = $conn->prepare($total_items_query);
+        $stmt->bind_param("i", $cart_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $total_products = $result->fetch_assoc();
+
+        $order_query = "INSERT INTO orders (user_id, total_amount, total_products, transaction_id) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($order_query);
+        $stmt->bind_param("idis", $user_id, $total_amount, $total_products, $order_id);
+        $stmt->execute();
+        $order_id = $conn->insert_id;
+
+        $update_transaction_order_id = "UPDATE payment_transactions SET order_id = ? WHERE transaction_id = ?";
+        $stmt = $conn->prepare($update_transaction_order_id);
+        $stmt->bind_param("ii", $order_id, $transaction_id);
+        $stmt->execute();
+        
+        // Move cart items to order items
+        $move_items_query = "INSERT INTO order_items (order_id, event_id, amount)
+                            SELECT ?, ci.event_id, e.registration_fee
+                            FROM cart_items ci
+                            JOIN events e ON ci.event_id = e.event_id
+                            WHERE ci.cart_id = ?";
+        $stmt = $conn->prepare($move_items_query);
+        $stmt->bind_param("ii", $order_id, $cart_id);
+        $stmt->execute();
+        
+        // Delete cart items
+        $delete_items_query = "DELETE FROM cart_items WHERE cart_id = ?";
+        $stmt = $conn->prepare($delete_items_query);
+        $stmt->bind_param("i", $cart_id);
+        $stmt->execute();
+        
+        // Delete cart
+        $delete_cart_query = "DELETE FROM cart WHERE cart_id = ?";
+        $stmt = $conn->prepare($delete_cart_query);
+        $stmt->bind_param("i", $cart_id);
+        $stmt->execute();
+        
+        // Commit transaction
+        $conn->commit();
 
         header("Location: ../orders/orders.php");
         exit();
