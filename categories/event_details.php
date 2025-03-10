@@ -14,7 +14,7 @@
         }
 
         .custom-shape {
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%);
         }
 
         .event-image {
@@ -181,7 +181,7 @@
                                         d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 <span class="font-medium">
-                                    For general events, a one-time general event fee of ₹150 applies for the first time.
+                                    For general events, a one-time general event fee of ₹150 applies for the first time while purchasing.
                                 </span>
                             </div>
 
