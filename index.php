@@ -326,9 +326,43 @@
                 </div>
             </div>
 
-            <div class="mt-12 pt-8 border-t border-orange-200 text-center text-gray-600">
-                <p>&copy; 2025 KALAM. All rights reserved.</p>
+            <!-- Legal Links and Developer Info -->
+            <div class="mt-10 pt-6 border-t border-orange-200 text-center">
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <!-- Legal Links -->
+                    <div class="flex flex-col items-center text-center font-[Poppins]">
+                        <h4 class="text-xl font-bold mb-4 text-gray-700">Legal</h4>
+                        <div class="flex flex-wrap justify-center gap-4 text-gray-600">
+                            <a href="termsandconditions.php" class="hover:text-orange-500 transition duration-300">Terms &
+                                Conditions</a>
+                        </div>
+                    </div>
+
+                    <!-- College Location -->
+                    <div class="flex flex-col items-center text-center font-[Poppins]">
+                        <h4 class="text-xl font-bold mb-4 text-gray-700">Event Location</h4>
+                        <div class="text-gray-600 text-sm leading-relaxed">
+                            <a href="https://maps.app.goo.gl/evaogygK4xEtuNWQ8" class="hover:text-orange-500 transition duration-300" target="_blank">
+                                <p>Sri Shakthi Institute of Engineering and Technology</p>
+                                <p>L&T Bypass Road, Coimbatore - 641 062</p>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Developer Info -->
+                    <div class="flex flex-col items-center text-center font-[Poppins]">
+                        <h4 class="text-xl font-bold mb-4 text-gray-700">Developed By</h4>
+                        <div class="text-gray-600">
+                            <p>Kavin Nandha M K</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="text-gray-600 text-sm">
+                    <p>&copy; 2025 KALAM. All rights reserved.</p>
+                </div>
             </div>
+
         </div>
     </footer>
 
