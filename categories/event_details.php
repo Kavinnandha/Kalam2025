@@ -14,7 +14,7 @@
         }
 
         .custom-shape {
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%);
         }
 
         .event-image {
