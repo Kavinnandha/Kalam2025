@@ -80,6 +80,32 @@
                 transform: translateX(-50px);
             }
         }
+
+        /* Error message styles */
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .has-error input {
+            border-color: #ef4444 !important;
+        }
+
+        /* Success message styles */
+        .success-message {
+            background-color: #10b981;
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
     </style>
 </head>
 
@@ -107,10 +133,10 @@
         <div class="max-w-7xl mx-auto py-12 flex flex-col lg:flex-row items-center justify-between gap-12">
             <!-- Left side content -->
             <div class="lg:w-5/12 text-white space-y-8 text-center lg:text-left relative z-10">
-            <h1 class="text-5xl font-extrabold tracking-tight sm:text-6xl">
-                Ignite Your Journey
-            </h1>
-            <p class="text-xl text-gray-100 leading-relaxed">
+                <h1 class="text-5xl font-extrabold tracking-tight sm:text-6xl">
+                    Ignite Your Journey
+                </h1>
+                <p class="text-xl text-gray-100 leading-relaxed">
                     Unleash your potential! Register now and be part of something extraordinary.
                 </p>
                 <div class="text-center lg:text-left">
@@ -126,25 +152,33 @@
             <!-- Right side form -->
             <div class="lg:w-6/12 w-full relative z-10">
                 <div class="bg-white p-8 rounded-2xl shadow-2xl">
+                    <!-- Success message container -->
+                    <div id="formSuccessMessage" class="success-message">
+                        Registration successful! Redirecting to your dashboard...
+                    </div>
+
                     <form id="registrationForm" action="registration_process.php" method="POST" class="space-y-6">
                         <!-- Step 1 -->
                         <div id="step1" class="space-y-6">
                             <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Step 1: Basic Info</h2>
 
                             <div class="space-y-4">
-                                <div>
+                                <div class="form-group">
                                     <input type="text" name="name" placeholder="Full Name" required
                                         class="w-full px-5 py-4 bg-gray-50 rounded-xl border-2 border-orange-200 text-gray-900 placeholder-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-colors duration-300">
+                                    <div id="nameError" class="error-message">Please enter your full name</div>
                                 </div>
 
-                                <div>
+                                <div class="form-group">
                                     <input type="email" name="email" placeholder="Email Address" required
                                         class="w-full px-5 py-4 bg-gray-50 rounded-xl border-2 border-orange-200 text-gray-900 placeholder-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-colors duration-300">
+                                    <div id="emailError" class="error-message">Please enter a valid email address</div>
                                 </div>
 
-                                <div>
+                                <div class="form-group">
                                     <input type="tel" name="phone" placeholder="Phone Number" required
                                         class="w-full px-5 py-4 bg-gray-50 rounded-xl border-2 border-orange-200 text-gray-900 placeholder-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-colors duration-300">
+                                    <div id="phoneError" class="error-message">Please enter a valid phone number (at least 10 digits)</div>
                                 </div>
                             </div>
 
@@ -160,22 +194,35 @@
 
                             <div class="space-y-4">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <input type="text" name="college_id" placeholder="College" required
-                                        class="px-5 py-4 bg-gray-50 rounded-xl border-2 border-orange-200 text-gray-900 placeholder-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-colors duration-300">
+                                    <div class="form-group">
+                                        <input type="text" name="college_id" placeholder="College" required
+                                            class="px-5 py-4 bg-gray-50 rounded-xl border-2 border-orange-200 text-gray-900 placeholder-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-colors duration-300">
+                                        <div id="collegeError" class="error-message">Please enter your college</div>
+                                    </div>
 
-                                    <input type="text" name="department" placeholder="Department" required
-                                        class="px-5 py-4 bg-gray-50 rounded-xl border-2 border-orange-200 text-gray-900 placeholder-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-colors duration-300">
+                                    <div class="form-group">
+                                        <input type="text" name="department" placeholder="Department" required
+                                            class="px-5 py-4 bg-gray-50 rounded-xl border-2 border-orange-200 text-gray-900 placeholder-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-colors duration-300">
+                                        <div id="departmentError" class="error-message">Please enter your department</div>
+                                    </div>
                                 </div>
 
-                                <div>
+                                <div class="form-group">
                                     <input type="password" name="password" placeholder="Password" required
                                         class="w-full px-5 py-4 bg-gray-50 rounded-xl border-2 border-orange-200 text-gray-900 placeholder-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-colors duration-300">
+                                    <div id="passwordError" class="error-message">Password must be at least 6 characters</div>
                                 </div>
 
-                                <div>
+                                <div class="form-group">
                                     <input type="password" name="confirm_password" placeholder="Confirm Password" required
                                         class="w-full px-5 py-4 bg-gray-50 rounded-xl border-2 border-orange-200 text-gray-900 placeholder-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-colors duration-300">
+                                    <div id="confirmPasswordError" class="error-message">Passwords do not match</div>
                                 </div>
+                            </div>
+
+                            <!-- Form-level error message for general errors -->
+                            <div id="formError" class="bg-red-100 text-red-700 p-4 rounded-xl hidden">
+                                <p>There was an error with your submission. Please check all fields and try again.</p>
                             </div>
 
                             <div class="flex gap-4">
@@ -219,31 +266,77 @@
 
         setInterval(createEmber, 500);
         
+        // Helper function to show error
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            const inputElement = document.querySelector(`[name="${elementId.replace('Error', '')}"]`);
+            
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+            
+            if (inputElement) {
+                inputElement.parentElement.classList.add('has-error');
+            }
+            
+            return false;
+        }
+        
+        // Helper function to clear error
+        function clearError(elementId) {
+            const errorElement = document.getElementById(elementId);
+            const inputElement = document.querySelector(`[name="${elementId.replace('Error', '')}"]`);
+            
+            if (errorElement) {
+                errorElement.style.display = 'none';
+            }
+            
+            if (inputElement) {
+                inputElement.parentElement.classList.remove('has-error');
+            }
+        }
+        
+        // Clear all errors
+        function clearAllErrors() {
+            const errorElements = document.querySelectorAll('.error-message');
+            errorElements.forEach(element => {
+                element.style.display = 'none';
+            });
+            
+            const formGroups = document.querySelectorAll('.form-group');
+            formGroups.forEach(group => {
+                group.classList.remove('has-error');
+            });
+            
+            document.getElementById('formError').classList.add('hidden');
+        }
+        
         function validateStep1() {
+            clearAllErrors();
+            
+            let isValid = true;
             const name = document.querySelector('input[name="name"]').value.trim();
             const email = document.querySelector('input[name="email"]').value.trim();
             const phone = document.querySelector('input[name="phone"]').value.trim();
 
-            if (!name || !email || !phone) {
-                alert('Please fill in all fields before proceeding');
-                return false;
+            if (!name) {
+                isValid = showError('nameError', 'Please enter your full name');
             }
 
             // Basic email validation
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(email)) {
-                alert('Please enter a valid email address');
-                return false;
+            if (!email || !emailPattern.test(email)) {
+                isValid = showError('emailError', 'Please enter a valid email address');
             }
 
             // Basic phone validation (at least 10 digits)
             const phonePattern = /^\d{10,}$/;
-            if (!phonePattern.test(phone.replace(/[^0-9]/g, ''))) {
-                alert('Please enter a valid phone number');
-                return false;
+            if (!phone || !phonePattern.test(phone.replace(/[^0-9]/g, ''))) {
+                isValid = showError('phoneError', 'Please enter a valid phone number (at least 10 digits)');
             }
 
-            return true;
+            return isValid;
         }
 
         function nextStep() {
@@ -288,19 +381,44 @@
             }, 300);
         }
 
-        document.getElementById('registrationForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            // Validate passwords match
+        function validateStep2() {
+            clearAllErrors();
+            
+            let isValid = true;
+            const college = document.querySelector('input[name="college_id"]').value.trim();
+            const department = document.querySelector('input[name="department"]').value.trim();
             const password = document.querySelector('input[name="password"]').value;
             const confirmPassword = document.querySelector('input[name="confirm_password"]').value;
 
+            if (!college) {
+                isValid = showError('collegeError', 'Please enter your college');
+            }
+            
+            if (!department) {
+                isValid = showError('departmentError', 'Please enter your department');
+            }
+            
+            if (!password || password.length < 6) {
+                isValid = showError('passwordError', 'Password must be at least 6 characters');
+            }
+            
             if (password !== confirmPassword) {
-                alert('Passwords do not match!');
+                isValid = showError('confirmPasswordError', 'Passwords do not match');
+            }
+            
+            return isValid;
+        }
+
+        document.getElementById('registrationForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            if (!validateStep2()) {
                 return;
             }
 
             const formData = new FormData(this);
+            const formError = document.getElementById('formError');
+            const successMessage = document.getElementById('formSuccessMessage');
 
             fetch('registration_process.php', {
                 method: 'POST',
@@ -309,7 +427,11 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert('Registration successful!');
+                        // Show success message
+                        successMessage.style.display = 'block';
+                        
+                        // Hide form error if visible
+                        formError.classList.add('hidden');
                         
                         // Auto-login after successful registration
                         const loginData = new FormData();
@@ -325,15 +447,28 @@
                             if (!loginData.success) {
                                 throw new Error(loginData.message || 'Auto-login failed');
                             }
-                            window.location.href = '../index.php';
+                            
+                            // Redirect after a short delay to show the success message
+                            setTimeout(() => {
+                                window.location.href = '../index.php';
+                            }, 1500);
                         });
                     } else {
-                        alert(data.message || 'Registration failed. Please try again.');
+                        // Show form error with message
+                        formError.textContent = data.message || 'Registration failed. Please try again.';
+                        formError.classList.remove('hidden');
+                        
+                        // Hide success message if visible
+                        successMessage.style.display = 'none';
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('An error occurred. Please try again.');
+                    formError.textContent = 'An error occurred. Please try again.';
+                    formError.classList.remove('hidden');
+                    
+                    // Hide success message if visible
+                    successMessage.style.display = 'none';
                 });
         });
     </script>

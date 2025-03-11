@@ -17,33 +17,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Prepare SQL statement
-    $stmt = $conn->prepare("INSERT INTO users (name, email, phone, college_id, department, password) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO users (name, email, phone, college_id, department, password) 
+                            VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssss", $name, $email, $phone, $college_id, $department, $hashed_password);
 
-    try {
-        $stmt->execute();
+    // Execute the query
+    if ($stmt->execute()) {
         $response['success'] = true;
         $response['message'] = "Registration successful!";
-    } catch (mysqli_sql_exception $e) {
-        if ($e->getCode() == 1062) {  // Duplicate entry error code
-            if (strpos($e->getMessage(), 'email') !== false) {
-                $response['message'] = "This email address is already registered";
-            } elseif (strpos($e->getMessage(), 'phone') !== false) {
-                $response['message'] = "This phone number is already registered";
+    } else {
+        // Check for MySQL Error
+        if ($stmt->errno == 1062) {
+            // Duplicate entry - Check which field caused the issue
+            if (strpos($stmt->error, 'email') !== false) {
+                $response['message'] = "This email address is already registered.";
+            } elseif (strpos($stmt->error, 'phone') !== false) {
+                $response['message'] = "This phone number is already registered.";
             } else {
-                $response['message'] = "This record already exists";
+                $response['message'] = "This record already exists.";
             }
         } else {
-            $response['message'] = "Error occurred while registering: " . $e->getMessage();
+            // Other SQL errors
+            $response['message'] = "Error occurred while registering: " . $stmt->errno . " - " . $stmt->error;
         }
     }
 
+    // Close the statement and connection
     $stmt->close();
     $conn->close();
 } else {
-    $response['message'] = "Invalid request method";
+    $response['message'] = "Invalid request method.";
 }
 
+// Return JSON response
 header('Content-Type: application/json');
 echo json_encode($response);
 ?>
