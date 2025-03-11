@@ -236,7 +236,7 @@
                 class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                 <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                 </svg>
                 <span>Technical Events</span>
             </a>
@@ -267,35 +267,40 @@
             <a href="/kalam/categories/events.php?category=Media"
                 class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                 <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m-4-4l4 4 4-4" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
                 <span>Media</span>
             </a>
             <a href="/kalam/categories/events.php?category=Culturals"
                 class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                 <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m-4-4l4 4 4-4" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
                 </svg>
                 <span>Culturals</span>
             </a>
             <a href="/kalam/categories/events.php?category=ESAT-Gaming"
                 class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                 <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m-4-4l4 4 4-4" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5zm-1 9h16" />
                 </svg>
                 <span>ESAT-Gaming</span>
             </a>
             <a href="/kalam/categories/events.php?category=Tech-Hub"
                 class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                 <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m-4-4l4 4 4-4" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
                 </svg>
                 <span>Tech-Hub</span>
             </a>
             <a href="/kalam/categories/events.php?category=NCC"
                 class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                 <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m-4-4l4 4 4-4" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
                 </svg>
                 <span>NCC</span>
             </a>
@@ -306,96 +311,94 @@
 <!-- JavaScript for Mobile Events Menu -->
 <script>
     // Enhanced JavaScript for Mobile Events Menu with resize handling
+    // Replace the existing Mobile Events Popup Menu with a scrollable dropdown
     document.addEventListener('DOMContentLoaded', function () {
         const eventsButton = document.getElementById('mobile-bottom-events');
-        const eventsPopup = document.getElementById('mobile-events-popup');
-        const closeButton = document.getElementById('close-events-popup');
-        const popupContent = eventsPopup.querySelector('div.bg-white');
+        const mobileEventsPopup = document.getElementById('mobile-events-popup');
 
-        // Function to position the popup correctly
-        function positionPopup() {
-            // Calculate the bottom position based on the navigation bar
-            const navHeight = document.querySelector('.md\\:hidden.fixed.bottom-0').offsetHeight;
-            popupContent.style.bottom = `${navHeight}px`;
-        }
+        // Create new scrollable dropdown
+        const scrollableDropdown = document.createElement('div');
+        scrollableDropdown.id = 'mobile-events-scrollable';
+        scrollableDropdown.className = 'fixed left-0 right-0 bg-white z-50 shadow-lg border-t border-gray-200 overflow-y-auto hidden';
+        scrollableDropdown.style.maxHeight = '70vh'; // Set maximum height
+        scrollableDropdown.style.bottom = '4rem'; // Position above bottom nav
 
-        // Position popup when opening
+        // Copy the grid content from popup to scrollable area
+        const gridContent = mobileEventsPopup.querySelector('.grid');
+        const headerContent = mobileEventsPopup.querySelector('.flex.justify-between');
+
+        const contentWrapper = document.createElement('div');
+        contentWrapper.className = 'p-4';
+
+        // Clone the header without the close button
+        const newHeader = document.createElement('div');
+        newHeader.className = 'mb-4';
+        newHeader.innerHTML = '<h3 class="text-lg font-semibold text-gray-800">Events</h3>';
+
+        contentWrapper.appendChild(newHeader);
+        contentWrapper.appendChild(gridContent.cloneNode(true));
+        scrollableDropdown.appendChild(contentWrapper);
+
+        // Add to the body
+        document.body.appendChild(scrollableDropdown);
+
+        // Toggle the scrollable dropdown when events button is clicked
         eventsButton.addEventListener('click', function () {
-            // First position the popup correctly
-            positionPopup();
-
-            // Then show and animate
-            eventsPopup.classList.remove('hidden');
-            popupContent.classList.add('animate-slide-up');
-        });
-
-        // Close popup
-        closeButton.addEventListener('click', function () {
-            popupContent.classList.add('animate-slide-down');
-
-            // Hide after animation completes
-            setTimeout(function () {
-                eventsPopup.classList.add('hidden');
-                popupContent.classList.remove('animate-slide-down');
-                popupContent.classList.remove('animate-slide-up');
-            }, 300);
-        });
-
-        // Close if clicking outside the popup content
-        eventsPopup.addEventListener('click', function (e) {
-            if (e.target === eventsPopup) {
-                closeButton.click();
+            if (scrollableDropdown.classList.contains('hidden')) {
+                scrollableDropdown.classList.remove('hidden');
+                scrollableDropdown.classList.add('animate-slide-up');
+            } else {
+                scrollableDropdown.classList.add('animate-slide-down');
+                setTimeout(function () {
+                    scrollableDropdown.classList.add('hidden');
+                    scrollableDropdown.classList.remove('animate-slide-down', 'animate-slide-up');
+                }, 300);
             }
         });
 
-        // Listen for window resize events
-        window.addEventListener('resize', function () {
-            // Only reposition if the popup is currently visible
-            if (!eventsPopup.classList.contains('hidden')) {
-                positionPopup();
-            }
-        });
-    });
-
-    // Updated CSS with improved positioning
-    document.head.insertAdjacentHTML('beforeend', `
-<style>
-    @keyframes slideUp {
-        from { transform: translateY(100%); }
-        to { transform: translateY(0); }
-    }
-    
-    @keyframes slideDown {
-        from { transform: translateY(0); }
-        to { transform: translateY(100%); }
-    }
-    
-    .animate-slide-up {
-        animation: slideUp 0.3s ease-out forwards;
-    }
-    
-    .animate-slide-down {
-        animation: slideDown 0.3s ease-out forwards;
-    }
-    
-    /* Improved popup positioning */
-    #mobile-events-popup .bg-white {
-        position: fixed;
-        bottom: 4rem; /* Default value, will be updated by JS */
-        left: 0;
-        right: 0;
-        z-index: 50;
-        border-top-left-radius: 0.75rem;
-        border-top-right-radius: 0.75rem;
-        box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Add padding to main content to avoid bottom nav overlap */
-    @media (max-width: 768px) {
-        body {
-            padding-bottom: 5rem;
+        // Hide popup menu as we're replacing it
+        if (mobileEventsPopup) {
+            mobileEventsPopup.style.display = 'none';
         }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!scrollableDropdown.contains(e.target) &&
+                e.target !== eventsButton &&
+                !eventsButton.contains(e.target) &&
+                !scrollableDropdown.classList.contains('hidden')) {
+                scrollableDropdown.classList.add('animate-slide-down');
+                setTimeout(function () {
+                    scrollableDropdown.classList.add('hidden');
+                    scrollableDropdown.classList.remove('animate-slide-down', 'animate-slide-up');
+                }, 300);
+            }
+        });
+
+        // Add additional styles
+        const styleElement = document.createElement('style');
+        styleElement.textContent = `
+    #mobile-events-scrollable {
+      transition: transform 0.3s ease-out;
     }
-</style>
-`);
+    
+    /* Add some inertia scrolling for iOS */
+    #mobile-events-scrollable {
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Add a subtle gradient fade at the bottom to indicate more content */
+    #mobile-events-scrollable::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 20px;
+      background: linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0));
+      pointer-events: none;
+    }
+  `;
+        document.head.appendChild(styleElement);
+    });
 </script>

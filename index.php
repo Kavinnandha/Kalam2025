@@ -508,7 +508,7 @@
                 isDragging = false;
                 const diff = touchStartX - touchEndX;
 
-                if (Math.abs(diff) > 100) { // Threshold for slide change
+                if (Math.abs(diff) > 50) { // Threshold for slide change
                     if (diff > 0) {
                         currentSlide = Math.min(currentSlide + 1, maxSlideIndex);
                     } else {
@@ -541,7 +541,7 @@
                     currentSlide = (currentSlide >= maxSlideIndex) ? 0 : currentSlide + 1;
                     updateCarousel();
                 }
-            }, 5000);
+            }, 10000);
 
             // Initialize
             createDots();
