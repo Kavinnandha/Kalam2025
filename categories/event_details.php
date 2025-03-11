@@ -30,6 +30,49 @@
                 height: 300px;
             }
         }
+        
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            max-width: 300px;
+            z-index: 9999;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .notification.success {
+            background: linear-gradient(to right, #10b981, #059669);
+        }
+
+        .notification.error {
+            background: linear-gradient(to right, #ef4444, #dc2626);
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notification-close {
+            cursor: pointer;
+            margin-left: 10px;
+        }
     </style>
 </head>
 
@@ -61,6 +104,15 @@
 
     $event = $result->fetch_assoc();
     ?>
+
+    <!-- Notification element -->
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <svg id="notification-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"></svg>
+            <span id="notification-message"></span>
+        </div>
+        <span class="notification-close" onclick="closeNotification()">✕</span>
+    </div>
 
     <div class="pt-20">
         <!-- Hero Section -->
@@ -217,6 +269,44 @@
     </div>
 
     <script>
+        // Notification functions
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            const notificationMessage = document.getElementById('notification-message');
+            const notificationIcon = document.getElementById('notification-icon');
+            
+            // Set message
+            notificationMessage.textContent = message;
+            
+            // Set proper class based on type
+            notification.className = 'notification';
+            notification.classList.add(type);
+            
+            // Set icon based on type
+            if (type === 'success') {
+                notificationIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M5 13l4 4L19 7" />
+                `;
+            } else {
+                notificationIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                `;
+            }
+            
+            // Show notification
+            notification.classList.add('show');
+            
+            // Auto-hide after 4 seconds
+            setTimeout(closeNotification, 4000);
+        }
+        
+        function closeNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.remove('show');
+        }
+
         function checkEventAccess(eventId) {
             fetch('../hackathon/check_event_access.php?event_id=' + eventId)
                 .then(response => response.json())
@@ -224,12 +314,13 @@
                     if (data.status === 'not_logged_in') {
                         window.location.href = '../user/registration.php';
                     } else if (data.status === 'not_purchased') {
-                        alert('You need to purchase this event to proceed.');
+                        showNotification('You need to purchase this event to proceed.', 'error');
                     } else if (data.status === 'allowed') {
                         window.location.href = '../hackathon/hackathon.php?event_id=' + encodeURIComponent(<?php echo $event['event_id'] ?>);
                     }
                 });
         }
+        
         function addToCart(eventId) {
             <?php if (!isset($_SESSION['user_id'])): ?>
                 window.location.href = '../user/registration.php';
@@ -249,15 +340,14 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Update cart UI or show success message
-                        alert('Added to cart successfully!');
+                        showNotification('Added to cart successfully!', 'success');
                     } else {
-                        alert(data.message || 'Error adding to cart');
+                        showNotification(data.message || 'Error adding to cart', 'error');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Error adding to cart');
+                    showNotification('Error adding to cart', 'error');
                 });
         }
 
