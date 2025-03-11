@@ -333,7 +333,8 @@
                     <div class="flex flex-col items-center text-center font-[Poppins]">
                         <h4 class="text-xl font-bold mb-4 text-gray-700">Legal</h4>
                         <div class="flex flex-wrap justify-center gap-4 text-gray-600">
-                            <a href="termsandconditions.php" class="hover:text-orange-500 transition duration-300">Terms &
+                            <a href="termsandconditions.php" class="hover:text-orange-500 transition duration-300">Terms
+                                &
                                 Conditions</a>
                         </div>
                     </div>
@@ -342,19 +343,36 @@
                     <div class="flex flex-col items-center text-center font-[Poppins]">
                         <h4 class="text-xl font-bold mb-4 text-gray-700">Event Location</h4>
                         <div class="text-gray-600 text-sm leading-relaxed">
-                            <a href="https://maps.app.goo.gl/evaogygK4xEtuNWQ8" class="hover:text-orange-500 transition duration-300" target="_blank">
+                            <a href="https://maps.app.goo.gl/evaogygK4xEtuNWQ8"
+                                class="hover:text-orange-500 transition duration-300" target="_blank">
                                 <p>Sri Shakthi Institute of Engineering and Technology</p>
                                 <p>L&T Bypass Road, Coimbatore - 641 062</p>
                             </a>
                         </div>
                     </div>
                     <!-- Developer Info -->
-                    <div class="flex flex-col items-center text-center font-[Poppins]">
-                        <h4 class="text-xl font-bold mb-4 text-gray-700">Developed By</h4>
-                        <div class="text-gray-600">
-                            <p>Kavin Nandha M K</p>
+                    <div class="flex flex-col items-center text-center font-[Poppins] space-y-4">
+                        <h4
+                            class="text-xl font-bold mb-4 text-gray-700">
+                            Developed By
+                        </h4>
+                        <div class="text-gray-700">
+                            <p class="text-lg font-semibold text-gray-800">Kavin Nandha M K</p>
+                            <p class="text-sm mt-1 text-gray-500">CSE (Cyber Security) - II Year</p>
+
+                            <!-- Centered LinkedIn Section -->
+                            <div class="flex flex-col items-center justify-center mt-2">
+                                <a href="https://www.linkedin.com/in/kavin-nandha-076b22263"
+                                    target="_blank"
+                                    class="flex items-center text-gray-700 hover:text-orange-500 transition duration-300 transform hover:scale-110 hover:-rotate-3">
+                                    <i class="fab fa-linkedin text-2xl mb-1"></i>
+                                    <span class="text-sm font-semibold ml-2">LinkedIn</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
+
+
 
                 </div>
 
@@ -490,7 +508,7 @@
                 isDragging = false;
                 const diff = touchStartX - touchEndX;
 
-                if (Math.abs(diff) > 100) { // Threshold for slide change
+                if (Math.abs(diff) > 50) { // Threshold for slide change
                     if (diff > 0) {
                         currentSlide = Math.min(currentSlide + 1, maxSlideIndex);
                     } else {
@@ -523,7 +541,7 @@
                     currentSlide = (currentSlide >= maxSlideIndex) ? 0 : currentSlide + 1;
                     updateCarousel();
                 }
-            }, 2000);
+            }, 10000);
 
             // Initialize
             createDots();

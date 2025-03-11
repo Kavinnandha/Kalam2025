@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
             if ($event['image_path'] && file_exists($event['image_path'])) {
-            unlink($event['image_path']);
+                unlink($event['image_path']);
             }
             $image_path = "/kalam/images/{$new_filename}";
         }
@@ -112,15 +112,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($update_stmt->execute()) {
         $_SESSION['message'] = "Event updated successfully!";
-        
+
         header("Location: " . (isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'));
         exit();
     }
+}
+
+// Fetch ENUM values from `category` column
+$query = "SHOW COLUMNS FROM events LIKE 'category'";
+$result = $conn->query($query);
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $enumValues = $row['Type']; // Get ENUM values in raw format like: enum('Technical','Non-Technical','General',...)
+
+    // Extract ENUM values using regular expression
+    preg_match("/^enum\((.*)\)$/", $enumValues, $matches);
+    $enumValues = str_getcsv($matches[1], ",", "'"); // Split by comma and remove quotes
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -138,7 +152,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <h1 class="text-3xl font-bold text-gray-800">Edit Event</h1>
                     <p class="text-gray-600 mt-2">Update event details and information</p>
                 </div>
-                <a href="<?php echo isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'; ?>" class="flex items-center px-4 py-2 text-blue-600 hover:text-blue-800 transition-colors duration-200">
+                <a href="<?php echo isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'; ?>"
+                    class="flex items-center px-4 py-2 text-blue-600 hover:text-blue-800 transition-colors duration-200">
                     <i class="fas fa-arrow-left mr-2"></i>
                     Back to Events
                 </a>
@@ -146,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <!-- Error Messages -->
             <?php if (isset($_SESSION['error'])): ?>
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                    <?php 
+                    <?php
                     echo htmlspecialchars($_SESSION['error']);
                     unset($_SESSION['error']);
                     ?>
@@ -194,19 +209,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <label class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
                                         <select name="category" required
                                             class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
-                                            <option value="Technical" <?php echo $event['category'] == 'Technical' ? 'selected' : ''; ?>>Technical</option>
-                                            <option value="Non-Technical" <?php echo $event['category'] == 'Non-Technical' ? 'selected' : ''; ?>>Non-Technical</option>
-                                            <option value="General" <?php echo $event['category'] == 'General' ? 'selected' : ''; ?>>General</option>
-                                            <option value="Workshop" <?php echo $event['category'] == 'Workshop' ? 'selected' : ''; ?>>Workshop</option>
-                                            <option value="Hackathon" <?php echo $event['category'] == 'Hackathon' ? 'selected' : ''; ?>>Hackathon</option>
-                                            <option value="Media" <?php echo $event['category'] == 'Media' ? 'selected' : ''; ?>>Media</option>
+                                            <option value="">Select Category</option>
+                                            <?php
+                                            foreach ($enumValues as $value) {
+                                                // Check if the option matches the category and make it selected
+                                                $selected = ($event['category'] == $value) ? 'selected' : '';
+                                                echo "<option value=\"$value\" $selected>$value</option>";
+                                            }
+                                            ?>
+
                                         </select>
                                     </div>
 
                                     <div>
-                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Registration Fee</label>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Registration
+                                            Fee</label>
                                         <div class="relative">
-                                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">₹</span>
+                                            <span
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">₹</span>
                                             <input type="number" name="registration_fee"
                                                 value="<?php echo $event['registration_fee']; ?>" step="0.1"
                                                 class="w-full rounded-lg border-gray-300 pl-8 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
@@ -219,16 +239,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <label class="block text-sm font-semibold text-gray-700 mb-2">Fee Type</label>
                                         <select name="fee_description" required
                                             class="mb-5 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
-                                            <option value="Individual" <?php echo $event['fee_description'] == 'Individual' ? 'selected' : ''; ?>>Individual</option>
+                                            <option value="Individual" <?php echo $event['fee_description'] == 'Individual' ? 'selected' : ''; ?>>Individual
+                                            </option>
                                             <option value="Team" <?php echo $event['fee_description'] == 'Team' ? 'selected' : ''; ?>>Team</option>
                                         </select>
                                     </div>
-                                    
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Department</label>
-                                <?php if (isset($_SESSION['department_code']) && !empty($_SESSION['department_code'])): ?>
-                                    
-                                    <input type="hidden" name="department_code" value="<?php echo $_SESSION['department_code']; ?>">
-                                    <p class="text-gray-700"><?php
+
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Department</label>
+                                    <?php if (isset($_SESSION['department_code']) && !empty($_SESSION['department_code'])): ?>
+
+                                        <input type="hidden" name="department_code"
+                                            value="<?php echo $_SESSION['department_code']; ?>">
+                                        <p class="text-gray-700"><?php
                                         $dept_sql = "SELECT department_name FROM department WHERE department_code = ?";
                                         $stmt = $conn->prepare($dept_sql);
                                         $stmt->bind_param("s", $_SESSION['department_code']);
@@ -237,23 +259,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         $stmt->fetch();
                                         echo $department_name;
                                         $stmt->close();
-                                    ?></p>
-                                <?php else: ?>
-                                    <select name="department_code" required
+                                        ?></p>
+                                    <?php else: ?>
+                                        <select name="department_code" required
                                             class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
-                                        <option value="">Select Department</option>
-                                        <?php
-                                        $dept_sql = "SELECT department_code, department_name FROM department";
-                                        $dept_result = $conn->query($dept_sql);
-                                        if ($dept_result->num_rows > 0) {
-                                            while ($row = $dept_result->fetch_assoc()) {
-                                                echo '<option value="' . $row['department_code'] . '">' . $row['department_name'] . '</option>';
+                                            <option value="">Select Department</option>
+                                            <?php
+                                            $dept_sql = "SELECT department_code, department_name FROM department";
+                                            $dept_result = $conn->query($dept_sql);
+                                            if ($dept_result->num_rows > 0) {
+                                                while ($row = $dept_result->fetch_assoc()) {
+                                                    echo '<option value="' . $row['department_code'] . '">' . $row['department_name'] . '</option>';
+                                                }
                                             }
-                                        }
-                                        ?>
-                                    </select>
-                                <?php endif; ?>
-                    
+                                            ?>
+                                        </select>
+                                    <?php endif; ?>
+
                                 </div>
                             </div>
                         </div>
@@ -276,8 +298,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">End Time</label>
-                                <input type="time" name="end_time" value="<?php echo $event['end_time']; ?>"
-                                    required
+                                <input type="time" name="end_time" value="<?php echo $event['end_time']; ?>" required
                                     class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                             </div>
                         </div>
@@ -287,14 +308,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Venue</label>
-                                    <input type="text" name="venue" value="<?php echo htmlspecialchars($event['venue']); ?>"
-                                        required
+                                    <input type="text" name="venue"
+                                        value="<?php echo htmlspecialchars($event['venue']); ?>" required
                                         class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Contact No.</label>
-                                    <input type="text" name="contact" value="<?php echo htmlspecialchars($event['contact']); ?>"
-                                        
+                                    <input type="text" name="contact"
+                                        value="<?php echo htmlspecialchars($event['contact']); ?>"
                                         class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                                 </div>
                             </div>
@@ -308,7 +329,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
 
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Details and Guidelines</label>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Details and
+                                    Guidelines</label>
                                 <textarea name="description" rows="4" required
                                     class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm"><?php echo htmlspecialchars($event['description']); ?></textarea>
                             </div>
@@ -335,7 +357,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         function previewImage(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     document.getElementById('currentImage').src = e.target.result;
                 };
                 reader.readAsDataURL(input.files[0]);
@@ -343,7 +365,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // Form validation
-        document.querySelector('form').addEventListener('submit', function(e) {
+        document.querySelector('form').addEventListener('submit', function (e) {
             const startTime = document.querySelector('input[name="start_time"]').value;
             const endTime = document.querySelector('input[name="end_time"]').value;
 
@@ -354,4 +376,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         });
     </script>
 </body>
+
 </html>

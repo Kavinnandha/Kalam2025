@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $contact = $_POST['contact'];
     $registration_fee = $_POST['registration_fee'];
     $fee_description = $_POST['fee_description'];
-    
+
     // Initialize image path
     $image_path = null;
 
@@ -69,20 +69,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $insert_sql = "INSERT INTO events (event_name, event_detail, category, department_code, description,
                    event_date, start_time, end_time, venue, registration_fee, contact, image_path, fee_description) 
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    
+
     $stmt = $conn->prepare($insert_sql);
-    $stmt->bind_param("sssssssssssss", 
-        $event_name, 
-        $event_detail, 
-        $category, 
-        $department_code, 
-        $description, 
-        $event_date, 
-        $start_time, 
-        $end_time, 
-        $venue, 
+    $stmt->bind_param(
+        "sssssssssssss",
+        $event_name,
+        $event_detail,
+        $category,
+        $department_code,
+        $description,
+        $event_date,
+        $start_time,
+        $end_time,
+        $venue,
         $registration_fee,
-        $contact, 
+        $contact,
         $image_path,
         $fee_description
     );
@@ -95,10 +96,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['error'] = "Error creating event: {$conn->error}";
     }
 }
+
+// Fetch ENUM values from `category` column
+$query = "SHOW COLUMNS FROM events LIKE 'category'";
+$result = $conn->query($query);
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $enumValues = $row['Type']; // Get ENUM values in raw format like: enum('Technical','Non-Technical','General',...)
+
+    // Extract ENUM values using regular expression
+    preg_match("/^enum\((.*)\)$/", $enumValues, $matches);
+    $enumValues = str_getcsv($matches[1], ",", "'"); // Split by comma and remove quotes
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -117,8 +132,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <h1 class="text-3xl font-bold text-gray-800">Create New Event</h1>
                         <p class="mt-2 text-gray-600">Add a new event to your calendar</p>
                     </div>
-                    <a href="<?php echo isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'; ?>" 
-                       class="flex items-center px-4 py-2 text-blue-600 hover:text-blue-800 transition-colors duration-200">
+                    <a href="<?php echo isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'; ?>"
+                        class="flex items-center px-4 py-2 text-blue-600 hover:text-blue-800 transition-colors duration-200">
                         <i class="fas fa-arrow-left mr-2"></i>
                         Back to Events
                     </a>
@@ -127,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <!-- Alert Messages -->
                 <?php if (isset($_SESSION['error'])): ?>
                     <div class="mt-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
-                        <?php 
+                        <?php
                         echo $_SESSION['error'];
                         unset($_SESSION['error']);
                         ?>
@@ -145,14 +160,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="flex items-center justify-center w-full">
                                 <div class="w-full h-64 relative border-2 border-dashed border-gray-300 rounded-lg">
                                     <img id="preview" class="hidden w-full h-full object-cover rounded-lg">
-                                    <div id="placeholder" class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <div id="placeholder"
+                                        class="absolute inset-0 flex flex-col items-center justify-center">
                                         <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
                                         <p class="text-gray-500">Click or drag to upload image</p>
                                         <p class="text-sm text-gray-400 mt-2">PNG, JPG, GIF up to 2MB</p>
                                     </div>
-                                    <input type="file" name="image" accept="image/*" 
-                                           class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                           onchange="previewImage(this)">
+                                    <input type="file" name="image" accept="image/*"
+                                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                        onchange="previewImage(this)">
                                 </div>
                             </div>
                         </div>
@@ -162,41 +178,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Event Name</label>
                                 <input type="text" name="event_name" required
-                                       class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
                                 <select name="category" required
-                                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                                     <option value="">Select Category</option>
-                                    <option value="Technical">Technical</option>
-                                    <option value="Non-Technical">Non-Technical</option>
-                                    <option value="General">General</option>
-                                    <option value="Workshop">Workshop</option>
-                                    <option value="Hackathon">Hackathon</option>
-                                    <option value="Media">Media</option>
+                                    <?php
+                                    foreach ($enumValues as $value) {
+                                        echo "<option value=\"$value\">$value</option>";
+                                    }
+                                    ?>
                                 </select>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Department</label>
                                 <?php if (isset($_SESSION['department_code']) && !empty($_SESSION['department_code'])): ?>
-                                    
-                                    <input type="hidden" name="department_code" value="<?php echo $_SESSION['department_code']; ?>">
+
+                                    <input type="hidden" name="department_code"
+                                        value="<?php echo $_SESSION['department_code']; ?>">
                                     <p class="text-gray-700"><?php
-                                        $dept_sql = "SELECT department_name FROM department WHERE department_code = ?";
-                                        $stmt = $conn->prepare($dept_sql);
-                                        $stmt->bind_param("s", $_SESSION['department_code']);
-                                        $stmt->execute();
-                                        $stmt->bind_result($department_name);
-                                        $stmt->fetch();
-                                        echo $department_name;
-                                        $stmt->close();
+                                    $dept_sql = "SELECT department_name FROM department WHERE department_code = ?";
+                                    $stmt = $conn->prepare($dept_sql);
+                                    $stmt->bind_param("s", $_SESSION['department_code']);
+                                    $stmt->execute();
+                                    $stmt->bind_result($department_name);
+                                    $stmt->fetch();
+                                    echo $department_name;
+                                    $stmt->close();
                                     ?></p>
                                 <?php else: ?>
                                     <select name="department_code" required
-                                            class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                                         <option value="">Select Department</option>
                                         <?php
                                         $dept_sql = "SELECT department_code, department_name FROM department";
@@ -214,16 +230,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Registration Fee</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">₹</span>
+                                    <span
+                                        class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">₹</span>
                                     <input type="number" name="registration_fee" step="0.1"
-                                           class="w-full rounded-lg border-gray-300 pl-8 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                        class="w-full rounded-lg border-gray-300 pl-8 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                                 </div>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Fee Description</label>
                                 <select name="fee_description" required
-                                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                                     <option value="">Select Fee Type</option>
                                     <option value="Individual">Individual</option>
                                     <option value="Team">Team</option>
@@ -236,19 +253,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Event Date</label>
                                 <input type="date" name="event_date" required
-                                       class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Start Time</label>
                                 <input type="time" name="start_time" required
-                                       class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">End Time</label>
                                 <input type="time" name="end_time" required
-                                       class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                             </div>
                         </div>
 
@@ -257,35 +274,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Venue</label>
                                 <input type="text" name="venue" required
-                                       class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Contact No.</label>
                                 <input type="text" name="contact"
-                                       class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Tag Line</label>
                             <input type="text" name="event_detail" required
-                                   class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
                             <textarea name="description" rows="4" required
-                                      class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm"></textarea>
+                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm"></textarea>
                         </div>
 
                         <!-- Form Actions -->
                         <div class="flex justify-end space-x-4 pt-6">
                             <a href="<?php echo isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'; ?>"
-                               class="px-6 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+                                class="px-6 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200">
                                 Cancel
                             </a>
                             <button type="submit"
-                                    class="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                                class="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
                                 Create Event
                             </button>
                         </div>
@@ -299,30 +316,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         function previewImage(input) {
             const preview = document.getElementById('preview');
             const placeholder = document.getElementById('placeholder');
-            
+
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                
-                reader.onload = function(e) {
+
+                reader.onload = function (e) {
                     preview.src = e.target.result;
                     preview.classList.remove('hidden');
                     placeholder.classList.add('hidden');
                 };
-                
+
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
         // Form validation
-        document.querySelector('form').addEventListener('submit', function(e) {
+        document.querySelector('form').addEventListener('submit', function (e) {
             const startTime = document.querySelector('input[name="start_time"]').value;
             const endTime = document.querySelector('input[name="end_time"]').value;
             const eventDate = new Date(document.querySelector('input[name="event_date"]').value);
             const today = new Date();
-            
+
             // Set hours to 0 for date comparison
             today.setHours(0, 0, 0, 0);
-            
+
             if (eventDate < today) {
                 e.preventDefault();
                 alert('Event date cannot be in the past');
@@ -337,4 +354,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         });
     </script>
 </body>
+
 </html>

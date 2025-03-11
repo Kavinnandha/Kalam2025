@@ -6,6 +6,51 @@
     <?php include '../header/links.php'; ?>
     <?php include '../header/navbar_styles.php'; ?>
     <title>Department Events</title>
+    <style>
+        .notification {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .notification-success {
+            background: linear-gradient(to right, #34d399, #10b981);
+        }
+        
+        .notification-error {
+            background: linear-gradient(to right, #f87171, #ef4444);
+        }
+        
+        .notification-icon {
+            margin-right: 12px;
+        }
+        
+        .notification-message {
+            flex-grow: 1;
+            font-weight: 500;
+        }
+        
+        .notification-close {
+            cursor: pointer;
+            margin-left: 12px;
+        }
+    </style>
 </head>
 
 <body class="bg-gradient-to-br from-orange-50 to-yellow-50">
@@ -26,7 +71,7 @@
             $dept_result = $stmt->get_result();
             $department = $dept_result->fetch_assoc();
         } else {
-            $department = ['department_name' => 'All Departments'];
+            $department = ['department_name' => ' '];
         }
         
         // Get events based on department code and category
@@ -49,6 +94,9 @@
         $stmt->execute();
         $events = $stmt->get_result();
     ?>
+
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
 
     <div class="pt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -152,6 +200,54 @@
     </div>
 
     <script>
+        // Notification system
+        function showNotification(message, type) {
+            const container = document.getElementById('notification-container');
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            
+            // Icon based on notification type
+            let icon = '';
+            if (type === 'success') {
+                icon = `<svg class="notification-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>`;
+            } else {
+                icon = `<svg class="notification-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>`;
+            }
+            
+            // Create notification content
+            notification.innerHTML = `
+                ${icon}
+                <span class="notification-message">${message}</span>
+                <span class="notification-close" onclick="this.parentElement.remove()">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </span>
+            `;
+            
+            // Add to container
+            container.appendChild(notification);
+            
+            // Show notification with animation
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            // Auto-remove after 4 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 4000);
+        }
+
         function addToCart(eventId) {
             <?php if(!isset($_SESSION['user_id'])): ?>
                 window.location.href = '../user/registration.php';
@@ -171,15 +267,17 @@
             .then(response => response.json())
             .then(data => {
                 if(data.success) {
-                    // Update cart UI or show success message
-                    alert('Added to cart successfully!');
+                    // Show success notification instead of alert
+                    showNotification('Added to cart successfully!', 'success');
                 } else {
-                    alert(data.message || 'Error adding to cart');
+                    // Show error notification instead of alert
+                    showNotification(data.message || 'Error adding to cart', 'error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error adding to cart');
+                // Show error notification
+                showNotification('Error adding to cart', 'error');
             });
         }
     </script>
