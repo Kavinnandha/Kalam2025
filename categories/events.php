@@ -26,7 +26,7 @@
             $dept_result = $stmt->get_result();
             $department = $dept_result->fetch_assoc();
         } else {
-            $department = ['department_name' => 'All Departments'];
+            $department = ['department_name' => ' '];
         }
         
         // Get events based on department code and category
