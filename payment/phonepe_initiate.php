@@ -8,11 +8,11 @@ if (!isset($_SESSION['user_id'])) {
 require_once '../database/connection.php';
 
 // PhonePe API credentials
-$merchantId = "MERCHANTUAT";
+$merchantId = "M22DZIHTE7XA8";
 $apiKey = "bbdc4a8f-806b-4307-ad83-d0efefbe8725";
 $saltKey = "bbdc4a8f-806b-4307-ad83-d0efefbe8725";
 $saltIndex = 1;
-$apiEndpoint = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay";
+$apiEndpoint = "https://api.phonepe.com/apis/hermes/pg/v1/pay";
 
 $user_id = $_SESSION['user_id'];
 $sql = "SELECT name, email, phone FROM users WHERE user_id = ?";
@@ -99,7 +99,17 @@ if ($err) {
 
 $responseData = json_decode($response, true);
 
-if ($responseData['success'] && isset($responseData['data']['instrumentResponse']['redirectInfo']['url'])) {
+// Check if $responseData is null or not an array
+if (!$responseData || !is_array($responseData)) {
+    echo "Error: Invalid response from PhonePe API";
+    // Optionally log the raw response
+    echo "<pre>Response: " . htmlspecialchars($response) . "</pre>";
+    exit();
+}
+
+// Then check for success and the nested properties
+if (isset($responseData['success']) && $responseData['success'] && 
+    isset($responseData['data']['instrumentResponse']['redirectInfo']['url'])) {
     $redirectUrl = $responseData['data']['instrumentResponse']['redirectInfo']['url'];
     
     // Update the transaction with PhonePe details if needed
@@ -107,7 +117,7 @@ if ($responseData['success'] && isset($responseData['data']['instrumentResponse'
     exit();
 } else {
     echo "Error initiating payment: ";
-    print_r($responseData);
+    echo "<pre>"; print_r($responseData); echo "</pre>";
     exit();
 }
 ?>
