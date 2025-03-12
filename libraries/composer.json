@@ -1,5 +1,24 @@
 {
     "require": {
-        "phpmailer/phpmailer": "^6.9"
-    }
+        "phpmailer/phpmailer": "^6.9",
+        "phonepe/phonepe-pg-php-sdk": "^1.0"
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": [
+                {
+                    "dist": {
+                        "type": "zip",
+                        "url": "https://phonepe.mycloudrepo.io/public/repositories/phonepe-pg-php-sdk/phonepe-pg-php-sdk.zip"
+                    },
+                    "name": "phonepe/phonepepg",
+                    "version": "1.0.0",
+                    "autoload": {
+                        "classmap": ["/"]
+                    }
+                }
+            ]
+        }
+    ]
 }
