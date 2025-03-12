@@ -326,7 +326,7 @@
                         $purchaseResult = $checkPurchaseStmt->get_result();
                         
                         if ($purchaseResult->num_rows == 0) {
-                            $error = "This user has not purchased this event. They must register for the event before joining your team.";
+                            $error = "This user has not purchased any event. They must register for the event before joining your team.";
                         } else {
                             // Add member to team
                             $addMemberSql = "INSERT INTO hackathon_teams (team_id, user_id) VALUES (?, ?)";
