@@ -8,6 +8,15 @@ include '../database/connection.php';
 
 $department_code = $_SESSION['department_code'];
 
+$stmt = $conn->prepare("SELECT department_name FROM department WHERE department_code = ?");
+$stmt->bind_param("s", $department_code);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result && $row = $result->fetch_assoc()) {
+    $department_name = $row['department_name'];
+} 
+
 // Get statistics using prepared statements
 $stats_queries = [
     'total_events' => "SELECT COUNT(*) as count FROM events WHERE department_code = ?",
@@ -79,6 +88,12 @@ if (isset($_POST['delete_event'])) {
                         <h1 class="text-2xl font-bold text-gray-900">Event Management</h1>
                     </div>
                     <div class="flex items-center space-x-4">
+                        <?php if ($department_name == "Culturals"): ?>
+                            <a href="culturals_team.php"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                                <i class="fas fa-music mr-2"></i>Culturals Team
+                            </a>
+                        <?php endif; ?>
                         <a href="cart_items.php" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
                             <i class="fas fa-shopping-cart mr-2"></i>Users Cart
                         </a>
@@ -191,7 +206,8 @@ if (isset($_POST['delete_event'])) {
                         </div>
                         <div class="p-4">
                             <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                                <?php echo htmlspecialchars($event['event_name']); ?></h3>
+                                <?php echo htmlspecialchars($event['event_name']); ?>
+                            </h3>
                             <p class="text-sm text-gray-600 mb-2">
                                 <i class="far fa-calendar mr-2"></i>
                                 <?php echo date('F d, Y', strtotime($event['event_date'])); ?>

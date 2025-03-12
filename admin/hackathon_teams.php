@@ -16,6 +16,12 @@
         session_start();
     }
 
+    if (!isset($_SESSION['admin_id'])) {
+        header("Location: login.php");
+        exit();
+    }
+    
+
     // Get department from session
     $department_code = isset($_SESSION['department_code']) ? $_SESSION['department_code'] : null;
 
