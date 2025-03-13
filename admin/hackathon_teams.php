@@ -11,14 +11,16 @@
 
 <body class="bg-gray-100 min-h-screen">
     <?php
-    // Start session if not already started
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
+    session_start();
+
+    if (!isset($_SESSION['admin_id'])) {
+        header("Location: login.php");
+        exit();
     }
 
     // Get department from session
     $department_code = isset($_SESSION['department_code']) ? $_SESSION['department_code'] : null;
-
+    
     // Database connection
     require_once '../database/connection.php';
 
