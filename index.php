@@ -376,7 +376,7 @@
                 </div>
 
                 <div class="text-gray-600 text-sm">
-                    <p>&copy; 2025 KALAM. All rights reserved.</p>
+                    <p>&copy; Copyright @ 2025 By Kalam | Thiru.S.SengodaGounder Educational Trust and Charitable Trust</p>
                 </div>
             </div>
 

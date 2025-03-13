@@ -305,7 +305,7 @@
     <!-- Footer -->
     <div class="bg-gradient-to-b from-orange-100 to-red-200 py-6 mt-16">
         <div class="text-center text-gray-700 font-medium">
-            &copy; 2025 KALAM. All Rights Reserved.
+            &copy; Copyright @ 2025 By Kalam | Thiru.S.SengodaGounder Educational Trust and Charitable Trust
         </div>
     </div>
 
