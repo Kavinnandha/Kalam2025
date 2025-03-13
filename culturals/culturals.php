@@ -180,7 +180,7 @@
                 // Add user to the team
                 $addMemberSql = "INSERT INTO culturals_team (cteam_id, user_id) VALUES (?, ?)";
                 $addMemberStmt = $conn->prepare($addMemberSql);
-                $addMemberStmt->bind_param("iii", $cteam_id, $user_id);
+                $addMemberStmt->bind_param("ii", $cteam_id, $user_id);
                 $addMemberStmt->execute();
                 
                 // Refresh the page to show updated info
@@ -223,8 +223,8 @@
                     $countResult = $countMembersStmt->get_result();
                     $countData = $countResult->fetch_assoc();
                     
-                    if ($countData['member_count'] >= 15) {
-                        $error = "Maximum team size (15 members) reached.";
+                    if ($countData['member_count'] >= 25) {
+                        $error = "Maximum team size (25 members) reached.";
                     } else {
                         // Check if the user has purchased the event
                         $checkPurchaseSql = "SELECT * FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.user_id = ? AND oi.event_id = ?";
@@ -407,8 +407,8 @@
                 
                 <div class="mt-8">
                     <div class="flex justify-between items-center mb-4 header-actions">
-                        <h3 class="text-xl font-bold text-gray-800">Team Members (<?php echo $member_count; ?>/15)</h3>
-                        <?php if ($member_count < 15): ?>
+                        <h3 class="text-xl font-bold text-gray-800">Team Members (<?php echo $member_count; ?>/25)</h3>
+                        <?php if ($member_count < 25): ?>
                             <button class="text-orange-500 hover:text-orange-700 transition-colors duration-300 flex items-center" onclick="toggleAddMember()">
                                 <i class="fas fa-plus-circle mr-1"></i> Add Member
                             </button>
