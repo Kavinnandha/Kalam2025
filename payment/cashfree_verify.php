@@ -23,6 +23,18 @@ try {
     $cashfree = new Cashfree();
     $response = $cashfree->PGOrderFetchPayments($x_api_version, $transaction_id);
 
+    // Check if response is empty (payment was canceled or not yet processed)
+    if (empty($response) || empty($response[0])) {
+        // Update the transaction as CANCELLED
+        $stmt = $conn->prepare("UPDATE payment_transactions SET payment_status = 'CANCELLED' WHERE transaction_id = ?");
+        $stmt->bind_param("s", $transaction_id);
+        $stmt->execute();
+        
+        // Redirect to cart page
+        header("Location: ../cart/cart.php?payment=cancelled");
+        exit();
+    }
+
     // Extract Payment Details
     $paymentEntity = $response[0][0]; // Access the nested object
 
@@ -37,9 +49,6 @@ try {
     // Convert object to JSON string for storage
     $response_data = json_encode($paymentEntity);
     
-    // Debug the response (optional)
-    // print_r($paymentEntity);
-
     // Process Payment Status
     if ($payment_status === 'SUCCESS') {
         $stmt = $conn->prepare("UPDATE payment_transactions 
@@ -133,7 +142,7 @@ try {
         $stmt->bind_param("ss", $response_data, $transaction_id);
         $stmt->execute();
         
-        header("Location: ../cart/cart.php");
+        header("Location: ../cart/cart.php?payment=failed");
         exit();
     } else {
         echo "Payment is still pending.";
@@ -143,6 +152,15 @@ try {
 } catch (Exception $e) {
     // Log the error
     error_log('Exception when calling PGOrderFetchPayments: ' . $e->getMessage());
-    echo 'Error processing payment: ', $e->getMessage();
+    
+    // Update the transaction as ERROR
+    $error_message = $e->getMessage();
+    $stmt = $conn->prepare("UPDATE payment_transactions SET payment_status = 'ERROR', response_data = ? WHERE transaction_id = ?");
+    $stmt->bind_param("ss", $error_message, $transaction_id);
+    $stmt->execute();
+    
+    // Redirect to cart page with error
+    header("Location: ../cart/cart.php?payment=error");
+    exit();
 }
 ?>
