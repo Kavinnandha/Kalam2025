@@ -1,8 +1,6 @@
 <?php
-// Start session if not already started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+
+session_start();
 
 if (!isset($_SESSION['admin_id'])) {
     header("Location: login.php");
@@ -89,20 +87,20 @@ $stmt->close();
                         // Get teams for this event with user details directly
                         $event_id = $event['event_id'];
                         $team_sql = "SELECT 
-    c.cteam_id, c.cteam_name, c.event_id, 
-    ct.cteam_member_id, u.user_id, u.name, u.email, u.phone
-FROM 
-    culturals c
-JOIN 
-    culturals_team ct ON c.cteam_id = ct.cteam_id
-JOIN 
-    events e ON e.event_id = c.event_id
-JOIN 
-    users u ON ct.user_id = u.user_id
-WHERE 
-    c.event_id = 10
-ORDER BY 
-    c.cteam_name, ct.cteam_member_id;";
+                                         c.cteam_id, c.cteam_name, c.event_id, 
+                                         ct.cteam_member_id, u.user_id, u.name, u.email, u.phone
+                                     FROM 
+                                         culturals c
+                                     JOIN 
+                                         culturals_team ct ON c.cteam_id = ct.cteam_id
+                                     JOIN 
+                                         events e ON e.event_id = c.event_id
+                                     JOIN 
+                                         users u ON ct.user_id = u.user_id
+                                     WHERE 
+                                         c.event_id = 10
+                                     ORDER BY 
+                                         c.cteam_name, ct.cteam_member_id;";
 
                         $team_stmt = $conn->prepare($team_sql);
                         $team_stmt->bind_param("i", $event_id);
