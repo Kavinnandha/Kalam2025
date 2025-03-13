@@ -15,9 +15,9 @@ use Cashfree\Model\CustomerDetails;
 use Cashfree\Model\OrderMeta;
 
 // Set Cashfree API credentials
-Cashfree::$XClientId = "TEST430329ae80e0f32e41a393d78b923034";
-Cashfree::$XClientSecret = "TESTaf195616268bd6202eeb3bf8dc458956e7192a85";
-Cashfree::$XEnvironment = Cashfree::$SANDBOX;
+Cashfree::$XClientId = "926727802c7772f7b5131518e4727629";
+Cashfree::$XClientSecret = "cfsk_ma_prod_1d6c34c09b03491ed89f684ec0913dc0_31a7fd0a";
+Cashfree::$XEnvironment = Cashfree::$PRODUCTION;
 
 $x_api_version = "2023-08-01";
 
@@ -73,10 +73,29 @@ try {
     $orderEntity = $result[0];
     $payment_session_id = $orderEntity->getPaymentSessionId();
 
-    // Auto redirect to Cashfree payment page
-    header ("Location: cashfree_checkout.php?payment_session_id=$payment_session_id");
-    exit();
-
+    // End PHP processing and output HTML
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to Cashfree</title>
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+</head>
+<body>
+    <script>
+        const cashfree = Cashfree({
+            mode: "production"
+        });
+        cashfree.checkout({
+            paymentSessionId: "<?php echo $payment_session_id; ?>",
+            redirectTarget: "_self"
+        });
+    </script>
+</body>
+</html>
+<?php
 } catch (Exception $e) {
     echo 'Exception when calling PGCreateOrder: ', $e->getMessage();
 }
