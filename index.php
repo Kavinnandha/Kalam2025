@@ -333,9 +333,8 @@
                     <div class="flex flex-col items-center text-center font-[Poppins]">
                         <h4 class="text-xl font-bold mb-4 text-gray-700">Legal</h4>
                         <div class="flex flex-wrap justify-center gap-4 text-gray-600">
-                            <a href="termsandconditions.php" class="hover:text-orange-500 transition duration-300">Terms
-                                &
-                                Conditions</a>
+                            <a href="legal/termsandconditions.php" class="hover:text-orange-500 transition duration-300">Terms & Conditions</a>
+                            <a href="legal/privacyPolicy.php" class="hover:text-orange-500 transition duration-300">Privacy Policy</a>
                         </div>
                     </div>
 

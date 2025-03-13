@@ -90,9 +90,9 @@ $stmt->close();
                                          c.cteam_id, c.cteam_name, c.event_id, 
                                          ct.cteam_member_id, u.user_id, u.name, u.email, u.phone
                                      FROM 
-                                         culturals c
+                                         team c
                                      JOIN 
-                                         culturals_team ct ON c.cteam_id = ct.cteam_id
+                                         team_members ct ON c.cteam_id = ct.cteam_id
                                      JOIN 
                                          events e ON e.event_id = c.event_id
                                      JOIN 

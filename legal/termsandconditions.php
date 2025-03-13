@@ -3,8 +3,8 @@
 <html lang="en">
 
 <head>
-    <?php include 'header/links.php'; ?>
-    <?php include 'header/navbar_styles.php'; ?>
+    <?php include '../header/links.php'; ?>
+    <?php include '../header/navbar_styles.php'; ?>
     <title>Terms and Conditions | KALAM 2025</title>
     <!-- Add additional styles for animations and mobile optimization -->
     <style>
@@ -76,7 +76,7 @@
 </head>
 
 <body class="bg-gradient-to-b from-gray-50 to-orange-50 min-h-screen">
-    <?php include 'header/navbar.php'; ?>
+    <?php include '../header/navbar.php'; ?>
 
     <!-- Hero Section with Animation -->
     <div class="relative overflow-hidden">

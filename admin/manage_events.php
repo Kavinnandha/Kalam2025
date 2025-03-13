@@ -89,9 +89,9 @@ if (isset($_POST['delete_event'])) {
                     </div>
                     <div class="flex items-center space-x-4">
                         <?php if ($department_name == "Culturals"): ?>
-                            <a href="culturals_team.php"
+                            <a href="view_team.php"
                                 class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-                                <i class="fas fa-music mr-2"></i>Culturals Team
+                                <i class="fas fa-music mr-2"></i>Team Management
                             </a>
                         <?php endif; ?>
                         <a href="cart_items.php" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">

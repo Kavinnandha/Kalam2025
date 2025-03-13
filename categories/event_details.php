@@ -263,7 +263,7 @@
                             </button>
                         <?php endif; ?>
 
-                        <?php if (($event['category'] == 'Culturals') && ($event['fee_description'] == "Team")): ?>
+                        <?php if ($event['fee_description'] == "Team"): ?>
                             <button
                                 class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-lg 
                                            hover:from-orange-600 hover:to-yellow-500 transform hover:scale-105 transition-all duration-300 shadow-md  flex items-center justify-center"
@@ -273,7 +273,7 @@
                                         d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 100-16 8 8 0 000 16z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2" />
                                 </svg>
-                                Cultural Team
+                                Team Management
                             </button>
                         <?php endif; ?>
                     </div>
@@ -336,7 +336,7 @@
         }
 
         function culturalEventAccess(eventId) {
-            fetch('../culturals/culturals_event_access.php?event_id=' + eventId)
+            fetch('../team/team_event_access.php?event_id=' + eventId)
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'not_logged_in') {
@@ -344,7 +344,7 @@
                     } else if (data.status === 'not_purchased') {
                         showNotification('You need to purchase this event to proceed.', 'error');
                     } else if (data.status === 'allowed') {
-                        window.location.href = '../culturals/culturals.php?event_id=' + encodeURIComponent(<?php echo $event['event_id'] ?>);
+                        window.location.href = '../team/team.php?event_id=' + encodeURIComponent(<?php echo $event['event_id'] ?>);
                     }
                 });
         }

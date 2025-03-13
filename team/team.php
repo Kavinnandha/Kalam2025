@@ -139,7 +139,7 @@
         $event_id = $_GET['event_id'];
 
         // User and event verification
-        $verify_query = "SELECT * FROM orders o JOIN order_items oi ON oi.order_id = o.order_id JOIN events e ON e.event_id = oi.event_id WHERE o.user_id = ? AND e.category = 'Culturals' AND e.event_id = ?";
+        $verify_query = "SELECT * FROM orders o JOIN order_items oi ON oi.order_id = o.order_id JOIN events e ON e.event_id = oi.event_id WHERE o.user_id = ? AND e.event_id = ?";
         $verify_stmt = $conn->prepare($verify_query);
         $verify_stmt->bind_param("ii", $user_id, $event_id);
         $verify_stmt->execute();
@@ -153,10 +153,10 @@
     }
 
     // Check if user is already in a team for this event
-    $checkTeamSql = "SELECT c.cteam_id, c.cteam_name
-                    FROM culturals c 
-                    JOIN culturals_team ct ON c.cteam_id = ct.cteam_id 
-                    WHERE ct.user_id = ? AND c.event_id = ?";
+    $checkTeamSql = "SELECT t.team_id, t.team_name
+                    FROM team t 
+                    JOIN team_members tm ON t.team_id = tm.team_id 
+                    WHERE tm.user_id = ? AND t.event_id = ?";
     $checkTeamStmt = $conn->prepare($checkTeamSql);
     $checkTeamStmt->bind_param("ii", $user_id, $event_id);
     $checkTeamStmt->execute();
@@ -169,18 +169,18 @@
             $event_id = $_POST['event_id'];
             $team_name = trim($_POST['team_name']);
             
-            // Insert into culturals table
-            $createTeamSql = "INSERT INTO culturals (cteam_name, event_id) VALUES (?, ?)";
+            // Insert into team table
+            $createTeamSql = "INSERT INTO team (team_name, event_id) VALUES (?, ?)";
             $createTeamStmt = $conn->prepare($createTeamSql);
             $createTeamStmt->bind_param("si", $team_name, $event_id);
             
             if ($createTeamStmt->execute()) {
-                $cteam_id = $conn->insert_id;
+                $team_id = $conn->insert_id;
                 
                 // Add user to the team
-                $addMemberSql = "INSERT INTO culturals_team (cteam_id, user_id) VALUES (?, ?)";
+                $addMemberSql = "INSERT INTO team_members (team_id, user_id) VALUES (?, ?)";
                 $addMemberStmt = $conn->prepare($addMemberSql);
-                $addMemberStmt->bind_param("ii", $cteam_id, $user_id);
+                $addMemberStmt->bind_param("ii", $team_id, $user_id);
                 $addMemberStmt->execute();
                 
                 // Refresh the page to show updated info
@@ -191,7 +191,7 @@
         
         // Add team member
         if (isset($_POST['add_member'])) {
-            $cteam_id = $_POST['cteam_id'];
+            $team_id = $_POST['team_id'];
             $email = trim($_POST['member_email']);
             
             // Get user ID for the email
@@ -206,9 +206,9 @@
                 $newMemberId = $userData['user_id'];
                 
                 // Check if user is already in this team
-                $checkExistingSql = "SELECT * FROM culturals_team WHERE cteam_id = ? AND user_id = ?";
+                $checkExistingSql = "SELECT * FROM team_members WHERE team_id = ? AND user_id = ?";
                 $checkExistingStmt = $conn->prepare($checkExistingSql);
-                $checkExistingStmt->bind_param("ii", $cteam_id, $newMemberId);
+                $checkExistingStmt->bind_param("ii", $team_id, $newMemberId);
                 $checkExistingStmt->execute();
                 $checkExistingResult = $checkExistingStmt->get_result();
                 
@@ -216,9 +216,9 @@
                     $error = "This user is already in your team.";
                 } else {
                     // Count current team members
-                    $countMembersSql = "SELECT COUNT(*) as member_count FROM culturals_team WHERE cteam_id = ?";
+                    $countMembersSql = "SELECT COUNT(*) as member_count FROM team_members WHERE team_id = ?";
                     $countMembersStmt = $conn->prepare($countMembersSql);
-                    $countMembersStmt->bind_param("i", $cteam_id);
+                    $countMembersStmt->bind_param("i", $team_id);
                     $countMembersStmt->execute();
                     $countResult = $countMembersStmt->get_result();
                     $countData = $countResult->fetch_assoc();
@@ -237,9 +237,9 @@
                             $error = "This user has not purchased the event. They must register for the event before joining your team.";
                         } else {
                             // Add member to team
-                            $addMemberSql = "INSERT INTO culturals_team (cteam_id, user_id) VALUES (?, ?)";
+                            $addMemberSql = "INSERT INTO team_members (team_id, user_id) VALUES (?, ?)";
                             $addMemberStmt = $conn->prepare($addMemberSql);
-                            $addMemberStmt->bind_param("ii", $cteam_id, $newMemberId);
+                            $addMemberStmt->bind_param("ii", $team_id, $newMemberId);
                             $addMemberStmt->execute();
                             $success = "Team member added successfully!";
                         }
@@ -252,14 +252,14 @@
         
         // Remove team member
         if (isset($_POST['remove_member'])) {
-            $cteam_id = $_POST['cteam_id'];
+            $team_id = $_POST['team_id'];
             $member_id = $_POST['member_id'];
             
             // Don't allow removing yourself if you're the only member
             if ($member_id == $user_id) {
-                $countMembersSql = "SELECT COUNT(*) as member_count FROM culturals_team WHERE cteam_id = ?";
+                $countMembersSql = "SELECT COUNT(*) as member_count FROM team_members WHERE team_id = ?";
                 $countMembersStmt = $conn->prepare($countMembersSql);
-                $countMembersStmt->bind_param("i", $cteam_id);
+                $countMembersStmt->bind_param("i", $team_id);
                 $countMembersStmt->execute();
                 $countResult = $countMembersStmt->get_result();
                 $countData = $countResult->fetch_assoc();
@@ -267,16 +267,16 @@
                 if ($countData['member_count'] <= 1) {
                     $error = "You cannot remove yourself as the only team member. Delete the team instead.";
                 } else {
-                    $removeMemberSql = "DELETE FROM culturals_team WHERE cteam_id = ? AND user_id = ?";
+                    $removeMemberSql = "DELETE FROM team_members WHERE team_id = ? AND user_id = ?";
                     $removeMemberStmt = $conn->prepare($removeMemberSql);
-                    $removeMemberStmt->bind_param("ii", $cteam_id, $member_id);
+                    $removeMemberStmt->bind_param("ii", $team_id, $member_id);
                     $removeMemberStmt->execute();
                     $success = "Team member removed successfully!";
                 }
             } else {
-                $removeMemberSql = "DELETE FROM culturals_team WHERE cteam_id = ? AND user_id = ?";
+                $removeMemberSql = "DELETE FROM team_members WHERE team_id = ? AND user_id = ?";
                 $removeMemberStmt = $conn->prepare($removeMemberSql);
-                $removeMemberStmt->bind_param("ii", $cteam_id, $member_id);
+                $removeMemberStmt->bind_param("ii", $team_id, $member_id);
                 $removeMemberStmt->execute();
                 $success = "Team member removed successfully!";
             }
@@ -284,30 +284,30 @@
         
         // Update team details
         if (isset($_POST['update_team'])) {
-            $cteam_id = $_POST['cteam_id'];
+            $team_id = $_POST['team_id'];
             $team_name = trim($_POST['team_name']);
             
-            $updateTeamSql = "UPDATE culturals SET cteam_name = ? WHERE cteam_id = ?";
+            $updateTeamSql = "UPDATE team SET team_name = ? WHERE team_id = ?";
             $updateTeamStmt = $conn->prepare($updateTeamSql);
-            $updateTeamStmt->bind_param("si", $team_name, $cteam_id);
+            $updateTeamStmt->bind_param("si", $team_name, $team_id);
             $updateTeamStmt->execute();
             $success = "Team details updated successfully!";
         }
         
         // Delete team
         if (isset($_POST['delete_team'])) {
-            $cteam_id = $_POST['cteam_id'];
+            $team_id = $_POST['team_id'];
             
             // Delete team members first (due to foreign key constraint)
-            $deleteTeamMembersSql = "DELETE FROM culturals_team WHERE cteam_id = ?";
+            $deleteTeamMembersSql = "DELETE FROM team_members WHERE team_id = ?";
             $deleteTeamMembersStmt = $conn->prepare($deleteTeamMembersSql);
-            $deleteTeamMembersStmt->bind_param("i", $cteam_id);
+            $deleteTeamMembersStmt->bind_param("i", $team_id);
             $deleteTeamMembersStmt->execute();
             
             // Then delete the team
-            $deleteTeamSql = "DELETE FROM culturals WHERE cteam_id = ?";
+            $deleteTeamSql = "DELETE FROM team WHERE team_id = ?";
             $deleteTeamStmt = $conn->prepare($deleteTeamSql);
-            $deleteTeamStmt->bind_param("i", $cteam_id);
+            $deleteTeamStmt->bind_param("i", $team_id);
             $deleteTeamStmt->execute();
             
             echo "<script>window.location.href = '../categories/event_details.php?event_id=$event_id';</script>";
@@ -318,7 +318,7 @@
 
     <div class="container mx-auto px-4 py-8">
         <div class="gradient-bg text-white p-8 rounded-t-xl shadow-lg">
-            <h1 class="text-3xl font-bold mb-2">Cultural Team Management</h1>
+            <h1 class="text-3xl font-bold mb-2">Team Management</h1>
             <p class="text-lg opacity-90">
                 <?php
                 // Get event name
@@ -353,15 +353,15 @@
         <?php if ($teamResult->num_rows > 0): ?>
             <?php 
             $teamData = $teamResult->fetch_assoc();
-            $cteam_id = $teamData['cteam_id'];
+            $team_id = $teamData['team_id'];
             
             // Get team members
             $membersSql = "SELECT u.user_id, u.name, u.email, u.phone 
                           FROM users u 
-                          JOIN culturals_team ct ON u.user_id = ct.user_id 
-                          WHERE ct.cteam_id = ?";
+                          JOIN team_members tm ON u.user_id = tm.user_id 
+                          WHERE tm.team_id = ?";
             $membersStmt = $conn->prepare($membersSql);
-            $membersStmt->bind_param("i", $cteam_id);
+            $membersStmt->bind_param("i", $team_id);
             $membersStmt->execute();
             $membersResult = $membersStmt->get_result();
             $members = $membersResult->fetch_all(MYSQLI_ASSOC);
@@ -370,7 +370,7 @@
 
             <div class="glass-card p-6 mb-8">
                 <div class="flex justify-between items-center mb-6 header-actions">
-                    <h2 class="text-2xl font-bold text-gray-800">Your Team: <?php echo htmlspecialchars($teamData['cteam_name']); ?></h2>
+                    <h2 class="text-2xl font-bold text-gray-800">Your Team: <?php echo htmlspecialchars($teamData['team_name']); ?></h2>
                     <button class="text-orange-500 hover:text-orange-700 transition-colors duration-300 flex items-center" onclick="toggleEditTeam()">
                         <i class="fas fa-edit mr-1"></i> Edit Team Details
                     </button>
@@ -379,18 +379,18 @@
                 <div id="team-details" class="mb-6">
                     <div class="mb-4">
                         <h3 class="text-lg font-semibold text-gray-700">Team Name</h3>
-                        <p class="text-gray-700"><?php echo htmlspecialchars($teamData['cteam_name']); ?></p>
+                        <p class="text-gray-700"><?php echo htmlspecialchars($teamData['team_name']); ?></p>
                     </div>
                 </div>
                 
                 <div id="edit-team-form" class="mb-6 hidden">
                     <form method="POST" class="space-y-4">
-                        <input type="hidden" name="cteam_id" value="<?php echo $cteam_id; ?>">
+                        <input type="hidden" name="team_id" value="<?php echo $team_id; ?>">
                         <div class="input-group">
                             <label for="team_name" class="form-label">Team Name</label>
                             <div class="relative">
                                 <i class="fas fa-users input-group-icon"></i>
-                                <input type="text" id="team_name" name="team_name" value="<?php echo htmlspecialchars($teamData['cteam_name']); ?>" required 
+                                <input type="text" id="team_name" name="team_name" value="<?php echo htmlspecialchars($teamData['team_name']); ?>" required 
                                     class="form-input input-with-icon">
                             </div>
                         </div>
@@ -417,7 +417,7 @@
                     
                     <div id="add-member-form" class="mb-6 hidden">
                         <form method="POST">
-                            <input type="hidden" name="cteam_id" value="<?php echo $cteam_id; ?>">
+                            <input type="hidden" name="team_id" value="<?php echo $team_id; ?>">
                             <div class="mb-3">
                                 <div class="relative">
                                     <i class="fas fa-envelope input-group-icon"></i>
@@ -459,7 +459,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?php echo htmlspecialchars($member['phone']); ?></td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <form method="POST" class="inline">
-                                            <input type="hidden" name="cteam_id" value="<?php echo $cteam_id; ?>">
+                                            <input type="hidden" name="team_id" value="<?php echo $team_id; ?>">
                                             <input type="hidden" name="member_id" value="<?php echo $member['user_id']; ?>">
                                             <button type="submit" name="remove_member" class="text-red-600 hover:text-red-900 transition-colors duration-300" 
                                                 <?php if ($member_count <= 1 && $member['user_id'] == $user_id): ?>disabled<?php endif; ?>>
@@ -476,10 +476,10 @@
                 
                 <div class="mt-10 border-t pt-6 flex justify-between team-actions">
                     <a href="../categories/event_details.php?event_id=<?php echo $event_id; ?>" class="inline-flex items-center text-gray-700 hover:text-gray-900 transition-colors duration-300">
-                        <i class="fas fa-arrow-left mr-2"></i> Back to Cultural Events
+                        <i class="fas fa-arrow-left mr-2"></i> Back to Events
                     </a>
                     <form method="POST" onsubmit="return confirm('Are you sure you want to delete this team? This action cannot be undone.')">
-                        <input type="hidden" name="cteam_id" value="<?php echo $cteam_id; ?>">
+                        <input type="hidden" name="team_id" value="<?php echo $team_id; ?>">
                         <button type="submit" name="delete_team" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md inline-flex items-center transition-colors duration-300">
                             <i class="fas fa-trash-alt mr-2"></i> Delete Team
                         </button>
@@ -489,7 +489,7 @@
 
         <?php else: ?>
             <div class="glass-card p-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Create a New Cultural Team</h2>
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Create a New Team</h2>
                 <form method="POST" class="space-y-6">
                     <input type="hidden" name="event_id" value="<?php echo $event_id; ?>">
                     <div class="input-group">
@@ -502,7 +502,7 @@
                     </div>
                     <div class="flex justify-between responsive-flex">
                         <a href="../categories/event_details.php?event_id=<?php echo $event_id; ?>" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 inline-flex items-center transition-colors duration-300">
-                            <i class="fas fa-arrow-left mr-2"></i> Back to Cultural Events
+                            <i class="fas fa-arrow-left mr-2"></i> Back to Events
                         </a>
                         <button type="submit" name="create_team" class="btn-gradient text-white px-6 py-2 rounded-md flex items-center">
                             <i class="fas fa-plus-circle mr-2"></i> Create Team
