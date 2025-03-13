@@ -180,7 +180,7 @@
                 // Add user to the team
                 $addMemberSql = "INSERT INTO culturals_team (cteam_id, user_id) VALUES (?, ?)";
                 $addMemberStmt = $conn->prepare($addMemberSql);
-                $addMemberStmt->bind_param("iii", $cteam_id, $user_id);
+                $addMemberStmt->bind_param("ii", $cteam_id, $user_id);
                 $addMemberStmt->execute();
                 
                 // Refresh the page to show updated info
