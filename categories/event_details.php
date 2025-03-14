@@ -30,7 +30,7 @@
                 height: 300px;
             }
         }
-        
+
         /* Notification styles */
         .notification {
             position: fixed;
@@ -202,6 +202,20 @@
                             </span>
                         </div>
 
+                        <?php if ($event['team_size'] != ''): ?>
+                            <div class="flex items-center gap-3 text-gray-700">
+                                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                    </path>
+                                </svg>
+                                <span class="font-medium">
+                                    No.of.days: <?php echo htmlspecialchars($event['team_size']); ?>
+                                </span>
+                            </div>
+                        <?php endif; ?>
+
                         <?php if ($event['contact'] != ''): ?>
                             <div class="flex items-center gap-3 text-gray-700">
                                 <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -210,6 +224,33 @@
                                 </svg>
                                 <span class="font-medium">
                                     <?php echo htmlspecialchars($event['contact']); ?>
+                                </span>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ($event['fee_description'] == 'Team (Per Head)'): ?>
+                            <div class="flex items-center gap-3 text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6">
+                                    <!-- Central person (leader) -->
+                                    <path fill="none" stroke="#ea580c" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M12 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                                    <path fill="none" stroke="#ea580c" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M12 13a5 5 0 0 0-5 5v2h10v-2a5 5 0 0 0-5-5z" />
+
+                                    <!-- Left person -->
+                                    <path fill="none" stroke="#ea580c" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M5.5 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                                    <path fill="none" stroke="#ea580c" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M3 20v-1a3 3 0 0 1 5-2.2" />
+
+                                    <!-- Right person -->
+                                    <path fill="none" stroke="#ea580c" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M18.5 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                                    <path fill="none" stroke="#ea580c" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M16 16.8a3 3 0 0 1 5 2.2v1" />
+                                </svg>
+                                <span class="font-medium">
+                                    Team Size: <?php echo htmlspecialchars($event['team_size']); ?>
                                 </span>
                             </div>
                         <?php endif; ?>
@@ -228,12 +269,14 @@
                         <!-- Add to Cart Button -->
                         <?php if ($event['category'] == 'General'): ?>
                             <div class="flex items-start gap-3 text-gray-700">
-                                <svg class="w-11 h-11 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-11 h-11 text-orange-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 <span class="font-medium">
-                                    For general events, a one-time general event fee of ₹150 applies for the first time while purchasing.
+                                    For general events, a one-time general event fee of ₹150 applies for the first time
+                                    while purchasing.
                                 </span>
                             </div>
 
@@ -263,7 +306,7 @@
                             </button>
                         <?php endif; ?>
 
-                        <?php if ($event['fee_description'] == "Team"): ?>
+                        <?php if ($event['fee_description'] == "Team (Per Head)"): ?>
                             <button
                                 class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-lg 
                                            hover:from-orange-600 hover:to-yellow-500 transform hover:scale-105 transition-all duration-300 shadow-md  flex items-center justify-center"
@@ -288,14 +331,14 @@
             const notification = document.getElementById('notification');
             const notificationMessage = document.getElementById('notification-message');
             const notificationIcon = document.getElementById('notification-icon');
-            
+
             // Set message
             notificationMessage.textContent = message;
-            
+
             // Set proper class based on type
             notification.className = 'notification';
             notification.classList.add(type);
-            
+
             // Set icon based on type
             if (type === 'success') {
                 notificationIcon.innerHTML = `
@@ -308,14 +351,14 @@
                         d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 `;
             }
-            
+
             // Show notification
             notification.classList.add('show');
-            
+
             // Auto-hide after 4 seconds
             setTimeout(closeNotification, 4000);
         }
-        
+
         function closeNotification() {
             const notification = document.getElementById('notification');
             notification.classList.remove('show');
@@ -348,7 +391,7 @@
                     }
                 });
         }
-        
+
         function addToCart(eventId) {
             <?php if (!isset($_SESSION['user_id'])): ?>
                 window.location.href = '../user/registration.php';

@@ -202,6 +202,7 @@
         }
 
         // Add team member
+        // Add team member
         if (isset($_POST['add_member'])) {
             $team_id = $_POST['team_id'];
             $email = trim($_POST['member_email']);
@@ -226,25 +227,50 @@
 
                 if ($checkExistingResult->num_rows > 0) {
                     $error = "This user is already in your team.";
-                } // Team size check removed
-                $checkPurchaseSql = "SELECT * FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.user_id = ? AND oi.event_id = ?";
-                $checkPurchaseStmt = $conn->prepare($checkPurchaseSql);
-                $checkPurchaseStmt->bind_param("ii", $newMemberId, $event_id);
-                $checkPurchaseStmt->execute();
-                $purchaseResult = $checkPurchaseStmt->get_result();
-                
-                if ($purchaseResult->num_rows == 0) {
-                    // Error message without filtering by event category
-                    $error = "This user has not purchased the event. They must register and purchase the event before joining your team.";
                 } else {
-                    // Add member to team
-                    $addMemberSql = "INSERT INTO team_members (team_id, user_id) VALUES (?, ?)";
-                    $addMemberStmt = $conn->prepare($addMemberSql);
-                    $addMemberStmt->bind_param("ii", $team_id, $newMemberId);
-                    $addMemberStmt->execute();
-                    $success = "Team member added successfully!";
+                    // Check team size limit
+                    $teamSizeSql = "SELECT COUNT(*) as current_size, e.team_size as max_size 
+                           FROM team_members tm 
+                           JOIN team t ON tm.team_id = t.team_id 
+                           JOIN events e ON t.event_id = e.event_id 
+                           WHERE tm.team_id = ?";
+                    $teamSizeStmt = $conn->prepare($teamSizeSql);
+                    $teamSizeStmt->bind_param("i", $team_id);
+                    $teamSizeStmt->execute();
+                    $teamSizeResult = $teamSizeStmt->get_result();
+                    $teamSizeData = $teamSizeResult->fetch_assoc();
+
+                    if ($teamSizeData['current_size'] >= $teamSizeData['max_size']) {
+                        $error = "This team has reached its maximum size of " . $teamSizeData['max_size'] . " members.";
+                    } else {
+                        // Get event_id for purchase check
+                        $eventIdSql = "SELECT event_id FROM teams WHERE team_id = ?";
+                        $eventIdStmt = $conn->prepare($eventIdSql);
+                        $eventIdStmt->bind_param("i", $team_id);
+                        $eventIdStmt->execute();
+                        $eventIdResult = $eventIdStmt->get_result();
+                        $eventData = $eventIdResult->fetch_assoc();
+                        $event_id = $eventData['event_id'];
+
+                        // Check if user has purchased the event
+                        $checkPurchaseSql = "SELECT * FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.user_id = ? AND oi.event_id = ?";
+                        $checkPurchaseStmt = $conn->prepare($checkPurchaseSql);
+                        $checkPurchaseStmt->bind_param("ii", $newMemberId, $event_id);
+                        $checkPurchaseStmt->execute();
+                        $purchaseResult = $checkPurchaseStmt->get_result();
+
+                        if ($purchaseResult->num_rows == 0) {
+                            $error = "This user has not purchased the event. They must register and purchase the event before joining your team.";
+                        } else {
+                            // Add member to team
+                            $addMemberSql = "INSERT INTO team_members (team_id, user_id) VALUES (?, ?)";
+                            $addMemberStmt = $conn->prepare($addMemberSql);
+                            $addMemberStmt->bind_param("ii", $team_id, $newMemberId);
+                            $addMemberStmt->execute();
+                            $success = "Team member added successfully!";
+                        }
+                    }
                 }
-                
             } else {
                 $error = "No user found with that email.";
             }
@@ -366,6 +392,14 @@
             $membersResult = $membersStmt->get_result();
             $members = $membersResult->fetch_all(MYSQLI_ASSOC);
             $member_count = count($members);
+
+            $max_members_query = "SELECT team_size FROM events WHERE event_id = ?";
+            $max_members_stmt = $conn->prepare($max_members_query);
+            $max_members_stmt->bind_param("i", $event_id);
+            $max_members_stmt->execute();
+            $max_members_result = $max_members_stmt->get_result();
+            $max_members_data = $max_members_result->fetch_assoc();
+            $max_members = $max_members_data['team_size'];
             ?>
 
             <div class="glass-card p-6 mb-8">
@@ -412,8 +446,8 @@
                 </div>
 
                 <div class="mt-8">
-                    <div class="flex justify-between items-center mb-4 header-actions">
-                        <h3 class="text-xl font-bold text-gray-800">Team Members (<?php echo $member_count; ?>)</h3>
+                    <div class="flex justify-between items-center mb-4 header-actions"> 
+                        <h3 class="text-xl font-bold text-gray-800">Team Members (<?php echo $member_count . "/" . $max_members; ?>)</h3>
                         <button
                             class="text-orange-500 hover:text-orange-700 transition-colors duration-300 flex items-center"
                             onclick="toggleAddMember()">
