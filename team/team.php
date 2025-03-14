@@ -226,48 +226,25 @@
 
                 if ($checkExistingResult->num_rows > 0) {
                     $error = "This user is already in your team.";
+                } // Team size check removed
+                $checkPurchaseSql = "SELECT * FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.user_id = ? AND oi.event_id = ?";
+                $checkPurchaseStmt = $conn->prepare($checkPurchaseSql);
+                $checkPurchaseStmt->bind_param("ii", $newMemberId, $event_id);
+                $checkPurchaseStmt->execute();
+                $purchaseResult = $checkPurchaseStmt->get_result();
+                
+                if ($purchaseResult->num_rows == 0) {
+                    // Error message without filtering by event category
+                    $error = "This user has not purchased the event. They must register and purchase the event before joining your team.";
                 } else {
-                    // Team size check removed
-                    
-                    $event_category_sql = "SELECT category FROM events WHERE event_id = ?";
-                    $event_category_stmt = $conn->prepare($event_category_sql);
-                    $event_category_stmt->bind_param("i", $event_id);
-                    $event_category_stmt->execute();
-                    $event_category_result = $event_category_stmt->get_result();
-                    $event_category_data = $event_category_result->fetch_assoc();
-                    $event_category = $event_category_data['category'];
-                    
-                    // Check if the user has purchased the event (for both Culturals and ESAT-Gaming, or other events)
-                    $checkPurchaseSql = $event_category == 'Culturals' || $event_category == 'ESAT-Gaming'
-                        ? "SELECT * FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.user_id = ? AND oi.event_id = ?"
-                        : "SELECT * FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.user_id = ?";
-
-                    $checkPurchaseStmt = $conn->prepare($checkPurchaseSql);
-
-                    // Bind parameters based on the event category
-                    if ($event_category == 'Culturals' || $event_category == 'ESAT-Gaming') {
-                        $checkPurchaseStmt->bind_param("ii", $newMemberId, $event_id);
-                    } else {
-                        $checkPurchaseStmt->bind_param("i", $newMemberId);
-                    }
-
-                    $checkPurchaseStmt->execute();
-                    $purchaseResult = $checkPurchaseStmt->get_result();
-
-                    if ($purchaseResult->num_rows == 0) {
-                        // Error message based on the event category
-                        $error = $event_category == 'Culturals' || $event_category == 'ESAT-Gaming'
-                            ? "This user has not purchased the event. They must register and purchase the event before joining your team."
-                            : "This user has not registered for any event.";
-                    } else {
-                        // Add member to team
-                        $addMemberSql = "INSERT INTO team_members (team_id, user_id) VALUES (?, ?)";
-                        $addMemberStmt = $conn->prepare($addMemberSql);
-                        $addMemberStmt->bind_param("ii", $team_id, $newMemberId);
-                        $addMemberStmt->execute();
-                        $success = "Team member added successfully!";
-                    }
+                    // Add member to team
+                    $addMemberSql = "INSERT INTO team_members (team_id, user_id) VALUES (?, ?)";
+                    $addMemberStmt = $conn->prepare($addMemberSql);
+                    $addMemberStmt->bind_param("ii", $team_id, $newMemberId);
+                    $addMemberStmt->execute();
+                    $success = "Team member added successfully!";
                 }
+                
             } else {
                 $error = "No user found with that email.";
             }

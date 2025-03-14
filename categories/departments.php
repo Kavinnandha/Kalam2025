@@ -8,7 +8,7 @@
     <title>Departments</title>
 </head>
 
-<body class="bg-gradient-to-br from-orange-50 to-yellow-50">
+<body class="bg-gradient-to-br from-orange-50 to-yellow-50 pb-16 md:hidden">
     <?php include '../header/navbar.php'; ?>
     
     <div class="pt-20">
