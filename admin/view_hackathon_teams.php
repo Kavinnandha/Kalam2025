@@ -1,7 +1,9 @@
 <?php
 // Start the session to get department_code if available
 session_start();
-
+if (!isset($_SESSION["admin_id"])) {
+    header("Location: login.php");
+}
 // Include database connection
 require_once '../database/connection.php';
 
