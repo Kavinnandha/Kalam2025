@@ -228,7 +228,7 @@
                             </div>
                         <?php endif; ?>
 
-                        <?php if ($event['fee_description'] == 'Team (Per Head)'): ?>
+                        <?php if ($event['fee_description'] == 'Team (Per Person)'): ?>
                             <div class="flex items-center gap-3 text-gray-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6">
                                     <!-- Central person (leader) -->
@@ -306,7 +306,7 @@
                             </button>
                         <?php endif; ?>
 
-                        <?php if ($event['fee_description'] == "Team (Per Head)"): ?>
+                        <?php if ($event['fee_description'] == "Team (Per Person)"): ?>
                             <button
                                 class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-lg 
                                            hover:from-orange-600 hover:to-yellow-500 transform hover:scale-105 transition-all duration-300 shadow-md  flex items-center justify-center"

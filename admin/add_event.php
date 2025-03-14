@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $no_of_days = $_POST['no_of_days'];
     $team_size = null;
-    if ($_POST['fee_description'] == 'Team (Per Head)') {
+    if ($_POST['fee_description'] == 'Team (Per Person)') {
         $team_size = $_POST['team_size'];
     }
 
@@ -251,7 +251,7 @@ if ($result->num_rows > 0) {
                                     class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                                     <option value="">Select Fee Type</option>
                                     <option value="Individual">Individual</option>
-                                    <option value="Team (Per Head)">Team (Per Head)</option>
+                                    <option value="Team (Per Person)">Team (Per Person)</option>
                                 </select>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -376,7 +376,7 @@ if ($result->num_rows > 0) {
 
         document.querySelector('select[name="fee_description"]').addEventListener('change', function () {
             const teamSizeContainer = document.getElementById('team-size-container');
-            if (this.value === 'Team (Per Head)') {
+            if (this.value === 'Team (Per Person)') {
                 teamSizeContainer.classList.remove('hidden');
             } else {
                 teamSizeContainer.classList.add('hidden');
@@ -386,7 +386,7 @@ if ($result->num_rows > 0) {
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function () {
             const feeDescription = document.querySelector('select[name="fee_description"]');
-            if (feeDescription.value === 'Team (Per Head)') {
+            if (feeDescription.value === 'Team (Per Person)') {
                 document.getElementById('team-size-container').classList.remove('hidden');
             }
         });
