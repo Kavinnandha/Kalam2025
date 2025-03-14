@@ -64,7 +64,7 @@
     </style>
 </head>
 
-<body class="bg-yellow-50 pb-8" x-data="{ 
+<body class="bg-yellow-50 pb-8 md:hidden" x-data="{ 
     cartItems: [],
     totalPrice: 0,
     showOrderModal: false,

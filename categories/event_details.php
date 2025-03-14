@@ -76,7 +76,7 @@
     </style>
 </head>
 
-<body class="bg-gray-50 pb-16">
+<body class="bg-gray-50 pb-16 md:hidden">
     <?php include '../header/navbar.php'; ?>
     <?php
     if (!isset($_GET['event_id'])) {

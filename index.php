@@ -57,7 +57,7 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-orange-50 to-red-100 min-h-screen ">
+<body class="bg-gradient-to-br from-orange-50 to-red-100 min-h-screen pb-16 md:hidden">
     <?php include 'header/navbar.php'; ?>
     <?php include 'database/connection.php';
 

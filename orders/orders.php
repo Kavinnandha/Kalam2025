@@ -9,7 +9,7 @@
 
 </head>
 
-<body class="bg-gray-50 pb-16">
+<body class="bg-gray-50 pb-16 md:hidden">
     <?php include '../header/navbar.php'; ?>
     <?php
     include '../database/connection.php';

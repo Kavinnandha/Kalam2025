@@ -73,7 +73,7 @@
     </style>
 </head>
 
-<body class="bg-black pb-16">
+<body class="bg-black pb-16 md:hidden">
     <?php include '../header/navbar.php'; ?>
 
     <div class="min-h-screen pt-20 px-4 sm:px-6 lg:px-8 fire-gradient relative overflow-hidden">

@@ -104,7 +104,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 </head>
 
-<body class="bg-gradient-to-b from-gray-50 to-orange-50 min-h-screen pb-16">
+<body class="bg-gradient-to-b from-gray-50 to-orange-50 min-h-screen pb-16 md:hidden">
     <?php include '../header/navbar.php'; ?>
 
     <!-- Hero Section with Animation -->
