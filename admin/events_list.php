@@ -54,6 +54,7 @@ while ($row = $result->fetch_assoc()) {
 </head>
 
 <body class="bg-gray-50">
+<?php include 'navigation.php'; ?>
     <div class="container mx-auto p-6">
         <!-- Header -->
         <div class="mb-6">

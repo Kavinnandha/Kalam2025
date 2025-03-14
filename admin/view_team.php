@@ -1,224 +1,214 @@
 <?php
-
+// Start session to get department code
 session_start();
-
-if (!isset($_SESSION['admin_id'])) {
+if (!isset($_SESSION["admin_id"])) {
     header("Location: login.php");
-    exit();
 }
 
-// Get department from session
-$department_code = isset($_SESSION['department_code']) ? $_SESSION['department_code'] : null;
-
-// Database connection
+// Include database connection
 require_once '../database/connection.php';
 
-// Fetch cultural events directly
-$sql = "SELECT e.* FROM events e 
-        JOIN department d ON e.department_code = d.department_code
-        WHERE d.department_name = 'Culturals'";
+// Get department code from session if it exists
+$department_code = isset($_SESSION['department_code']) ? $_SESSION['department_code'] : null;
 
-// If department code is provided, add it to the filter
-if ($department_code) {
-    $sql .= " AND e.department_code = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $department_code);
-} else {
-    $stmt = $conn->prepare($sql);
+// Handle search query
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+// Prepare SQL based on whether department code exists and search query
+$sql = "
+    SELECT t.team_id, t.team_name, e.event_name, d.department_name, 
+           GROUP_CONCAT(u.name SEPARATOR '|') as member_names,
+           GROUP_CONCAT(u.email SEPARATOR '|') as member_emails,
+           GROUP_CONCAT(u.phone SEPARATOR '|') as member_phones,
+           GROUP_CONCAT(u.college_id SEPARATOR '|') as member_college
+    FROM team t
+    JOIN events e ON t.event_id = e.event_id
+    JOIN department d ON d.department_code = e.department_code
+    LEFT JOIN team_members tm ON t.team_id = tm.team_id
+    LEFT JOIN users u ON tm.user_id = u.user_id
+";
+
+// Add conditions
+$conditions = [];
+$params = [];
+
+if ($department_code !== null) {
+    $conditions[] = "e.department_code = ?";
+    $params[] = $department_code;
+}
+
+if (!empty($search)) {
+    $conditions[] = "(t.team_name LIKE ? OR e.event_name LIKE ? OR u.name LIKE ?)";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
+}
+
+if (!empty($conditions)) {
+    $sql .= " WHERE " . implode(" AND ", $conditions);
+}
+
+// Group and order
+$sql .= " GROUP BY t.team_id ORDER BY t.team_name";
+
+// Prepare and execute statement
+$stmt = $conn->prepare($sql);
+
+if (!empty($params)) {
+    $types = str_repeat('s', count($params)); // Assuming all params are strings
+    $stmt->bind_param($types, ...$params);
 }
 
 $stmt->execute();
 $result = $stmt->get_result();
-$events = [];
-
-while ($row = $result->fetch_assoc()) {
-    $events[] = $row;
-}
-
-$stmt->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cultural Events Dashboard</title>
+    <title>Team Listing</title>
+    <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-
 <body class="bg-gray-100 min-h-screen">
+<?php include 'navigation.php'; ?>
     <div class="container mx-auto px-4 py-8">
         <header class="mb-8">
-            <div class="flex justify-between items-center">
-                <h1 class="text-3xl font-bold text-purple-700">Cultural Events Dashboard</h1>
-                <?php if ($department_code): ?>
-                    <span class="px-4 py-2 bg-purple-100 text-purple-800 rounded-lg">
-                        Department: <?php echo htmlspecialchars($department_code); ?>
-                    </span>
-                <?php else: ?>
-                    <span class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg">
-                        All Departments
-                    </span>
-                <?php endif; ?>
-            </div>
-        </header>
-
-        <div class="grid grid-cols-1 gap-8">
-            <?php if (count($events) > 0): ?>
-                <?php foreach ($events as $event): ?>
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        <div class="bg-purple-600 px-6 py-4">
-                            <h2 class="text-xl font-semibold text-white flex items-center">
-                                <i class="fas fa-music mr-2"></i>
-                                <?php echo htmlspecialchars($event['event_name']); ?>
-                                <span class="ml-3 px-2 py-1 text-xs bg-purple-200 text-purple-800 rounded">
-                                    Cultural Event
-                                </span>
-                            </h2>
-                            <p class="text-purple-200 text-sm">
-                                Department: <?php echo htmlspecialchars($event['department_code']); ?>
-                            </p>
-                        </div>
-
-                        <?php
-                        // Get teams for this event with user details directly
-                        $event_id = $event['event_id'];
-                        $team_sql = "SELECT 
-                                         c.cteam_id, c.cteam_name, c.event_id, 
-                                         ct.cteam_member_id, u.user_id, u.name, u.email, u.phone
-                                     FROM 
-                                         team c
-                                     JOIN 
-                                         team_members ct ON c.cteam_id = ct.cteam_id
-                                     JOIN 
-                                         events e ON e.event_id = c.event_id
-                                     JOIN 
-                                         users u ON ct.user_id = u.user_id
-                                     WHERE 
-                                         c.event_id = 10
-                                     ORDER BY 
-                                         c.cteam_name, ct.cteam_member_id;";
-
-                        $team_stmt = $conn->prepare($team_sql);
-                        $team_stmt->bind_param("i", $event_id);
-                        $team_stmt->execute();
-                        $team_result = $team_stmt->get_result();
-
-                        $teams = [];
-                        while ($row = $team_result->fetch_assoc()) {
-                            $team_id = $row['cteam_id'];
-
-                            if (!isset($teams[$team_id])) {
-                                $teams[$team_id] = [
-                                    'cteam_id' => $team_id,
-                                    'cteam_name' => $row['cteam_name'],
-                                    'members' => []
-                                ];
-                            }
-
-                            if ($row['user_id']) {
-                                $teams[$team_id]['members'][] = [
-                                    'user_id' => $row['user_id'],
-                                    'cteam_member_id' => $row['cteam_member_id'],
-                                    'name' => $row['name'],
-                                    'email' => $row['email'],
-                                    'phone' => $row['phone']
-                                ];
-                            }
-                        }
-                        $team_stmt->close();
-                        ?>
-
-                        <div class="p-6">
-                            <h3 class="text-lg font-medium text-gray-800 mb-4">
-                                <?php echo count($teams) > 0 ? 'Participating Teams (' . count($teams) . ')' : 'No teams registered yet'; ?>
-                            </h3>
-
-                            <?php if (count($teams) > 0): ?>
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    <?php foreach ($teams as $team): ?>
-                                        <div
-                                            class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                                            <div class="bg-purple-50 px-4 py-3">
-                                                <div class="flex justify-between items-start">
-                                                    <h4 class="text-purple-700 font-medium">
-                                                        <?php echo htmlspecialchars($team['cteam_name']); ?>
-                                                    </h4>
-                                                    <span class="text-xs text-gray-500">
-                                                        ID: <?php echo $team['cteam_id']; ?>
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <div class="px-4 py-3">
-                                                <h5 class="text-sm font-medium text-gray-700 mb-2 flex items-center">
-                                                    <i class="fas fa-users mr-2 text-purple-500"></i>
-                                                    Team Members (<?php echo count($team['members']); ?>)
-                                                </h5>
-
-                                                <?php if (!empty($team['members'])): ?>
-                                                    <div class="space-y-3">
-                                                        <?php foreach ($team['members'] as $member): ?>
-                                                            <div class="flex items-start text-sm border-b border-gray-100 pb-2">
-                                                                <div
-                                                                    class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-700 flex-shrink-0 mr-3">
-                                                                    <?php echo substr($member['name'] ?? $member['user_id'], 0, 1); ?>
-                                                                </div>
-                                                                <div class="flex-grow">
-                                                                    <p class="font-medium">
-                                                                        <?php echo htmlspecialchars($member['name'] ?? 'N/A'); ?>
-                                                                    </p>
-                                                                    <div class="text-xs text-gray-500 mt-1">
-                                                                        <?php if (!empty($member['email'])): ?>
-                                                                            <p class="flex items-center">
-                                                                                <i class="fas fa-envelope mr-1"></i>
-                                                                                <?php echo htmlspecialchars($member['email']); ?>
-                                                                            </p>
-                                                                        <?php endif; ?>
-
-                                                                        <?php if (!empty($member['phone'])): ?>
-                                                                            <p class="flex items-center mt-1">
-                                                                                <i class="fas fa-phone mr-1"></i>
-                                                                                <?php echo htmlspecialchars($member['phone']); ?>
-                                                                            </p>
-                                                                        <?php endif; ?>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        <?php endforeach; ?>
-                                                    </div>
-                                                <?php else: ?>
-                                                    <p class="text-sm text-gray-500">No team members registered</p>
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="text-center py-12">
-                    <i class="fas fa-calendar-times text-gray-400 text-5xl mb-4"></i>
-                    <p class="text-xl text-gray-600">No cultural events found</p>
-                    <?php if ($department_code): ?>
-                        <p class="text-gray-500 mt-2">No cultural events are currently registered for department:
-                            <?php echo htmlspecialchars($department_code); ?>
-                        </p>
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">Team Directory</h1>
+            
+            <!-- Search Form -->
+            <form method="GET" class="mb-6">
+                <div class="flex gap-2">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        placeholder="Search by team, event or member name..." 
+                        value="<?php echo htmlspecialchars($search); ?>"
+                        class="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
+                    >
+                    <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                        Search
+                    </button>
+                    <?php if (!empty($search)): ?>
+                        <a href="<?php echo $_SERVER['PHP_SELF']; ?>" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors">
+                            Clear
+                        </a>
                     <?php endif; ?>
                 </div>
-            <?php endif; ?>
-        </div>
+            </form>
+            
+            <!-- Results count -->
+            <p class="text-gray-600">
+                <?php echo $result->num_rows; ?> team<?php echo $result->num_rows !== 1 ? 's' : ''; ?> found
+                <?php if (!empty($search)): ?>
+                    for "<?php echo htmlspecialchars($search); ?>"
+                <?php endif; ?>
+            </p>
+        </header>
+
+        <?php if ($result->num_rows > 0): ?>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <?php while ($row = $result->fetch_assoc()): ?>
+                    <?php 
+                    // Parse member data from grouped results
+                    $member_names = explode('|', $row['member_names'] ?? '');
+                    $member_emails = explode('|', $row['member_emails'] ?? '');
+                    $member_phones = explode('|', $row['member_phones'] ?? '');
+                    $member_college = explode('|', $row['member_college'] ?? '');
+                    
+                    // Create member array
+                    $members = [];
+                    for ($i = 0; $i < count($member_names); $i++) {
+                        if (!empty($member_names[$i])) {
+                            $members[] = [
+                                'name' => $member_names[$i],
+                                'email' => $member_emails[$i] ?? '',
+                                'phone' => $member_phones[$i] ?? '',
+                                'college'=> $member_college[$i] ??'',
+                            ];
+                        }
+                    }
+                    ?>
+
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                        <div class="bg-orange-600 text-white p-4">
+                            <h2 class="text-xl font-bold"><?php echo htmlspecialchars($row['team_name']); ?></h2>
+                            <p class="text-orange-100">Event: <?php echo htmlspecialchars($row['event_name']); ?></p>
+                        </div>
+                        
+                        <div class="p-4">
+                            <h3 class="font-medium text-gray-700 mb-2">Team Members (<?php echo count($members); ?>)</h3>
+                            
+                            <?php if (!empty($members)): ?>
+                                <ul class="divide-y divide-gray-200">
+                                    <?php foreach ($members as $member): ?>
+                                        <li class="py-3">
+                                            <p class="font-medium"><?php echo htmlspecialchars($member['name']); ?></p>
+                                            <?php if (!empty($member['email'])): ?>
+                                                <p class="text-sm text-gray-600">
+                                                    <span class="inline-block w-14">Email:</span>
+                                                    <a href="mailto:<?php echo htmlspecialchars($member['email']); ?>" class="text-orange-600 hover:underline">
+                                                        <?php echo htmlspecialchars($member['email']); ?>
+                                                    </a>
+                                                </p>
+                                            <?php endif; ?>
+                                            <?php if (!empty($member['phone'])): ?>
+                                                <p class="text-sm text-gray-600">
+                                                    <span class="inline-block w-14">Phone:</span>
+                                                    <a href="tel:<?php echo htmlspecialchars($member['phone']); ?>" class="text-orange-600 hover:underline">
+                                                        <?php echo htmlspecialchars($member['phone']); ?>
+                                                    </a>
+                                                </p>
+                                            <?php endif; ?>
+                                            <?php if (!empty($member['college'])): ?>
+                                                <p class="text-sm text-gray-600">
+                                                    <span class="inline-block w-14">College:</span>
+                                                    <a <?php echo htmlspecialchars($member['college']); ?>" class="text-orange-600 hover:underline">
+                                                        <?php echo htmlspecialchars($member['college']); ?>
+                                                    </a>
+                                                </p>
+                                            <?php endif; ?>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php else: ?>
+                                <p class="text-gray-500 italic">No team members found</p>
+                            <?php endif; ?>
+                        </div>
+                        
+                        <div class="bg-gray-50 px-4 py-3 text-right">
+                            <span class="inline-block bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded">
+                                <?php echo htmlspecialchars($row['department_name']); ?>
+                            </span>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            </div>
+        <?php else: ?>
+            <div class="bg-white rounded-lg shadow p-6 text-center">
+                <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">No teams found</h3>
+                <p class="text-gray-500">
+                    <?php if (!empty($search)): ?>
+                        No results match your search criteria. Try a different search term or clear the search.
+                    <?php else: ?>
+                        There are no teams available at this time.
+                    <?php endif; ?>
+                </p>
+            </div>
+        <?php endif; ?>
     </div>
 
-    <?php
-    // Close database connection
-    $conn->close();
-    ?>
+    <script>
+        // Optional JavaScript for enhancing the UI
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add any client-side functionality here
+        });
+    </script>
 </body>
-
 </html>

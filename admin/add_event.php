@@ -123,6 +123,7 @@ if ($result->num_rows > 0) {
 </head>
 
 <body class="bg-gradient-to-tr from-blue-50 via-white to-purple-50 min-h-screen">
+<?php include 'navigation.php'; ?>
     <div class="container mx-auto p-6">
         <div class="max-w-4xl mx-auto">
             <!-- Header Section -->
