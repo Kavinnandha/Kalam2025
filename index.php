@@ -1,4 +1,6 @@
-<?php session_start(); ?>
+<?php 
+session_set_cookie_params(86400 * 10, "/");
+session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
