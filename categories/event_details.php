@@ -202,7 +202,7 @@
                             </span>
                         </div>
 
-                        <?php if ($event['team_size'] != ''): ?>
+                        <?php if ($event['no_of_days'] != ''): ?>
                             <div class="flex items-center gap-3 text-gray-700">
                                 <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -211,7 +211,7 @@
                                     </path>
                                 </svg>
                                 <span class="font-medium">
-                                    No.of.days: <?php echo htmlspecialchars($event['team_size']); ?>
+                                    No.of.days: <?php echo htmlspecialchars($event['no_of_days']); ?>
                                 </span>
                             </div>
                         <?php endif; ?>

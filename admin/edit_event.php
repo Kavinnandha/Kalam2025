@@ -307,7 +307,7 @@ if ($result->num_rows > 0) {
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Number of Days</label>
-                                <input type="number" name="no_of_days" value="<?php echo $event['no_of_days']; ?>"
+                                <input type="number" name="no_of_days" min="1" value="<?php echo $event['no_of_days']; ?>"
                                     required
                                     class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                             </div>
