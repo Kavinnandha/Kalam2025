@@ -203,7 +203,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen pb-16 md:hidden">
+<body class="bg-gray-50 min-h-screen pb-16">
     <?php include '../header/navbar.php'; ?>
     <div class="pt-20"></div>
 
