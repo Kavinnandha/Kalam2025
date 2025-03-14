@@ -102,7 +102,7 @@ $result = mysqli_query($conn, $query);
         
         <!-- Results Section -->
         <div class="bg-white rounded-lg shadow overflow-hidden">
-            <div class="p-4 bg-primary text-white flex justify-between items-center">
+            <div class="p-4 bg-primary text-black flex justify-between items-center">
                 <h2 class="text-xl font-semibold">User List</h2>
                 <span class="bg-white text-primary px-3 py-1 rounded-full font-medium">
                     Total: <?php echo $totalUsers; ?>
