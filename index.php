@@ -295,7 +295,6 @@ session_start(); ?>
         @media (max-width: 768px) {
             .animate-scroll {
                 animation-duration: 6s;
-                /* Faster on mobile */
             }
         }
     </style>
