@@ -235,14 +235,52 @@ session_start(); ?>
                 class="text-4xl md:text-5xl font-bold text-center mb-10 text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500">
                 Our Sponsors
             </h2>
-
-            <!-- Sponsor Carousel -->
+            <!-- Sponsor Marquee - Two Rows -->
             <div class="relative overflow-hidden">
-                <!-- Carousel Container -->
-                <div class="sponsor-carousel flex items-center">
+                <!-- Top Row Marquee -->
+                <div class="sponsor-marquee flex items-center animate-scroll-right mb-8">
                     <?php
-                    $sponsors = $conn->query("SELECT * FROM sponsors ORDER BY sponsor_id ASC");
-                    while ($sponsor = $sponsors->fetch_assoc()):
+                    $sponsors_top = $conn->query("SELECT * FROM sponsors WHERE sponsor_id % 2 = 1 ORDER BY sponsor_id ASC");
+                    while ($sponsor = $sponsors_top->fetch_assoc()):
+                        ?>
+                        <div class="flex-shrink-0 mx-6 md:mx-10">
+                            <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
+                                alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
+                                class="h-12 md:h-16 lg:h-20 object-contain"
+                                title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
+                        </div>
+                    <?php endwhile; ?>
+                    <!-- Duplicate sponsors for seamless looping -->
+                    <?php
+                    $sponsors_top = $conn->query("SELECT * FROM sponsors WHERE sponsor_id % 2 = 1 ORDER BY sponsor_id ASC");
+                    while ($sponsor = $sponsors_top->fetch_assoc()):
+                        ?>
+                        <div class="flex-shrink-0 mx-6 md:mx-10">
+                            <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
+                                alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
+                                class="h-12 md:h-16 lg:h-20 object-contain"
+                                title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
+                        </div>
+                    <?php endwhile; ?>
+                </div>
+
+                <!-- Bottom Row Marquee (Opposite Direction) -->
+                <div class="sponsor-marquee flex items-center animate-scroll-left">
+                    <?php
+                    $sponsors_bottom = $conn->query("SELECT * FROM sponsors WHERE sponsor_id % 2 = 0 ORDER BY sponsor_id ASC");
+                    while ($sponsor = $sponsors_bottom->fetch_assoc()):
+                        ?>
+                        <div class="flex-shrink-0 mx-6 md:mx-10">
+                            <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
+                                alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
+                                class="h-12 md:h-16 lg:h-20 object-contain"
+                                title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
+                        </div>
+                    <?php endwhile; ?>
+                    <!-- Duplicate sponsors for seamless looping -->
+                    <?php
+                    $sponsors_bottom = $conn->query("SELECT * FROM sponsors WHERE sponsor_id % 2 = 0 ORDER BY sponsor_id ASC");
+                    while ($sponsor = $sponsors_bottom->fetch_assoc()):
                         ?>
                         <div class="flex-shrink-0 mx-6 md:mx-10">
                             <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
@@ -256,59 +294,53 @@ session_start(); ?>
         </div>
     </div>
 
+    <!-- Updated CSS for the marquee animations -->
     <style>
-        /* Sponsor Carousel Animation */
-        .sponsor-carousel {
-            display: flex;
-            animation: carousel 30s linear infinite;
-            /* Adjust timing as needed */
-        }
-
-        @keyframes carousel {
+        /* Right direction animation */
+        @keyframes scroll-right {
             0% {
                 transform: translateX(0);
             }
 
             100% {
-                transform: translateX(-100%);
+                transform: translateX(-50%);
             }
         }
 
-        /* Ensure the carousel container has enough content for smooth looping */
-        .sponsor-carousel {
-            width: fit-content;
-            /* Allow the container to be as wide as needed */
+        /* Left direction animation */
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(-50%);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
         }
 
-        /* Clone the sponsors using JavaScript for seamless looping */
+        .animate-scroll-right {
+            animation: scroll-right 10s linear infinite;
+        }
+
+        .animate-scroll-left {
+            animation: scroll-left 10s linear infinite;
+        }
+
+        /* Pause animation on hover for better user experience */
+        .sponsor-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+
+            .animate-scroll-right,
+            .animate-scroll-left {
+                animation-duration: 8s;
+                /* Faster on mobile */
+            }
+        }
     </style>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get the carousel container
-            const carousel = document.querySelector('.sponsor-carousel');
-
-            // Clone all sponsor logos for seamless looping
-            const originalLogos = carousel.innerHTML;
-            carousel.innerHTML = originalLogos + originalLogos;
-
-            // Adjust animation speed based on number of sponsors
-            const logoCount = document.querySelectorAll('.sponsor-carousel > div').length / 2;
-            const carouselSpeed = Math.max(20, logoCount * 5); // Minimum 20s, scales with logo count
-
-            carousel.style.animationDuration = carouselSpeed + 's';
-
-            // Pause animation on hover
-            carousel.addEventListener('mouseenter', function () {
-                this.style.animationPlayState = 'paused';
-            });
-
-            carousel.addEventListener('mouseleave', function () {
-                this.style.animationPlayState = 'running';
-            });
-        });
-    </script>
-
     <!-- Event Schedule section -->
     <div class="relative py-12 bg-gradient-to-b from-red-50 to-orange-100">
         <div class="max-w-7xl mx-auto px-4">
