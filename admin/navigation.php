@@ -37,6 +37,10 @@ $superAdmin = $_SESSION['is_superadmin'];
                     class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
                     <i class="fas fa-users mr-1"></i>Events
                 </a>
+                <a href="sponsors.php"
+                    class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
+                    <i class="fas fa-users mr-1"></i>Sponsors
+                </a>
                 <a href="view_team.php"
                     class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
                     <i class="fas fa-users mr-1"></i>Team
