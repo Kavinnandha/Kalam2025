@@ -41,7 +41,7 @@
             max-height: 90vh;
             overflow-y: auto;
         }
-        
+
         /* Mobile order summary page styles */
         .mobile-order-summary {
             position: fixed;
@@ -52,19 +52,59 @@
             background-color: white;
             z-index: 60;
             overflow-y: auto;
-
             padding-bottom: 5rem;
         }
-        
+
         @media (min-width: 640px) {
             .mobile-order-summary {
                 display: none !important;
             }
         }
+
+        /* Loading animation styles */
+        .loading-spinner {
+            border: 4px solid rgba(237, 137, 54, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #ed8936;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-pulse {
+            height: 24px;
+            background-color: #f3f4f6;
+            border-radius: 4px;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.6;
+            }
+        }
     </style>
 </head>
 
-<body class="bg-yellow-50" x-data="{ 
+<body class="bg-yellow-50 pb-8 md:pb-0" x-data="{ 
     cartItems: [],
     totalPrice: 0,
     showOrderModal: false,
@@ -78,7 +118,9 @@
         hasExistingOrder: false
     },
     isMobile: window.innerWidth < 640,
+    isLoading: true,
     async loadCartItems() {
+        this.isLoading = true;
         try {
             const response = await fetch('get_cart_items.php');
             const result = await response.json();
@@ -88,6 +130,8 @@
             }
         } catch (error) {
             console.error('Error loading cart items:', error);
+        } finally {
+            this.isLoading = false;
         }
     },
     calculateTotal() {
@@ -155,7 +199,46 @@
 
             <!-- Cart Items -->
             <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                <template x-if="cartItems.length > 0">
+                <!-- Loading State -->
+                <template x-if="isLoading">
+                    <div class="p-8">
+                        <div class="flex flex-col items-center justify-center py-4">
+                            <div class="loading-spinner mb-4"></div>
+                            <p class="text-lg font-medium text-yellow-800">Loading your cart...</p>
+                        </div>
+
+                        <!-- Loading skeleton for cart items -->
+                        <div class="mt-6 space-y-4">
+                            <div class="flex p-4 items-center space-x-4">
+                                <div class="w-24 h-24 rounded-lg bg-gray-200 loading-pulse"></div>
+                                <div class="flex-1">
+                                    <div class="h-6 w-3/4 loading-pulse mb-2"></div>
+                                    <div class="h-4 w-1/2 loading-pulse mb-2"></div>
+                                    <div class="h-4 w-1/3 loading-pulse"></div>
+                                </div>
+                                <div class="w-24">
+                                    <div class="h-6 w-full loading-pulse mb-2"></div>
+                                    <div class="h-4 w-1/2 loading-pulse ml-auto"></div>
+                                </div>
+                            </div>
+                            <div class="flex p-4 items-center space-x-4">
+                                <div class="w-24 h-24 rounded-lg bg-gray-200 loading-pulse"></div>
+                                <div class="flex-1">
+                                    <div class="h-6 w-2/3 loading-pulse mb-2"></div>
+                                    <div class="h-4 w-1/2 loading-pulse mb-2"></div>
+                                    <div class="h-4 w-2/5 loading-pulse"></div>
+                                </div>
+                                <div class="w-24">
+                                    <div class="h-6 w-full loading-pulse mb-2"></div>
+                                    <div class="h-4 w-1/2 loading-pulse ml-auto"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Loaded State with Items -->
+                <template x-if="!isLoading && cartItems.length > 0">
                     <div class="divide-y divide-yellow-100">
                         <template x-for="item in cartItems" :key="item.cart_item_id">
                             <!-- Desktop view (original layout) and mobile view (new layout) -->
@@ -250,8 +333,8 @@
                                                 <span x-text="'Date: ' + item.event_date"></span>
                                             </div>
                                             <div class="text-orange-700">
-                                                <span
-                                                    x-text="'Time: ' + item.start_time + ' - ' + item.end_time"></span>
+                                                <span x-text="'Time: ' + item.start_time + ' - 'x-text="'Time: ' +
+                                                    item.start_time + ' - ' + item.end_time"></span>
                                             </div>
                                             <div class="text-orange-700 col-span-2">
                                                 <span x-text="'Venue: ' + item.venue"></span>
@@ -274,7 +357,8 @@
                     </div>
                 </template>
 
-                <template x-if="cartItems.length === 0">
+                <!-- Empty Cart State -->
+                <template x-if="!isLoading && cartItems.length === 0">
                     <div class="p-12 text-center">
                         <svg class="mx-auto h-12 w-12 text-yellow-500" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -295,7 +379,7 @@
 
     <!-- Fixed Bottom Bar with Mobile Adjustments -->
     <div class="fixed left-0 right-0 bg-white shadow-lg border-t border-yellow-200 sm:bottom-0 bottom-14"
-        x-show="cartItems.length > 0" x-transition:enter="transition ease-out duration-300"
+        x-show="!isLoading && cartItems.length > 0" x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0 transform translate-y-full"
         x-transition:enter-end="opacity-100 transform translate-y-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -313,11 +397,10 @@
     </div>
 
     <!-- Desktop Order Summary Modal (shown only on larger screens) -->
-    <div class="modal-backdrop hidden sm:flex" x-show="showOrderModal" x-cloak 
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0">
+    <div class="modal-backdrop hidden sm:flex" x-show="showOrderModal" x-cloak
+        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
         <div class="modal-content" @click.outside="showOrderModal = false"
             x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 transform scale-95"
@@ -406,17 +489,18 @@
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100 transform translate-x-0"
         x-transition:leave-end="opacity-0 transform translate-x-full">
-        
+
         <!-- Mobile header with back button -->
         <div class="sticky top-0 bg-white shadow-sm px-4 py-4 flex items-center z-10">
             <button @click="closeMobileOrderSummary()" class="mr-2 text-yellow-800">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </button>
             <h1 class="text-xl font-bold text-yellow-800">Order Summary</h1>
         </div>
-        
+
         <div class="px-4 py">
             <!-- User Details -->
             <div class="mb-6 bg-yellow-50 p-4 rounded-lg mt-2">
@@ -456,18 +540,15 @@
                 <h3 class="text-lg font-semibold text-yellow-800 mb-2">Cost Summary</h3>
                 <div class="flex justify-between mb-2">
                     <span class="text-yellow-700">Subtotal</span>
-                    <span class="font-medium text-yellow-800"
-                        x-text="'₹' + orderSummary.subtotal.toFixed(2)"></span>
+                    <span class="font-medium text-yellow-800" x-text="'₹' + orderSummary.subtotal.toFixed(2)"></span>
                 </div>
                 <div class="flex justify-between mb-2" x-show="orderSummary.generalFee > 0">
                     <span class="text-yellow-700">General Fee</span>
-                    <span class="font-medium text-yellow-800"
-                        x-text="'₹' + orderSummary.generalFee.toFixed(2)"></span>
+                    <span class="font-medium text-yellow-800" x-text="'₹' + orderSummary.generalFee.toFixed(2)"></span>
                 </div>
                 <div class="border-t border-yellow-200 pt-2 mt-2 flex justify-between">
                     <span class="font-bold text-yellow-800">Total</span>
-                    <span class="font-bold text-orange-700"
-                        x-text="'₹' + orderSummary.totalAmount.toFixed(2)"></span>
+                    <span class="font-bold text-orange-700" x-text="'₹' + orderSummary.totalAmount.toFixed(2)"></span>
                 </div>
                 <div class="mt-2 text-xs text-yellow-600" x-show="orderSummary.generalFee > 0">
                     <p>* General fee is applied for first-time orders.</p>
@@ -475,7 +556,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Fixed bottom action buttons for mobile -->
         <div class="fixed bottom-15 left-0 right-0 bg-white border-t border-yellow-200 p-4">
             <button @click="proceedToPayment()"

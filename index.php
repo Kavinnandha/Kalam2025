@@ -1,4 +1,6 @@
-<?php session_start(); ?>
+<?php 
+session_set_cookie_params(86400 * 10, "/");
+session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -57,7 +59,7 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-orange-50 to-red-100 min-h-screen">
+<body class="bg-gradient-to-br from-orange-50 to-red-100 min-h-screen pb-16 md:pb-0">
     <?php include 'header/navbar.php'; ?>
     <?php include 'database/connection.php';
 
@@ -333,9 +335,8 @@
                     <div class="flex flex-col items-center text-center font-[Poppins]">
                         <h4 class="text-xl font-bold mb-4 text-gray-700">Legal</h4>
                         <div class="flex flex-wrap justify-center gap-4 text-gray-600">
-                            <a href="termsandconditions.php" class="hover:text-orange-500 transition duration-300">Terms
-                                &
-                                Conditions</a>
+                            <a href="legal/termsandconditions.php" class="hover:text-orange-500 transition duration-300">Terms & Conditions</a>
+                            <a href="legal/privacyPolicy.php" class="hover:text-orange-500 transition duration-300">Privacy Policy</a>
                         </div>
                     </div>
 
@@ -377,7 +378,7 @@
                 </div>
 
                 <div class="text-gray-600 text-sm">
-                    <p>&copy; 2025 KALAM. All rights reserved.</p>
+                    <p>&copy; Copyright @ 2025 By Kalam | Thiru.S.SengodaGounder Educational Trust and Charitable Trust</p>
                 </div>
             </div>
 

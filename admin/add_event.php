@@ -22,6 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $registration_fee = $_POST['registration_fee'];
     $fee_description = $_POST['fee_description'];
 
+    $no_of_days = $_POST['no_of_days'];
+    $team_size = null;
+    if ($_POST['fee_description'] == 'Team (Per Person)') {
+        $team_size = $_POST['team_size'];
+    }
+
     // Initialize image path
     $image_path = null;
 
@@ -67,12 +73,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Insert into database
     $insert_sql = "INSERT INTO events (event_name, event_detail, category, department_code, description,
-                   event_date, start_time, end_time, venue, registration_fee, contact, image_path, fee_description) 
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+               event_date, start_time, end_time, venue, registration_fee, contact, image_path, fee_description, no_of_days, team_size) 
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($insert_sql);
     $stmt->bind_param(
-        "sssssssssssss",
+        "sssssssssssssii",
         $event_name,
         $event_detail,
         $category,
@@ -85,9 +91,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $registration_fee,
         $contact,
         $image_path,
-        $fee_description
+        $fee_description,
+        $no_of_days,
+        $team_size
     );
-
     if ($stmt->execute()) {
         $_SESSION['success'] = "Event created successfully!";
         header("Location: " . (isset($_SESSION['is_superadmin']) && $_SESSION['is_superadmin'] == 'yes' ? 'manage_events_admin.php' : 'manage_events.php'));
@@ -123,6 +130,7 @@ if ($result->num_rows > 0) {
 </head>
 
 <body class="bg-gradient-to-tr from-blue-50 via-white to-purple-50 min-h-screen">
+    <?php include 'navigation.php'; ?>
     <div class="container mx-auto p-6">
         <div class="max-w-4xl mx-auto">
             <!-- Header Section -->
@@ -243,19 +251,32 @@ if ($result->num_rows > 0) {
                                     class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                                     <option value="">Select Fee Type</option>
                                     <option value="Individual">Individual</option>
-                                    <option value="Team">Team</option>
+                                    <option value="Team (Per Person)">Team (Per Person)</option>
                                 </select>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                               
+
+                                <div id="team-size-container" class="hidden">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Team Size</label>
+                                    <input type="number" name="team_size" min="1" value="1"
+                                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                </div>
                             </div>
                         </div>
 
                         <!-- Date and Time Section -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Event Date</label>
                                 <input type="date" name="event_date" required
                                     class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                             </div>
-
+                            <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Number of Days</label>
+                                    <input type="number" name="no_of_days" min="1" value="1"
+                                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Start Time</label>
                                 <input type="time" name="start_time" required
@@ -350,6 +371,23 @@ if ($result->num_rows > 0) {
                 e.preventDefault();
                 alert('End time must be after start time');
                 return;
+            }
+        });
+
+        document.querySelector('select[name="fee_description"]').addEventListener('change', function () {
+            const teamSizeContainer = document.getElementById('team-size-container');
+            if (this.value === 'Team (Per Person)') {
+                teamSizeContainer.classList.remove('hidden');
+            } else {
+                teamSizeContainer.classList.add('hidden');
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            const feeDescription = document.querySelector('select[name="fee_description"]');
+            if (feeDescription.value === 'Team (Per Person)') {
+                document.getElementById('team-size-container').classList.remove('hidden');
             }
         });
     </script>

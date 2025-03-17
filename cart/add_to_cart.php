@@ -70,10 +70,11 @@ $overlapCheck = "
     WHERE ci.cart_id = '$cartId'
     AND e.event_date = '{$newEvent['event_date']}'
     AND (
-        ('{$newEvent['start_time']}' > e.start_time AND '{$newEvent['start_time']}' < e.end_time) OR
-        ('{$newEvent['end_time']}' > e.start_time AND '{$newEvent['end_time']}' < e.end_time) OR
-        (e.start_time > '{$newEvent['start_time']}' AND e.end_time < '{$newEvent['end_time']}')
+        ('{$newEvent['start_time']}' >= e.start_time AND '{$newEvent['start_time']}' < e.end_time) OR
+        ('{$newEvent['end_time']}' > e.start_time AND '{$newEvent['end_time']}' <= e.end_time) OR
+        (e.start_time >= '{$newEvent['start_time']}' AND e.end_time <= '{$newEvent['end_time']}')
     )
+    AND e.category != 'General'
 ";
 
 $overlappingEvents = mysqli_query($conn, $overlapCheck);

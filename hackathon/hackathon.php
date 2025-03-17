@@ -203,7 +203,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-50 min-h-screen pb-16 md:pb-0">
     <?php include '../header/navbar.php'; ?>
     <div class="pt-20"></div>
 
@@ -319,9 +319,9 @@
                         $error = "Maximum team size (4 members) reached.";
                     } else {
                         // Check if the user has purchased the event
-                        $checkPurchaseSql = "SELECT * FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.user_id = ?";
+                        $checkPurchaseSql = "SELECT * FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.user_id = ? AND oi.event_id = ?";
                         $checkPurchaseStmt = $conn->prepare($checkPurchaseSql);
-                        $checkPurchaseStmt->bind_param("i", $newMemberId);
+                        $checkPurchaseStmt->bind_param("ii", $newMemberId, $event_id);
                         $checkPurchaseStmt->execute();
                         $purchaseResult = $checkPurchaseStmt->get_result();
                         
