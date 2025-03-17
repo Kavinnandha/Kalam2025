@@ -283,7 +283,7 @@ session_start(); ?>
         }
 
         .animate-scroll {
-            animation: scroll 5s linear infinite;
+            animation: scroll 6s linear infinite;
         }
 
         /* Pause animation on hover for better user experience */
@@ -294,7 +294,7 @@ session_start(); ?>
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .animate-scroll {
-                animation-duration: 10s;
+                animation-duration: 6s;
                 /* Faster on mobile */
             }
         }
