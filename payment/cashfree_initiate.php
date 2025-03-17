@@ -49,6 +49,8 @@ $stmt = $conn->prepare($payment_transaction_query);
 $stmt->bind_param("sdisi", $transaction_id, $total_amount, $user_id, $payment_status, $payment_time);
 $stmt->execute();
 
+$customer_id = str_pad((string) $user_id, 4, '0', STR_PAD_LEFT);
+
 // Create Cashfree order request
 $create_order_request = new CreateOrderRequest();
 $create_order_request->setOrderAmount($total_amount);
@@ -56,13 +58,13 @@ $create_order_request->setOrderCurrency("INR");
 $create_order_request->setOrderId($transaction_id);
 
 $customer_details = new CustomerDetails();
-$customer_details->setCustomerId((string) $user_id);
+$customer_details->setCustomerId($customer_id);
 $customer_details->setCustomerPhone($user['phone']);
 $customer_details->setCustomerEmail($user['email']);
 $create_order_request->setCustomerDetails($customer_details);
 
 $order_meta = new OrderMeta();
-$order_meta->setReturnUrl("https://bc03-103-208-230-95.ngrok-free.app/kalam/payment/cashfree_verify.php?order_id=$transaction_id");
+$order_meta->setReturnUrl("https://f6bf-14-102-13-146.ngrok-free.app//kalam/payment/cashfree_verify.php?order_id=$transaction_id");
 $create_order_request->setOrderMeta($order_meta);
 
 try {
