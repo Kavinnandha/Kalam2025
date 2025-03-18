@@ -66,9 +66,10 @@
                             <a href="/kalam/categories/events.php?category=Culturals"
                                 class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">
                                 Culturals</a>
+                            <!--    
                             <a href="/kalam/categories/events.php?category=ESAT-Gaming"
                                 class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">
-                                ESAT-Gaming</a>
+                                ESAT-Gaming</a>  -->
                             <a href="/kalam/categories/events.php?category=Tech-Hub"
                                 class="block px-4 py-2 text-gray-700 hover:bg-red-50 rounded-md transition-colors duration-300 hover:text-orange-400">
                                 Tech-Hub</a>
@@ -280,6 +281,7 @@
                 </svg>
                 <span>Culturals</span>
             </a>
+            <!--
             <a href="/kalam/categories/events.php?category=ESAT-Gaming"
                 class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                 <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -288,6 +290,7 @@
                 </svg>
                 <span>ESAT-Gaming</span>
             </a>
+            -->
             <a href="/kalam/categories/events.php?category=Tech-Hub"
                 class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                 <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
