@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_set_cookie_params(86400 * 10, "/");
 session_start(); ?>
 <!DOCTYPE html>
@@ -228,8 +228,121 @@ session_start(); ?>
         </div>
     </div>
 
+    <!-- Sponsors Section -->
+    <div class="relative py-16 bg-gradient-to-b from-orange-100 to-red-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2
+                class="text-4xl md:text-5xl font-bold text-center mb-10 text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500">
+                Our Sponsors
+            </h2>
+            <!-- Sponsor Marquee - Two Rows -->
+            <div class="relative overflow-hidden">
+                <!-- Top Row Marquee -->
+                <div class="sponsor-marquee flex items-center animate-scroll-right mb-8">
+                    <?php
+                    $sponsors_top = $conn->query("SELECT * FROM sponsors WHERE sponsor_id % 2 = 1 ORDER BY sponsor_id ASC");
+                    while ($sponsor = $sponsors_top->fetch_assoc()):
+                        ?>
+                        <div class="flex-shrink-0 mx-6 md:mx-10">
+                            <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
+                                alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
+                                class="h-12 md:h-16 lg:h-20 object-contain"
+                                title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
+                        </div>
+                    <?php endwhile; ?>
+                    <!-- Duplicate sponsors for seamless looping -->
+                    <?php
+                    $sponsors_top = $conn->query("SELECT * FROM sponsors WHERE sponsor_id % 2 = 1 ORDER BY sponsor_id ASC");
+                    while ($sponsor = $sponsors_top->fetch_assoc()):
+                        ?>
+                        <div class="flex-shrink-0 mx-6 md:mx-10">
+                            <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
+                                alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
+                                class="h-12 md:h-16 lg:h-20 object-contain"
+                                title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
+                        </div>
+                    <?php endwhile; ?>
+                </div>
+
+                <!-- Bottom Row Marquee (Opposite Direction) -->
+                <div class="sponsor-marquee flex items-center animate-scroll-left">
+                    <?php
+                    $sponsors_bottom = $conn->query("SELECT * FROM sponsors WHERE sponsor_id % 2 = 0 ORDER BY sponsor_id ASC");
+                    while ($sponsor = $sponsors_bottom->fetch_assoc()):
+                        ?>
+                        <div class="flex-shrink-0 mx-6 md:mx-10">
+                            <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
+                                alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
+                                class="h-12 md:h-16 lg:h-20 object-contain"
+                                title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
+                        </div>
+                    <?php endwhile; ?>
+                    <!-- Duplicate sponsors for seamless looping -->
+                    <?php
+                    $sponsors_bottom = $conn->query("SELECT * FROM sponsors WHERE sponsor_id % 2 = 0 ORDER BY sponsor_id ASC");
+                    while ($sponsor = $sponsors_bottom->fetch_assoc()):
+                        ?>
+                        <div class="flex-shrink-0 mx-6 md:mx-10">
+                            <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
+                                alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
+                                class="h-12 md:h-16 lg:h-20 object-contain"
+                                title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
+                        </div>
+                    <?php endwhile; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Updated CSS for the marquee animations -->
+    <style>
+        /* Right direction animation */
+        @keyframes scroll-right {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Left direction animation */
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(-50%);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .animate-scroll-right {
+            animation: scroll-right 10s linear infinite;
+        }
+
+        .animate-scroll-left {
+            animation: scroll-left 10s linear infinite;
+        }
+
+        /* Pause animation on hover for better user experience */
+        .sponsor-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+
+            .animate-scroll-right,
+            .animate-scroll-left {
+                animation-duration: 8s;
+                /* Faster on mobile */
+            }
+        }
+    </style>
     <!-- Event Schedule section -->
-    <div class="relative py-24 bg-gradient-to-b from-red-50 to-orange-100">
+    <div class="relative py-12 bg-gradient-to-b from-red-50 to-orange-100">
         <div class="max-w-7xl mx-auto px-4">
             <h2
                 class="text-4xl md:text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500">
@@ -335,8 +448,10 @@ session_start(); ?>
                     <div class="flex flex-col items-center text-center font-[Poppins]">
                         <h4 class="text-xl font-bold mb-4 text-gray-700">Legal</h4>
                         <div class="flex flex-wrap justify-center gap-4 text-gray-600">
-                            <a href="legal/termsandconditions.php" class="hover:text-orange-500 transition duration-300">Terms & Conditions</a>
-                            <a href="legal/privacyPolicy.php" class="hover:text-orange-500 transition duration-300">Privacy Policy</a>
+                            <a href="legal/termsandconditions.php"
+                                class="hover:text-orange-500 transition duration-300">Terms & Conditions</a>
+                            <a href="legal/privacyPolicy.php"
+                                class="hover:text-orange-500 transition duration-300">Privacy Policy</a>
                         </div>
                     </div>
 
@@ -353,8 +468,7 @@ session_start(); ?>
                     </div>
                     <!-- Developer Info -->
                     <div class="flex flex-col items-center text-center font-[Poppins] space-y-4">
-                        <h4
-                            class="text-xl font-bold mb-4 text-gray-700">
+                        <h4 class="text-xl font-bold mb-4 text-gray-700">
                             Developed By
                         </h4>
                         <div class="text-gray-700">
@@ -363,8 +477,7 @@ session_start(); ?>
 
                             <!-- Centered LinkedIn Section -->
                             <div class="flex flex-col items-center justify-center mt-2">
-                                <a href="https://www.linkedin.com/in/kavin-nandha-076b22263"
-                                    target="_blank"
+                                <a href="https://www.linkedin.com/in/kavin-nandha-076b22263" target="_blank"
                                     class="flex items-center text-gray-700 hover:text-orange-500 transition duration-300 transform hover:scale-110 hover:-rotate-3">
                                     <i class="fab fa-linkedin text-2xl mb-1"></i>
                                     <span class="text-sm font-semibold ml-2">LinkedIn</span>
@@ -378,7 +491,8 @@ session_start(); ?>
                 </div>
 
                 <div class="text-gray-600 text-sm">
-                    <p>&copy; Copyright @ 2025 By Kalam | Thiru.S.SengodaGounder Educational Trust and Charitable Trust</p>
+                    <p>&copy; Copyright @ 2025 By Kalam | Thiru.S.SengodaGounder Educational Trust and Charitable Trust
+                    </p>
                 </div>
             </div>
 
