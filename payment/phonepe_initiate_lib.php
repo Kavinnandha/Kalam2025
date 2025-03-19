@@ -9,6 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 require_once '../database/connection.php';
 require_once '../libraries/vendor/autoload.php';
 
+
 use PhonePe\payments\v1\PhonePePaymentClient;
 use PhonePe\Env;
 use PhonePe\payments\v1\models\request\builders\PgPayRequestBuilder;
@@ -56,8 +57,8 @@ $stmt->bind_param("sdisi", $transaction_id, $total_amount, $user_id, $payment_st
 $stmt->execute();
 
 // Set callback and redirect URLs
-$callback_url = "https://siet.ac.in/kalam/payment/phonepe_verify_lib.php";
-$redirect_url = "https://siet.ac.in/kalam/payment/phonepe_verify_lib.php";
+$callback_url = "https://siet.ac.in/kalam/payment/phonepe_verify_lib.php?merchantTransactionId=" . $transaction_id;
+$redirect_url = "https://siet.ac.in/kalam/payment/phonepe_verify_lib.php?merchantTransactionId=" . $transaction_id;
 
 // Amount in paise
 $amount_in_paise = (int)($total_amount * 100);
