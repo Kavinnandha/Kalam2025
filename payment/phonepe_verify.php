@@ -59,6 +59,7 @@ if ($err) {
 
 $responseData = json_decode($response, true);
 $response_json = json_encode($responseData);
+echo $responseData;
 
 // Check payment status
 if ($responseData['success'] && isset($responseData['data'])) {
