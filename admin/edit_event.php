@@ -40,8 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $registration_fee = $_POST['registration_fee'];
     $contact = $_POST['contact'];
     $fee_description = $_POST['fee_description'];
-    $team_size = ($fee_description == 'Team (Per Person)') ? $_POST['team_size'] : NULL;
-    $no_of_days = $_POST['no_of_days'];
+    $team_size = (($fee_description == 'Team (Per Person)') || $fee_description == 'Team') && isset($_POST['team_size']) ? $_POST['team_size'] : NULL;
+    $no_of_days = isset($_POST['no_of_days']) ? $_POST['no_of_days'] : NULL;
 
     // Handle file upload
     $image_path = $event['image_path'];
@@ -248,6 +248,7 @@ if ($result->num_rows > 0) {
                                             class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                                             <option value="Individual" <?php echo $event['fee_description'] == 'Individual' ? 'selected' : ''; ?>>Individual
                                             </option>
+                                            <option value="Team" <?php echo $event['fee_description'] == 'Team' ? 'selected' : ''; ?>>Team</option>
                                             <option value="Team (Per Person)" <?php echo $event['fee_description'] == 'Team (Per Person)' ? 'selected' : ''; ?>>Team (Per Person)</option>
                                         </select>
                                     </div>
@@ -394,7 +395,7 @@ if ($result->num_rows > 0) {
             const teamSizeContainer = document.getElementById('teamSizeContainer');
             const teamSizeInput = document.getElementById('teamSize');
 
-            if (feeType === 'Team (Per Person)') {
+            if (feeType === 'Team (Per Person)' || feeType === 'Team') {
                 teamSizeContainer.style.display = 'block';
                 teamSizeInput.required = true;
                 if (!teamSizeInput.value) {
@@ -426,7 +427,7 @@ if ($result->num_rows > 0) {
                 }
 
                 // Validate team size if team fee type is selected
-                if (feeType === 'Team (Per Person)' && (!teamSize || teamSize < 2)) {
+                if ((feeType === 'Team (Per Person)' || feeType === 'Team') && (!teamSize || teamSize < 2)) {
                     e.preventDefault();
                     alert('Please enter a valid team size (minimum 2)');
                     return;
