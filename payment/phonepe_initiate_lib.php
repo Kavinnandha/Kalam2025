@@ -9,12 +9,6 @@ if (!isset($_SESSION['user_id'])) {
 require_once '../database/connection.php';
 require_once '../libraries/vendor/autoload.php';
 
-require_once __DIR__ . '/../libraries\vendor\phonepe\src\phonepe\sdk\pg\payments\v1\PhonePePaymentClient.php';
-require_once __DIR__ . '/../libraries/vendor/phonepe/src/phonepe/sdk/pg/Env.php';
-require_once __DIR__ . '/../libraries/vendor/phonepe/src/phonepe/sdk/pg/payments/v1/models/request/builders/PgPayRequestBuilder.php';
-require_once __DIR__ . '/../libraries/vendor/phonepe/src/phonepe/sdk/pg/payments/v1/models/request/builders/InstrumentBuilder.php';
-
-
 use PhonePe\payments\v1\PhonePePaymentClient;
 use PhonePe\Env;
 use PhonePe\payments\v1\models\request\builders\PgPayRequestBuilder;
