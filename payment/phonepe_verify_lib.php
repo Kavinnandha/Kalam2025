@@ -123,10 +123,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
     if (!empty($merchantTransactionId)) {
         // Check transaction status
+        echo $merchantTransactionId;
         try {
             $checkStatus = $phonePePaymentsClient->statusCheck($merchantTransactionId);
             $state = $checkStatus->getState();
             
+            echo $state;
             // Redirect based on payment status
             if ($state === 'COMPLETED') {
                 $_SESSION['payment_success'] = true;
