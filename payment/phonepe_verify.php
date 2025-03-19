@@ -56,7 +56,6 @@ if ($err) {
     echo "cURL Error #:" . $err;
     exit();
 }
-echo $response;
 $responseData = json_decode($response, true);
 $response_json = json_encode($responseData);
 
