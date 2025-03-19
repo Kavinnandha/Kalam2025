@@ -182,7 +182,7 @@
         }
     },
     proceedToPayment() {
-        window.location.href = '../payment/phonepe_initiate.php';
+        window.location.href = '../payment/cashfree_initiate.php';
     },
     closeMobileOrderSummary() {
         this.showMobileOrderSummary = false;
