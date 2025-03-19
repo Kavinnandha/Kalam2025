@@ -269,7 +269,8 @@
                                     echo '₹' . number_format($event['registration_fee'], 2);
                                 }
                                 ?>
-                                <?php echo '| ' . htmlspecialchars($event['fee_description']); ?>
+                                <?php if($event['fee_description'] == 'Team (Per Person)') { echo '| Team'; }
+                                else { echo '| ' . htmlspecialchars($event['fee_description']); } ?>
                             </span>
                         </div>
 
@@ -313,7 +314,7 @@
                             </button>
                         <?php endif; ?>
 
-                        <?php if ($event['fee_description'] == "Team (Per Person)"): ?>
+                        <?php if (($event['fee_description'] == "Team (Per Person)") && ($event['category'] != 'Hackathon')): ?>
                             <button
                                 class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-lg 
                                            hover:from-orange-600 hover:to-yellow-500 transform hover:scale-105 transition-all duration-300 shadow-md  flex items-center justify-center"
