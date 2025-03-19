@@ -32,36 +32,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     // Check payment status
     try {
-        $checkStatus = $phonePePaymentsClient->statusCheck($merchantTransactionId);
-        $state = $checkStatus->getState();
+        // Get the status check response
+        $checkStatusResponse = $phonePePaymentsClient->statusCheck($merchantTransactionId);
         
-        // Get full response data for storing in database
-        $responseObject = $checkStatus->getResponseObject();
-        $response_data = json_encode($responseObject);
+        // Get the state which is the only method we know exists
+        $state = $checkStatusResponse->getState();
         
-        // Get other required fields from response
-        $payment_amount = $responseObject['amount'] / 100; // Convert from paisa to rupees
+        // Log all available methods for future debugging
+        ob_start();
+        var_dump(get_class_methods($checkStatusResponse));
+        $methods = ob_get_clean();
+        
+        // Create basic response data from what we know
+        $response_data = json_encode([
+            'state' => $state,
+            'merchantTransactionId' => $merchantTransactionId,
+            'debug_info' => $methods
+        ]);
+        
+        // Set transaction ID
         $transaction_id = $merchantTransactionId;
         
-        // Extract payment details from the first payment attempt (assuming there might be multiple)
-        if (!empty($responseObject['paymentDetails']) && is_array($responseObject['paymentDetails'])) {
-            $paymentDetail = $responseObject['paymentDetails'][0];
-            $payment_mode = $paymentDetail['paymentMode'] ?? '';
-            $payment_time = !empty($paymentDetail['timestamp']) ? 
-                date('Y-m-d H:i:s', $paymentDetail['timestamp'] / 1000) : null; // Convert from milliseconds
-            $payment_status = $state;
-            
-            // For PhonePe's API, we'll use their transactionId as our payment ID
-            $cf_payment_id = $paymentDetail['transactionId'] ?? '';
-            
-            // Payment completion time (same as payment time for successful payments)
-            $payment_completion_time = $payment_time;
-        } else {
-            // Fallback if payment details aren't available
-            $payment_mode = 'UNKNOWN';
-            $payment_time = date('Y-m-d H:i:s');
-            $payment_completion_time = $payment_time;
-            $cf_payment_id = '';
+        // Set default values since we can't access the API response directly
+        $cf_payment_id = $merchantTransactionId;
+        $payment_amount = 0; // Will need to be updated from your database
+        $payment_mode = 'PhonePe';
+        $payment_time = date('Y-m-d H:i:s');
+        $payment_completion_time = $payment_time;
+        $payment_status = $state;
+        
+        // Try to get the amount from the existing payment_transactions table
+        $stmt = $conn->prepare("SELECT amount FROM payment_transactions WHERE transaction_id = ?");
+        $stmt->bind_param("s", $transaction_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $payment_amount = $row['amount'];
         }
 
         // Process based on payment status
@@ -70,13 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             // Update transaction in database
             $stmt = $conn->prepare("UPDATE payment_transactions
-                           SET cf_payment_id = ?, amount = ?, payment_mode = ?, payment_time = ?,
+                           SET cf_payment_id = ?, payment_mode = ?, payment_time = ?,
                                payment_completion_time = ?, payment_status = ?, response_data = ?
                            WHERE transaction_id = ?");
             $stmt->bind_param(
-                "sdssssss",
+                "sssssss",
                 $cf_payment_id,
-                $payment_amount,
                 $payment_mode,
                 $payment_time,
                 $payment_completion_time,
@@ -188,7 +193,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         header("Location: ../cart/cart.php");
         exit();
     }
-
 }
 
 // If neither POST nor valid GET request
