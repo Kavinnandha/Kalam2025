@@ -43,8 +43,8 @@ $stmt->bind_param("sdisi", $transaction_id, $total_amount, $user_id, $payment_st
 $stmt->execute();
 
 // Create PhonePe payment request
-$callback_url = "https://siet.ac.in/kalam/payment/phonepe_verify.php";
-$redirect_url = "https://siet.ac.in/kalam/payment/phonepe_verify.php";
+$callback_url = "https://siet.ac.in/kalam/payment/phonepe_verify.php?merchantTransactionId=$transaction_id";
+$redirect_url = "https://siet.ac.in/kalam/payment/phonepe_verify.php?merchantTransactionId=$transaction_id";
 
 $amount = $total_amount * 100; // PhonePe expects amount in paise
 

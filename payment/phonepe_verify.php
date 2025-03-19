@@ -25,7 +25,7 @@ if (isset($_GET['merchantTransactionId'])) {
 }
 
 // Verify the payment status with PhonePe
-$apiEndpoint = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/$merchantId/$transaction_id";
+$apiEndpoint = "https://api.phonepe.com/apis/identity-manager/v1/oauth/token/$merchantId/$transaction_id";
 
 // Generate checksum
 $string = "/pg/v1/status/$merchantId/$transaction_id" . $saltKey;
