@@ -11,7 +11,7 @@ use phonepe\Env;
 $merchantId = "M22DZIHTE7XA8";
 $saltKey = "bbdc4a8f-806b-4307-ad83-d0efefbe8725";
 $saltIndex = "1";
-$env = Env::UAT; // Use Env::PRODUCTION for production
+$env = Env::PRODUCTION; // Use Env::PRODUCTION for production
 $shouldPublishEvents = true;
 
 // Initialize PhonePe Payment Client
