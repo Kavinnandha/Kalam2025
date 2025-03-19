@@ -120,19 +120,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Handle redirect from PhonePe
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $merchantTransactionId = $_GET['merchantTransactionId'] ?? '';
-
-    $checkStatus = $phonePePaymentsClient->statusCheck($merchantTransactionId);
-    $state = $checkStatus->getState();
-
-    echo $state;
-    // Redirect based on payment status
-    if ($state === 'COMPLETED') {
-        $_SESSION['payment_success'] = true;
-      //  header("Location: ../payment/success.php?txn_id=" . $merchantTransactionId);
+    
+    // Validate merchantTransactionId before proceeding
+    if (empty($merchantTransactionId)) {
+        $_SESSION['payment_error'] = "Missing transaction ID";
+        header("Location: ../payment/payment_failed.php");
         exit();
-    } else {
-        $_SESSION['payment_error'] = "Payment failed. Status: " . $state;
-      //  header("Location: ../payment/payment_failed.php");
+    }
+    
+    try {
+        $checkStatus = $phonePePaymentsClient->statusCheck($merchantTransactionId);
+        $state = $checkStatus->getState();
+        
+        // Redirect based on payment status
+        if ($state === 'COMPLETED') {
+            $_SESSION['payment_success'] = true;
+            header("Location: ../payment/success.php?txn_id=" . $merchantTransactionId);
+            exit();
+        } else {
+            $_SESSION['payment_error'] = "Payment failed. Status: " . $state;
+            header("Location: ../payment/payment_failed.php");
+            exit();
+        }
+    } catch (Exception $e) {
+        $_SESSION['payment_error'] = "Error checking payment status: " . $e->getMessage();
+        header("Location: ../payment/payment_failed.php");
         exit();
     }
 }
