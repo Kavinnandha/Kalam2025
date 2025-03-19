@@ -29,12 +29,13 @@ function getAccessToken($merchantId, $apiKey) {
     // Endpoint for Auth API
     $authEndpoint = "https://api.phonepe.com/apis/identity-manager/v1/oauth/token";
     
-    // Create request payload for auth
-    $authPayload = [
-        "grantType" => "client_credentials",
-        "clientId" => $merchantId,
-        "clientSecret" => $apiKey
-    ];
+    // Prepare the form data for auth
+    $authPayload = http_build_query([
+        "client_id" => $merchantId,
+        "client_version" => 1, // Use appropriate version number
+        "client_secret" => $apiKey,
+        "grant_type" => "client_credentials"
+    ]);
     
     $curl = curl_init();
     curl_setopt_array($curl, [
@@ -42,9 +43,9 @@ function getAccessToken($merchantId, $apiKey) {
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT => 30,
         CURLOPT_CUSTOMREQUEST => "POST",
-        CURLOPT_POSTFIELDS => json_encode($authPayload),
+        CURLOPT_POSTFIELDS => $authPayload,
         CURLOPT_HTTPHEADER => [
-            "Content-Type: application/json",
+            "Content-Type: application/x-www-form-urlencoded",
             "accept: application/json"
         ],
     ]);
