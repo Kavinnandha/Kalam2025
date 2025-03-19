@@ -8,6 +8,15 @@ include '../database/connection.php';
 
 $department_code = $_SESSION['department_code'];
 
+$stmt = $conn->prepare("SELECT department_name FROM department WHERE department_code = ?");
+$stmt->bind_param("s", $department_code);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result && $row = $result->fetch_assoc()) {
+    $department_name = $row['department_name'];
+}
+
 // Get statistics using prepared statements
 $stats_queries = [
     'total_events' => "SELECT COUNT(*) as count FROM events WHERE department_code = ?",
@@ -72,30 +81,7 @@ if (isset($_POST['delete_event'])) {
 <body class="bg-gray-50">
     <div class="min-h-screen">
         <!-- Navigation -->
-        <nav class="bg-white shadow-lg">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <div class="flex items-center">
-                        <h1 class="text-2xl font-bold text-gray-900">Event Management</h1>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <a href="cart_items.php" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-                            <i class="fas fa-shopping-cart mr-2"></i>Users Cart
-                        </a>
-                        <a href="add_event.php" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-                            <i class="fas fa-plus mr-2"></i>Add New Event
-                        </a>
-                        <a href="hackathon_teams.php"
-                            class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-                            <i class="fas fa-users mr-2"></i>Hackathon Teams
-                        </a>
-                        <a href="logout.php" class="text-gray-500 hover:text-gray-700">
-                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <?php include 'navigation.php'; ?>
 
         <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
             <!-- Statistics Cards -->
@@ -191,7 +177,8 @@ if (isset($_POST['delete_event'])) {
                         </div>
                         <div class="p-4">
                             <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                                <?php echo htmlspecialchars($event['event_name']); ?></h3>
+                                <?php echo htmlspecialchars($event['event_name']); ?>
+                            </h3>
                             <p class="text-sm text-gray-600 mb-2">
                                 <i class="far fa-calendar mr-2"></i>
                                 <?php echo date('F d, Y', strtotime($event['event_date'])); ?>

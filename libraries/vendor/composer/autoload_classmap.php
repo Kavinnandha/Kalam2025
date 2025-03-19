@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'PhonePe\\Env' => $vendorDir . '/phonepe/phonepe-pg-php-sdk/src/phonepe/sdk/pg/Env.php',
     'PhonePe\\common\\PhonePeClient' => $vendorDir . '/phonepe/phonepe-pg-php-sdk/src/phonepe/sdk/pg/common/PhonePeClient.php',

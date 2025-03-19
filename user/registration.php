@@ -109,7 +109,7 @@
     </style>
 </head>
 
-<body class="bg-black">
+<body class="bg-black pb-16 md:pb-0">
     <?php include '../header/navbar.php'; ?>
 
     <div class="min-h-screen pt-16 px-4 sm:px-6 lg:px-8 fire-gradient relative overflow-hidden">

@@ -49,6 +49,7 @@ if ($_SESSION['is_superadmin'] == 'yes') {
 </head>
 
 <body class="bg-gray-50">
+<?php include 'navigation.php'; ?>
     <div class="container mx-auto p-6">
         <!-- Header -->
         <div class="mb-6">

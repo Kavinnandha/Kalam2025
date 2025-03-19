@@ -2,37 +2,88 @@
 session_start();
 require_once '../database/connection.php';
 
-// PhonePe API credentials
+// PhonePe API credentials - replace with your actual production credentials
 $merchantId = "M22DZIHTE7XA8";
-$apiKey = "bbdc4a8f-806b-4307-ad83-d0efefbe8725";
-$saltKey = "bbdc4a8f-806b-4307-ad83-d0efefbe8725"; // get from PhonePe
-$saltIndex = 1;
+$clientId = $merchantId; // Usually same as merchantId
+$clientSecret = "bbdc4a8f-806b-4307-ad83-d0efefbe8725"; // Your client secret
+$clientVersion = 1; // Use the value provided in your credentials email for production
 
 // First, check if transaction ID is provided in the URL
-if (isset($_GET['merchantTransactionId'])) {
-    $transaction_id = $_GET['merchantTransactionId'];
+if (isset($_GET['merchantOrderId'])) {
+    $transaction_id = $_GET['merchantOrderId'];
 } else {
     // If not, check if PhonePe provides callback data
     $input = file_get_contents('php://input');
     $callback_data = json_decode($input, true);
     
-    if ($callback_data && isset($callback_data['merchantTransactionId'])) {
-        $transaction_id = $callback_data['merchantTransactionId'];
+    if ($callback_data && isset($callback_data['merchantOrderId'])) {
+        $transaction_id = $callback_data['merchantOrderId'];
     } else {
         echo "Invalid access! Transaction ID not found.";
         exit();
     }
 }
 
-// Verify the payment status with PhonePe
-$apiEndpoint = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/$merchantId/$transaction_id";
+// Function to get OAuth token
+function getAccessToken($clientId, $clientSecret, $clientVersion) {
+    $authEndpoint = "https://api.phonepe.com/apis/identity-manager/v1/oauth/token";
+    
+    $postData = http_build_query([
+        "client_id" => $clientId,
+        "client_version" => $clientVersion,
+        "client_secret" => $clientSecret,
+        "grant_type" => "client_credentials"
+    ]);
+    
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => $authEndpoint,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POSTFIELDS => $postData,
+        CURLOPT_HTTPHEADER => [
+            "Content-Type: application/x-www-form-urlencoded",
+            "accept: application/json"
+        ],
+    ]);
+    
+    $response = curl_exec($curl);
+    $err = curl_error($curl);
+    
+    curl_close($curl);
+    
+    if ($err) {
+        error_log("cURL Error in auth request: " . $err);
+        return null;
+    }
+    
+    $responseData = json_decode($response, true);
+    
+    if (isset($responseData['access_token']) && isset($responseData['token_type'])) {
+        return [
+            'access_token' => $responseData['access_token'],
+            'token_type' => $responseData['token_type'],
+            'expires_at' => $responseData['expires_at']
+        ];
+    } else {
+        error_log("Auth Error: " . json_encode($responseData));
+        return null;
+    }
+}
 
-// Generate checksum
-$string = "/pg/v1/status/$merchantId/$transaction_id" . $saltKey;
-$sha256 = hash('sha256', $string);
-$checksum = $sha256 . '###' . $saltIndex;
+// Get access token
+$authData = getAccessToken($clientId, $clientSecret, $clientVersion);
 
-// Prepare API request
+if (!$authData) {
+    echo "Failed to authenticate with PhonePe API";
+    exit();
+}
+
+// Verify the payment status with PhonePe using the access token
+$apiEndpoint = "https://api.phonepe.com/apis/pg/checkout/v2/order/$transaction_id/status?details=true&errorContext=true";
+
+// Prepare API request with OAuth token
 $curl = curl_init();
 
 curl_setopt_array($curl, [
@@ -42,8 +93,8 @@ curl_setopt_array($curl, [
     CURLOPT_CUSTOMREQUEST => "GET",
     CURLOPT_HTTPHEADER => [
         "Content-Type: application/json",
-        "X-VERIFY: " . $checksum,
-        "X-MERCHANT-ID: " . $merchantId
+        "Authorization: {$authData['token_type']} {$authData['access_token']}",
+        "accept: application/json"
     ],
 ]);
 
@@ -60,25 +111,45 @@ if ($err) {
 $responseData = json_decode($response, true);
 $response_json = json_encode($responseData);
 
-// Check payment status
-if ($responseData['success'] && isset($responseData['data'])) {
-    $payment_data = $responseData['data'];
-    $payment_status = $payment_data['state'];
-    $payment_amount = $payment_data['amount'] / 100; // Convert from paise to rupees
-    $payment_mode = $payment_data['paymentInstrument']['type'] ?? 'UNKNOWN';
+// Log the response for debugging
+error_log("PhonePe Response: " . $response_json);
+
+// Check payment status - rely on the 'state' parameter as per documentation
+if (isset($responseData['state'])) {
+    $payment_status = $responseData['state'];
+    $payment_amount = $responseData['amount'] / 100; // Convert from paise to rupees
+    
+    // Get PhonePe order ID
+    $phonepe_order_id = $responseData['orderId'];
+    
+    // Get transaction details from the latest payment attempt
+    $phonepe_transaction_id = null;
+    $payment_mode = 'UNKNOWN';
+    
+    if (isset($responseData['paymentDetails']) && !empty($responseData['paymentDetails'])) {
+        $latest_payment = $responseData['paymentDetails'][0];
+        
+        if (isset($latest_payment['transactionId'])) {
+            $phonepe_transaction_id = $latest_payment['transactionId'];
+        }
+        
+        if (isset($latest_payment['paymentMode'])) {
+            $payment_mode = $latest_payment['paymentMode'];
+        }
+    }
+    
     $payment_time = time(); // Current timestamp as payment time
     $payment_completion_time = time(); // Current timestamp as completion time
-    $phonepe_transaction_id = $payment_data['transactionId'] ?? null;
     
     if ($payment_status === 'COMPLETED') {
         // Update payment_transactions table
         $stmt = $conn->prepare("UPDATE payment_transactions 
-                               SET cf_payment_id = ?, amount = ?, payment_mode = ?, 
+                               SET cf_payment_id = ?, phonepe_order_id = ?, amount = ?, payment_mode = ?, 
                                payment_time = ?, payment_completion_time = ?, 
                                payment_status = 'SUCCESS', response_data = ?
                                WHERE transaction_id = ?");
         
-        $stmt->bind_param("sssssss", $phonepe_transaction_id, $payment_amount, 
+        $stmt->bind_param("ssdsssss", $phonepe_transaction_id, $phonepe_order_id, $payment_amount, 
                          $payment_mode, $payment_time, $payment_completion_time, 
                          $response_json, $transaction_id);
         $stmt->execute();
@@ -157,14 +228,19 @@ if ($responseData['success'] && isset($responseData['data'])) {
         // Redirect to orders page
         header("Location: ../orders/orders.php");
         exit();
-    } elseif ($payment_status === 'FAILED' || $payment_status === 'CANCELLED') {
+    } elseif ($payment_status === 'FAILED') {
         // Update payment status as failed
         $conn->query("UPDATE payment_transactions SET payment_status = 'FAILED', response_data = '$response_json' WHERE transaction_id = '$transaction_id'");
-        header("Location: ../cart/cart.php");
+        header("Location: ../cart/cart.php?payment=failed");
+        exit();
+    } elseif ($payment_status === 'PENDING') {
+        // Payment is still pending
+        echo "Your payment is being processed. Please wait...";
         exit();
     } else {
-        // Payment pending or other status
-        echo "Payment status: " . $payment_status;
+        // Any other status (like CANCELLED)
+        $conn->query("UPDATE payment_transactions SET payment_status = 'FAILED', response_data = '$response_json' WHERE transaction_id = '$transaction_id'");
+        header("Location: ../cart/cart.php?payment=cancelled");
         exit();
     }
 } else {

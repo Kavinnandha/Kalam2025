@@ -40,6 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $registration_fee = $_POST['registration_fee'];
     $contact = $_POST['contact'];
     $fee_description = $_POST['fee_description'];
+    $team_size = (($fee_description == 'Team (Per Person)') || $fee_description == 'Team') && isset($_POST['team_size']) ? $_POST['team_size'] : NULL;
+    $no_of_days = isset($_POST['no_of_days']) ? $_POST['no_of_days'] : NULL;
 
     // Handle file upload
     $image_path = $event['image_path'];
@@ -76,24 +78,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $update_sql = "UPDATE events SET 
-                   event_name = ?, 
-                   event_detail = ?, 
-                   category = ?, 
-                   department_code = ?,
-                   description = ?, 
-                   event_date = ?, 
-                   start_time = ?, 
-                   end_time = ?, 
-                   venue = ?, 
-                   registration_fee = ?, 
-                   image_path = ?,
-                   contact = ?,
-                   fee_description = ?
-                   WHERE event_id = ?";
+    event_name = ?, 
+    event_detail = ?, 
+    category = ?, 
+    department_code = ?,
+    description = ?, 
+    event_date = ?, 
+    start_time = ?, 
+    end_time = ?, 
+    venue = ?, 
+    registration_fee = ?, 
+    image_path = ?,
+    contact = ?,
+    fee_description = ?,
+    team_size = ?,
+    no_of_days = ?
+    WHERE event_id = ?";
 
     $update_stmt = $conn->prepare($update_sql);
     $update_stmt->bind_param(
-        "sssisssssdsssi",
+        "sssisssssdsisiii",
         $event_name,
         $event_detail,
         $category,
@@ -107,8 +111,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $image_path,
         $contact,
         $fee_description,
+        $team_size,
+        $no_of_days,
         $event_id
     );
+
 
     if ($update_stmt->execute()) {
         $_SESSION['message'] = "Event updated successfully!";
@@ -144,6 +151,7 @@ if ($result->num_rows > 0) {
 </head>
 
 <body class="bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen">
+    <?php include 'navigation.php'; ?>
     <div class="container mx-auto p-6">
         <div class="max-w-4xl mx-auto">
             <!-- Header -->
@@ -217,7 +225,6 @@ if ($result->num_rows > 0) {
                                                 echo "<option value=\"$value\" $selected>$value</option>";
                                             }
                                             ?>
-
                                         </select>
                                     </div>
 
@@ -234,20 +241,30 @@ if ($result->num_rows > 0) {
                                     </div>
                                 </div>
 
-                                <div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-semibold text-gray-700 mb-2">Fee Type</label>
-                                        <select name="fee_description" required
-                                            class="mb-5 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                        <select name="fee_description" id="feeType" required onchange="toggleTeamSize()"
+                                            class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                                             <option value="Individual" <?php echo $event['fee_description'] == 'Individual' ? 'selected' : ''; ?>>Individual
                                             </option>
                                             <option value="Team" <?php echo $event['fee_description'] == 'Team' ? 'selected' : ''; ?>>Team</option>
+                                            <option value="Team (Per Person)" <?php echo $event['fee_description'] == 'Team (Per Person)' ? 'selected' : ''; ?>>Team (Per Person)</option>
                                         </select>
                                     </div>
 
+                                    <div id="teamSizeContainer" <?php echo $event['fee_description'] == 'Individual' ? 'style="display: none;"' : ''; ?>>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Team Size</label>
+                                        <input type="number" name="team_size" id="teamSize"
+                                            value="<?php echo isset($event['team_size']) ? $event['team_size'] : ''; ?>"
+                                            min="2"
+                                            class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                    </div>
+                                </div>
+
+                                <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Department</label>
                                     <?php if (isset($_SESSION['department_code']) && !empty($_SESSION['department_code'])): ?>
-
                                         <input type="hidden" name="department_code"
                                             value="<?php echo $_SESSION['department_code']; ?>">
                                         <p class="text-gray-700"><?php
@@ -269,22 +286,29 @@ if ($result->num_rows > 0) {
                                             $dept_result = $conn->query($dept_sql);
                                             if ($dept_result->num_rows > 0) {
                                                 while ($row = $dept_result->fetch_assoc()) {
-                                                    echo '<option value="' . $row['department_code'] . '">' . $row['department_name'] . '</option>';
+                                                    $selected = ($event['department_code'] == $row['department_code']) ? 'selected' : '';
+                                                    echo "<option value=\"{$row['department_code']}\" $selected>{$row['department_name']}</option>";
                                                 }
                                             }
                                             ?>
                                         </select>
                                     <?php endif; ?>
-
                                 </div>
                             </div>
                         </div>
 
                         <!-- Date and Time Section -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Event Date</label>
                                 <input type="date" name="event_date" value="<?php echo $event['event_date']; ?>"
+                                    required
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Number of Days</label>
+                                <input type="number" name="no_of_days" min="1" value="<?php echo $event['no_of_days']; ?>"
                                     required
                                     class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                             </div>
@@ -364,15 +388,59 @@ if ($result->num_rows > 0) {
             }
         }
 
-        // Form validation
-        document.querySelector('form').addEventListener('submit', function (e) {
-            const startTime = document.querySelector('input[name="start_time"]').value;
-            const endTime = document.querySelector('input[name="end_time"]').value;
+        // Toggle team size field visibility based on fee type selection
 
-            if (startTime >= endTime) {
-                e.preventDefault();
-                alert('End time must be after start time');
+        function toggleTeamSize() {
+            const feeType = document.getElementById('feeType').value;
+            const teamSizeContainer = document.getElementById('teamSizeContainer');
+            const teamSizeInput = document.getElementById('teamSize');
+
+            if (feeType === 'Team (Per Person)' || feeType === 'Team') {
+                teamSizeContainer.style.display = 'block';
+                teamSizeInput.required = true;
+                if (!teamSizeInput.value) {
+                    teamSizeInput.value = 2; // Default minimum team size
+                }
+            } else {
+                teamSizeContainer.style.display = 'none';
+                teamSizeInput.required = false;
+                teamSizeInput.value = '';
             }
+        }
+
+        // Form validation
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize team size visibility on page load
+            toggleTeamSize();
+
+            document.querySelector('form').addEventListener('submit', function (e) {
+                const startTime = document.querySelector('input[name="start_time"]').value;
+                const endTime = document.querySelector('input[name="end_time"]').value;
+                const feeType = document.getElementById('feeType').value;
+                const teamSize = document.getElementById('teamSize').value;
+
+                // Validate time range
+                if (startTime >= endTime) {
+                    e.preventDefault();
+                    alert('End time must be after start time');
+                    return;
+                }
+
+                // Validate team size if team fee type is selected
+                if ((feeType === 'Team (Per Person)' || feeType === 'Team') && (!teamSize || teamSize < 2)) {
+                    e.preventDefault();
+                    alert('Please enter a valid team size (minimum 2)');
+                    return;
+                }
+
+                // Validate number of days
+                const noDays = document.querySelector('input[name="no_of_days"]').value;
+                if (!noDays || noDays < 1) {
+                    e.preventDefault();
+                    alert('Number of days must be at least 1');
+                    return;
+                }
+            });
         });
     </script>
 </body>

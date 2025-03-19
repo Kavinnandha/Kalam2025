@@ -113,8 +113,10 @@ if ($admin_query) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 min-h-screen p-6">
+<body class="bg-gray-100 min-h-screen">
+<?php include 'navigation.php'; ?>
     <div class="container mx-auto max-w-4xl">
         <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Admin Management</h1>
 
