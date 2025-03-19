@@ -124,15 +124,109 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         try {
             $checkStatus = $phonePePaymentsClient->statusCheck($merchantTransactionId);
             $state = $checkStatus->getState();
+            $payment_status = $state;
             
             // Redirect based on payment status
-            if ($state === 'COMPLETED') {
-                $_SESSION['payment_success'] = true;
-                header("Location: ../order/order_confirmation.php?txn_id=" . $merchantTransactionId);
+            if ($payment_status === 'COMPLETED') {
+                // Update payment_transactions table
+                $stmt = $conn->prepare("UPDATE payment_transactions 
+                                       SET cf_payment_id = ?, phonepe_order_id = ?, amount = ?, payment_mode = ?, 
+                                       payment_time = ?, payment_completion_time = ?, 
+                                       payment_status = 'SUCCESS', response_data = ?
+                                       WHERE transaction_id = ?");
+                
+                $stmt->bind_param("ssdsssss", $phonepe_transaction_id, $phonepe_order_id, $payment_amount, 
+                                 $payment_mode, $payment_time, $payment_completion_time, 
+                                 $response_json, $transaction_id);
+                $stmt->execute();
+        
+                // Start transaction to process order
+                $conn->begin_transaction();
+                
+                $user_id = $_SESSION['user_id'];
+                if (!isset($user_id)) {
+                    // Get user_id from transaction if session is not available
+                    $get_user_query = "SELECT user_id FROM payment_transactions WHERE transaction_id = ?";
+                    $stmt = $conn->prepare($get_user_query);
+                    $stmt->bind_param("s", $transaction_id);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    $user_data = $result->fetch_assoc();
+                    $user_id = $user_data['user_id'];
+                }
+                
+                $cart_query = "SELECT cart_id, total_amount FROM cart WHERE user_id = ?";
+                $stmt = $conn->prepare($cart_query);
+                $stmt->bind_param("i", $user_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $cart_data = $result->fetch_assoc();
+        
+                $cart_id = $cart_data['cart_id'];
+                $total_amount = $cart_data['total_amount'];
+        
+                $total_items_query = "SELECT COUNT(*) as count FROM cart_items WHERE cart_id = ?";
+                $stmt = $conn->prepare($total_items_query);
+                $stmt->bind_param("i", $cart_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $total_products_row = $result->fetch_assoc();
+                $total_products = $total_products_row['count'];
+        
+                // Create order
+                $order_query = "INSERT INTO orders (user_id, total_amount, total_products, transaction_id) VALUES (?, ?, ?, ?)";
+                $stmt = $conn->prepare($order_query);
+                $stmt->bind_param("idis", $user_id, $total_amount, $total_products, $transaction_id);
+                $stmt->execute();
+                $order_id = $conn->insert_id;
+        
+                // Update payment_transactions with order_id
+                $update_transaction_order_id = "UPDATE payment_transactions SET order_id = ? WHERE transaction_id = ?";
+                $stmt = $conn->prepare($update_transaction_order_id);
+                $stmt->bind_param("is", $order_id, $transaction_id);
+                $stmt->execute();
+                
+                // Move cart items to order items
+                $move_items_query = "INSERT INTO order_items (order_id, event_id, amount)
+                                    SELECT ?, ci.event_id, e.registration_fee
+                                    FROM cart_items ci
+                                    JOIN events e ON ci.event_id = e.event_id
+                                    WHERE ci.cart_id = ?";
+                $stmt = $conn->prepare($move_items_query);
+                $stmt->bind_param("ii", $order_id, $cart_id);
+                $stmt->execute();
+                
+                // Delete cart items
+                $delete_items_query = "DELETE FROM cart_items WHERE cart_id = ?";
+                $stmt = $conn->prepare($delete_items_query);
+                $stmt->bind_param("i", $cart_id);
+                $stmt->execute();
+                
+                // Delete cart
+                $delete_cart_query = "DELETE FROM cart WHERE cart_id = ?";
+                $stmt = $conn->prepare($delete_cart_query);
+                $stmt->bind_param("i", $cart_id);
+                $stmt->execute();
+                
+                // Commit transaction
+                $conn->commit();
+        
+                // Redirect to orders page
+                header("Location: ../orders/orders.php");
+                exit();
+            } elseif ($payment_status === 'FAILED') {
+                // Update payment status as failed
+                $conn->query("UPDATE payment_transactions SET payment_status = 'FAILED', response_data = '$response_json' WHERE transaction_id = '$transaction_id'");
+                header("Location: ../cart/cart.php?payment=failed");
+                exit();
+            } elseif ($payment_status === 'PENDING') {
+                // Payment is still pending
+                echo "Your payment is being processed. Please wait...";
                 exit();
             } else {
-                $_SESSION['payment_error'] = "Payment failed. Status: " . $state;
-                header("Location: ../payment/payment_failed.php");
+                // Any other status (like CANCELLED)
+                $conn->query("UPDATE payment_transactions SET payment_status = 'FAILED', response_data = '$response_json' WHERE transaction_id = '$transaction_id'");
+                header("Location: ../cart/cart.php?payment=cancelled");
                 exit();
             }
         } catch (Exception $e) {
