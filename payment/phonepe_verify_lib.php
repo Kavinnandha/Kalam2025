@@ -7,6 +7,8 @@ require_once '../libraries/vendor/autoload.php';
 use PhonePe\payments\v1\PhonePePaymentClient;
 use phonepe\Env;
 
+require_once __DIR__ . '/../libraries/vendor/phonepe/src/phonepe/sdk/pg/Env.php';
+
 // PhonePe API credentials
 $merchantId = "M22DZIHTE7XA8";
 $saltKey = "bbdc4a8f-806b-4307-ad83-d0efefbe8725";
