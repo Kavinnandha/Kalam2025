@@ -123,7 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
     if (!empty($merchantTransactionId)) {
         // Check transaction status
-        try {
             $checkStatus = $phonePePaymentsClient->statusCheck($merchantTransactionId);
             $state = $checkStatus->getState();
             $payment_status = $state;
@@ -231,11 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 header("Location: ../cart/cart.php?payment=cancelled");
                 exit();
             }
-        } catch (Exception $e) {
-            $_SESSION['payment_error'] = "Error checking payment status: " . $e->getMessage();
-            header("Location: ../payment/payment_failed.php");
-            exit();
-        }
+       
     } else {
         $_SESSION['payment_error'] = "Invalid transaction reference";
         header("Location: ../payment/payment_failed.php");
