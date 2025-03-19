@@ -5,7 +5,7 @@ require_once '../database/connection.php';
 // PhonePe API credentials
 $merchantId = "M22DZIHTE7XA8";
 $apiKey = "bbdc4a8f-806b-4307-ad83-d0efefbe8725";
-$saltKey = "bbdc4a8f-806b-4307-ad83-d0efefbe8725"; // get from PhonePe
+$saltKey = "bbdc4a8f-806b-4307-ad83-d0efefbe8725"; // Same as API key in your case
 $saltIndex = 1;
 
 // First, check if transaction ID is provided in the URL
@@ -24,15 +24,63 @@ if (isset($_GET['merchantTransactionId'])) {
     }
 }
 
-// Verify the payment status with PhonePe
-$apiEndpoint = "https://api.phonepe.com/apis/pg/checkout/v2/order/{$merchantId}/status";
+// Step 1: Get OAuth Bearer Token
+function getAccessToken($merchantId, $apiKey) {
+    // Endpoint for Auth API
+    $authEndpoint = "https://api.phonepe.com/apis/hermes-auth/v1/token";
+    
+    // Create request payload for auth
+    $authPayload = [
+        "grantType" => "client_credentials",
+        "clientId" => $merchantId,
+        "clientSecret" => $apiKey
+    ];
+    
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => $authEndpoint,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POSTFIELDS => json_encode($authPayload),
+        CURLOPT_HTTPHEADER => [
+            "Content-Type: application/json",
+            "accept: application/json"
+        ],
+    ]);
+    
+    $response = curl_exec($curl);
+    $err = curl_error($curl);
+    
+    curl_close($curl);
+    
+    if ($err) {
+        error_log("cURL Error in auth request: " . $err);
+        return null;
+    }
+    
+    $responseData = json_decode($response, true);
+    
+    if (isset($responseData['access_token'])) {
+        return $responseData['access_token'];
+    } else {
+        error_log("Auth Error: " . json_encode($responseData));
+        return null;
+    }
+}
 
-// Generate checksum
-$string = "/pg/v1/status/$merchantId/$transaction_id" . $saltKey;
-$sha256 = hash('sha256', $string);
-$checksum = $sha256 . '###' . $saltIndex;
+// Get access token
+$accessToken = getAccessToken($merchantId, $apiKey);
 
-// Prepare API request
+if (!$accessToken) {
+    echo "Failed to authenticate with PhonePe API";
+    exit();
+}
+
+// Step 2: Verify the payment status with PhonePe using the access token
+$apiEndpoint = "https://api.phonepe.com/apis/pg/checkout/v2/order/{$transaction_id}/status?details=true";
+
+// Prepare API request with OAuth token
 $curl = curl_init();
 
 curl_setopt_array($curl, [
@@ -42,8 +90,8 @@ curl_setopt_array($curl, [
     CURLOPT_CUSTOMREQUEST => "GET",
     CURLOPT_HTTPHEADER => [
         "Content-Type: application/json",
-        "X-VERIFY: " . $checksum,
-        "X-MERCHANT-ID: " . $merchantId
+        "Authorization: O-Bearer " . $accessToken,
+        "X-MERCHANT-ID: " . $merchantId // Include this if you're a TSP/Partner
     ],
 ]);
 
@@ -56,18 +104,32 @@ if ($err) {
     echo "cURL Error #:" . $err;
     exit();
 }
+
 $responseData = json_decode($response, true);
 $response_json = json_encode($responseData);
 
+// Log the response for debugging
+error_log("PhonePe Response: " . $response_json);
+
 // Check payment status
-if ($responseData['success'] && isset($responseData['data'])) {
-    $payment_data = $responseData['data'];
-    $payment_status = $payment_data['state'];
-    $payment_amount = $payment_data['amount'] / 100; // Convert from paise to rupees
-    $payment_mode = $payment_data['paymentInstrument']['type'] ?? 'UNKNOWN';
+if (isset($responseData['state'])) {
+    $payment_status = $responseData['state'];
+    $payment_amount = $responseData['amount'] / 100; // Convert from paise to rupees
+    
+    // Get transaction ID from PhonePe
+    $phonepe_transaction_id = null;
+    if (!empty($responseData['paymentDetails']) && isset($responseData['paymentDetails'][0]['transactionId'])) {
+        $phonepe_transaction_id = $responseData['paymentDetails'][0]['transactionId'];
+        
+        // Get payment mode if available
+        $payment_mode = 'UNKNOWN';
+        if (isset($responseData['paymentDetails'][0]['paymentMode'])) {
+            $payment_mode = $responseData['paymentDetails'][0]['paymentMode'];
+        }
+    }
+    
     $payment_time = time(); // Current timestamp as payment time
     $payment_completion_time = time(); // Current timestamp as completion time
-    $phonepe_transaction_id = $payment_data['transactionId'] ?? null;
     
     if ($payment_status === 'COMPLETED') {
         // Update payment_transactions table
