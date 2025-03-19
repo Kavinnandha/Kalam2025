@@ -27,7 +27,7 @@ if (isset($_GET['merchantTransactionId'])) {
 // Step 1: Get OAuth Bearer Token
 function getAccessToken($merchantId, $apiKey) {
     // Endpoint for Auth API
-    $authEndpoint = "https://api.phonepe.com/apis/hermes-auth/v1/token";
+    $authEndpoint = "https://api.phonepe.com/apis/identity-manager/v1/oauth/token";
     
     // Create request payload for auth
     $authPayload = [
