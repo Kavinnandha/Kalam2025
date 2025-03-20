@@ -76,6 +76,10 @@ $superAdmin = $_SESSION['is_superadmin'];
                         class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
                         Manage
                     </a>
+                    <a href="payment_report.php"
+                        class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
+                        Reports
+                    </a>
                 <?php endif; ?>
                 <?php endif; ?>
                 <a href="logout.php" class="text-white hover:text-primary-100 transition duration-300">
