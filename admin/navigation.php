@@ -33,43 +33,54 @@ $superAdmin = $_SESSION['is_superadmin'];
                 <h1 class="text-2xl font-bold text-white">Event Management</h1>
             </div>
             <div class="flex items-center space-x-3">
+                <?php if ($_SESSION['department_code'] == '7000'): ?>
+                    <a href="summary.php"
+                        class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
+                        Summary
+                    </a>
+                <?php else: ?>
                 <a href="<?php echo ($superAdmin == 'yes' ? "manage_events_admin.php" : "manage_events.php"); ?>"
                     class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
-                    <i class="fas fa-users mr-1"></i>Events
+                    Events
                 </a>
                 <a href="sponsors.php"
                     class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
-                    <i class="fas fa-users mr-1"></i>Sponsors
+                    Sponsors
                 </a>
                 <a href="view_team.php"
                     class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
-                    <i class="fas fa-users mr-1"></i>Team
+                    Team
                 </a>
                 <a href="view_cart.php"
                     class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
-                    <i class="fas fa-shopping-cart mr-1"></i>Cart
+                    Cart
                 </a>
                 <a href="add_event.php"
                     class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
-                    <i class="fas fa-plus mr-1"></i>New Event
+                    New Event
                 </a>
                 <a href="view_hackathon_teams.php"
                     class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
-                    <i class="fas fa-laptop-code mr-1"></i>Hackathon
+                    Hackathon
                 </a>
                 <?php if ($superAdmin == "yes"): ?>
+                    <a href="summary.php"
+                        class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
+                        Summary
+                    </a>
                     <a href="registered_users.php"
                         class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
-                        <i class="fas fa-clipboard-list mr-1"></i>Users
+                        Users
                     </a>
                     <a href="create_user.php"
                         class="bg-white text-primary-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-50 transition duration-300 shadow-sm">
-                        <i class="fas fa-users-cog mr-1"></i>Manage
+                        Manage
                     </a>
                 <?php endif; ?>
                 <a href="logout.php" class="text-white hover:text-primary-100 transition duration-300">
                     <i class="fas fa-sign-out-alt mr-1"></i>Logout
                 </a>
+                <?php endif; ?>
             </div>
         </div>
     </div>
