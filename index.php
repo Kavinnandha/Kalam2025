@@ -238,57 +238,67 @@ session_start(); ?>
             <!-- Sponsor Marquee - Two Rows -->
             <div class="relative overflow-hidden">
                 <!-- Top Row Marquee -->
-                <div class="sponsor-marquee flex items-center animate-scroll-right mb-8">
-                    <?php
-                    $sponsors_top = $conn->query("SELECT * FROM sponsors WHERE sponsor_id % 2 = 1 ORDER BY sponsor_id ASC");
-                    while ($sponsor = $sponsors_top->fetch_assoc()):
-                        ?>
-                        <div class="flex-shrink-0 mx-6 md:mx-10">
-                            <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
-                                alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
-                                class="h-12 md:h-16 lg:h-20 object-contain"
-                                title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
-                        </div>
-                    <?php endwhile; ?>
-                    <!-- Duplicate sponsors for seamless looping -->
-                    <?php
-                    $sponsors_top = $conn->query("SELECT * FROM sponsors WHERE sponsor_id % 2 = 1 ORDER BY sponsor_id ASC");
-                    while ($sponsor = $sponsors_top->fetch_assoc()):
-                        ?>
-                        <div class="flex-shrink-0 mx-6 md:mx-10">
-                            <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
-                                alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
-                                class="h-12 md:h-16 lg:h-20 object-contain"
-                                title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
-                        </div>
-                    <?php endwhile; ?>
+                <div class="sponsor-marquee-container overflow-hidden">
+                    <div class="sponsor-marquee flex items-center animate-scroll-right">
+                        <?php
+                        $sponsors_top = $conn->query("SELECT * FROM sponsors WHERE sponsor_id % 2 = 1 ORDER BY sponsor_id ASC");
+                        $top_sponsors = [];
+                        while ($sponsor = $sponsors_top->fetch_assoc()) {
+                            $top_sponsors[] = $sponsor;
+                        }
+
+                        // Display each sponsor
+                        foreach ($top_sponsors as $sponsor): ?>
+                            <div class="flex-shrink-0 mx-6 md:mx-10">
+                                <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
+                                    alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
+                                    class="h-12 md:h-16 lg:h-20 object-contain"
+                                    title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
+                            </div>
+                        <?php endforeach; ?>
+
+                        <!-- Duplicate sponsors for seamless looping -->
+                        <?php foreach ($top_sponsors as $sponsor): ?>
+                            <div class="flex-shrink-0 mx-6 md:mx-10">
+                                <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
+                                    alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
+                                    class="h-12 md:h-16 lg:h-20 object-contain"
+                                    title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
 
                 <!-- Bottom Row Marquee (Opposite Direction) -->
-                <div class="sponsor-marquee flex items-center animate-scroll-left">
-                    <?php
-                    $sponsors_bottom = $conn->query("SELECT * FROM sponsors WHERE sponsor_id % 2 = 0 ORDER BY sponsor_id ASC");
-                    while ($sponsor = $sponsors_bottom->fetch_assoc()):
-                        ?>
-                        <div class="flex-shrink-0 mx-6 md:mx-10">
-                            <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
-                                alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
-                                class="h-12 md:h-16 lg:h-20 object-contain"
-                                title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
-                        </div>
-                    <?php endwhile; ?>
-                    <!-- Duplicate sponsors for seamless looping -->
-                    <?php
-                    $sponsors_bottom = $conn->query("SELECT * FROM sponsors WHERE sponsor_id % 2 = 0 ORDER BY sponsor_id ASC");
-                    while ($sponsor = $sponsors_bottom->fetch_assoc()):
-                        ?>
-                        <div class="flex-shrink-0 mx-6 md:mx-10">
-                            <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
-                                alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
-                                class="h-12 md:h-16 lg:h-20 object-contain"
-                                title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
-                        </div>
-                    <?php endwhile; ?>
+                <div class="sponsor-marquee-container overflow-hidden mt-8">
+                    <div class="sponsor-marquee flex items-center animate-scroll-left">
+                        <?php
+                        $sponsors_bottom = $conn->query("SELECT * FROM sponsors WHERE sponsor_id % 2 = 0 ORDER BY sponsor_id ASC");
+                        $bottom_sponsors = [];
+                        while ($sponsor = $sponsors_bottom->fetch_assoc()) {
+                            $bottom_sponsors[] = $sponsor;
+                        }
+
+                        // Display each sponsor
+                        foreach ($bottom_sponsors as $sponsor): ?>
+                            <div class="flex-shrink-0 mx-6 md:mx-10">
+                                <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
+                                    alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
+                                    class="h-12 md:h-16 lg:h-20 object-contain"
+                                    title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
+                            </div>
+                        <?php endforeach; ?>
+
+                        <!-- Duplicate sponsors for seamless looping -->
+                        <?php foreach ($bottom_sponsors as $sponsor): ?>
+                            <div class="flex-shrink-0 mx-6 md:mx-10">
+                                <img src="<?php echo htmlspecialchars($sponsor['sponsor_image_path']); ?>"
+                                    alt="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>"
+                                    class="h-12 md:h-16 lg:h-20 object-contain"
+                                    title="<?php echo htmlspecialchars($sponsor['sponsor_name']); ?>">
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -296,6 +306,12 @@ session_start(); ?>
 
     <!-- Updated CSS for the marquee animations -->
     <style>
+        /* Container to manage overflow */
+        .sponsor-marquee-container {
+            width: 100%;
+            position: relative;
+        }
+
         /* Right direction animation */
         @keyframes scroll-right {
             0% {
@@ -319,11 +335,17 @@ session_start(); ?>
         }
 
         .animate-scroll-right {
-            animation: scroll-right 10s linear infinite;
+            display: flex;
+            width: max-content;
+            /* Ensures all content is visible */
+            animation: scroll-right 30s linear infinite;
         }
 
         .animate-scroll-left {
-            animation: scroll-left 10s linear infinite;
+            display: flex;
+            width: max-content;
+            /* Ensures all content is visible */
+            animation: scroll-left 30s linear infinite;
         }
 
         /* Pause animation on hover for better user experience */
@@ -336,8 +358,8 @@ session_start(); ?>
 
             .animate-scroll-right,
             .animate-scroll-left {
-                animation-duration: 8s;
-                /* Faster on mobile */
+                animation-duration: 20s;
+                /* Slower on mobile for better visibility */
             }
         }
     </style>
