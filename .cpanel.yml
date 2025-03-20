@@ -1,3 +1,4 @@
 deployment:
   tasks:
-    - git pull
+    - export DEPLOYPATH=/home1/sietasru/public_html/kalam
+    - /bin/rsync -av --exclude='.git' --delete-after ./ $DEPLOYPATH
