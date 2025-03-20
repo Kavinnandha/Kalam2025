@@ -4,6 +4,11 @@ if (!isset($_SESSION['department_code'])) {
     header("Location: login.php");
     exit();
 }
+
+if ($_SESSION['department_code'] == '7000') {
+    header("Location: summary.php");
+    exit();
+}
 include '../database/connection.php';
 
 $department_code = $_SESSION['department_code'];
