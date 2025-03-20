@@ -244,7 +244,7 @@
                         $error = "This team has reached its maximum size of " . $teamSizeData['max_size'] . " members.";
                     } else {
                         // Get event_id for purchase check
-                        $eventIdSql = "SELECT event_id FROM teams WHERE team_id = ?";
+                        $eventIdSql = "SELECT event_id FROM team WHERE team_id = ?";
                         $eventIdStmt = $conn->prepare($eventIdSql);
                         $eventIdStmt->bind_param("i", $team_id);
                         $eventIdStmt->execute();
