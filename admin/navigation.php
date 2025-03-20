@@ -77,10 +77,10 @@ $superAdmin = $_SESSION['is_superadmin'];
                         Manage
                     </a>
                 <?php endif; ?>
+                <?php endif; ?>
                 <a href="logout.php" class="text-white hover:text-primary-100 transition duration-300">
                     <i class="fas fa-sign-out-alt mr-1"></i>Logout
                 </a>
-                <?php endif; ?>
             </div>
         </div>
     </div>
