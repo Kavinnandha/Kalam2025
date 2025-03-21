@@ -22,8 +22,6 @@ try {
             events e ON oi.event_id = e.event_id
         JOIN
             department d ON e.department_code = d.department_code
-        WHERE
-            e.category != 'General'
         ORDER BY 
             u.phone, u.name
     ";
