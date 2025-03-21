@@ -7,6 +7,9 @@
                 <img src="/kalam/images/kalam2025-hor.png" alt="Kalam 2025"
                     class="w-50 h-13 transition-all duration-300 group-hover:scale-103 group-hover:shadow-lg opacity-90 mix-blend-multiply"
                     style="filter: invert(0.9);">
+                <span class="font-poppins text-right text-sm text-gray-600 bg-gradient-to-r from-orange-400 to-red-500 text-white px-3 py-1 rounded-full shadow-md hover:shadow-lg transition-all duration-300">
+                    <?php echo $_SESSION['user_id']; ?>
+                </span>
             </div>
 
             <!-- Desktop Menu -->
